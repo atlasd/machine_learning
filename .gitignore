@@ -78,6 +78,8 @@ ipython_config.py
 .idea/**/dictionaries
 .idea/**/shelf
 
+.idea/
+
 # Generated files
 .idea/**/contentModel.xml
 
