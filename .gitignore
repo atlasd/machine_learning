@@ -90,6 +90,7 @@ ipython_config.py
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
 
+notebooks/
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
