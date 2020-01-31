@@ -29,7 +29,20 @@ def test_get_indices(X, num_folds, shuffle, expected, monkeypatch):
         (np.arange(10), 3, [[0, 1, 2, 3], [4, 5, 6], [7, 8, 9]]),
     ],
 )
-def test_get_one_split(indices, num_folds, expected):
+def test_get_indices_split(indices, num_folds, expected):
     out = validation.KFoldCV._get_indices_split(indices, num_folds=num_folds)
     for out_arr, expt_arr in zip(out, expected):
         assert np.allclose(out_arr, expt_arr)
+
+
+@pytest.mark.parametrize(
+    "indices, num_split, expected",
+    [
+        ([[0, 1, 2, 3, 4], [5, 6, 7, 8, 9]], 0, ([0, 1, 2, 3, 4], [5, 6, 7, 8, 9])),
+        ([[0, 1, 2, 3], [4, 5, 6], [7, 8, 9]], 0, ([0, 1, 2, 3], [4, 5, 6, 7, 8, 9])),
+    ],
+)
+def test_get_one_split(indices, num_split, expected):
+    train, test = validation.KFoldCV._get_one_split(indices, num_split=num_split)
+    assert np.allclose(train, expected[1])
+    assert np.allclose(test, expected[0])

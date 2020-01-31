@@ -13,8 +13,12 @@ class KFoldCV:
         return np.random.shuffle(np.arange(nrows)) if self.shuffle else np.arange(nrows)
 
     @staticmethod
-    def _get_one_split(indices, num_split):
-        return np.delete(indices, indices[num_split]), indices[num_split]
+    def _get_one_split(split_indices, num_split):
+
+        return (
+            np.delete(np.concatenate(split_indices), split_indices[num_split]),
+            split_indices[num_split],
+        )
 
     @staticmethod
     def _get_indices_split(indices, num_folds):
