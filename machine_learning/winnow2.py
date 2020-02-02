@@ -9,8 +9,17 @@ class Winnow2:
         self.num_features = num_features
         self.weights = np.ones((num_features,))
 
+    def predict_prob(self, X: np.array):
+        """
+        Function to get the raw prediction score (not binary)
+        """
+        return X @ self.weights
+
     def predict(self, X: np.array):
-        return (X @ self.weights) > self.threshold
+        """
+        Function to get the binary prediction value.
+        """
+        return self.predict_prob(X) > self.threshold
 
     def adjust_weights(self, X: np.array, scale_func: Callable):
         if isinstance(X, list):

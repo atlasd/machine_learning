@@ -10,7 +10,11 @@ class KFoldCV:
     def get_indices(self, X):
         # Get indices of length rows of X. Shuffle if `self.shuffle` is true.
         nrows = X.shape[0]
-        return np.random.shuffle(np.arange(nrows)) if self.shuffle else np.arange(nrows)
+        return (
+            np.random.permutation(np.arange(nrows))
+            if self.shuffle
+            else np.arange(nrows)
+        )
 
     @staticmethod
     def _get_one_split(split_indices, num_split):
