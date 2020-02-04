@@ -37,7 +37,7 @@ class NaiveBayes:
             )
             normalizer = n + self.alpha * len(all_X_values)
             fitted_distributions[val] = stats.multinomial(
-                n=n, p=np.array(all_x_value_counts_smoothed.values()) / normalizer
+                n=n, p=np.array(list(all_x_value_counts_smoothed.values())) / normalizer
             )
         return fitted_distributions
 
