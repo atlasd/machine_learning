@@ -1,11 +1,14 @@
 import pytest
 import numpy as np
 from machine_learning import naive_bayes
+from scipy import stats
 
 
 @pytest.fixture
 def model():
-    yield naive_bayes.NaiveBayes(column_distribution_map={0: "multinomial"})
+    yield naive_bayes.NaiveBayes(
+        column_distribution_map={0: "multinomial", 1: "gaussian"}
+    )
 
 
 @pytest.mark.parametrize(
@@ -42,3 +45,50 @@ def test_fit_gaussian(model):
     assert out[1].kwds["loc"] == 0
     assert np.isclose(out[0].kwds["scale"], 1)
     assert np.isclose(out[1].kwds["scale"], 2)
+
+
+@pytest.fixture
+def X():
+    yield np.array([[0, 1, 2, 0, 1, 2], [0.1, -0.1, 0.2, -0.2, 0.3, -0.3]]).T
+
+
+@pytest.fixture
+def y():
+    yield np.array([0, 0, 0, 1, 1, 1])
+
+
+@pytest.fixture
+def fitted_model(X, y, model):
+    model.fit(X, y)
+    yield model
+
+
+def test_fit(fitted_model):
+    assert np.allclose(
+        fitted_model.fitted_distributions[0][0].p, np.array([1 / 3, 1 / 3, 1 / 3])
+    )
+    assert np.allclose(
+        fitted_model.fitted_distributions[0][1].p, np.array([1 / 3, 1 / 3, 1 / 3])
+    )
+    assert np.isclose(fitted_model.fitted_distributions[1][0].mean(), 0.2 / 3)
+    assert np.isclose(fitted_model.fitted_distributions[1][1].mean(), -0.2 / 3)
+
+    assert np.isclose(
+        fitted_model.fitted_distributions[1][0].std(), np.std([0.1, -0.1, 0.2])
+    )
+    assert np.isclose(
+        fitted_model.fitted_distributions[1][1].std(), np.std([0.3, -0.3, 0.2])
+    )
+
+    assert np.allclose(fitted_model.prior.p, [0.5, 0.5])
+
+
+def test_predict_one_class(fitted_model, X):
+    out0 = fitted_model._predict_one_class(X, class_idx=0)
+    out1 = fitted_model._predict_one_class(X, class_idx=1)
+    assert out0.shape[0] == X.shape[0]
+    assert out1.shape[0] == X.shape[0]
+    import ipdb
+
+    ipdb.set_trace()
+    out1

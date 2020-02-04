@@ -1,6 +1,7 @@
 import numpy as np
 from scipy import stats
 import pandas as pd
+from toolz import pipe
 from collections import Counter, OrderedDict
 
 
@@ -47,22 +48,41 @@ class NaiveBayes:
                 raise ValueError(f"No distribution given for column {col_idx}")
 
             if self.column_distribution_map[col_idx] == "multinomial":
-                self.fitted_distributions[col_idx] = NaiveBayes._fit_multinomial(
+                self.fitted_distributions[col_idx] = self._fit_multinomial(
                     X=X, col_idx=col_idx, y=y
                 )
 
             elif self.column_distribution_map[col_idx] == "gaussian":
-                self.fitted_distributions[col_idx] = NaiveBayes._fit_gaussian(
+                self.fitted_distributions[col_idx] = self._fit_gaussian(
                     X=X, col_idx=col_idx, y=y
                 )
 
         self.is_fitted = True
         self.prior = stats.multinomial(
-            n=len(y), p=[np.sum(y == val) for val in sorted(set(y))]
+            n=len(y), p=[np.sum(y == val) / len(y) for val in sorted(set(y))]
         )
+
+    def _predict_one_class(self, X, class_idx):
+        return np.array(
+            [
+                self.fitted_distributions[col_idx][class_idx].logpdf(X[:, col_idx])
+                if self.column_distribution_map[col_idx] == "gaussian"
+                else self.fitted_distributions[col_idx][class_idx].p[
+                    X[:, col_idx].astype("int")
+                ]
+                for col_idx in range(X.shape[1])
+            ]
+        ).prod(axis=0)
 
     def predict(self, X):
         if not self.is_fitted:
             raise ValueError("Must fit model before predictions can be made")
 
-        self.prior
+        return pipe(
+            [
+                self._predict_one_class(X=X, class_idx=class_idx)
+                for class_idx in self.fitted_distributions[0].keys()
+            ],
+            np.vstack,
+            lambda arr: np.argmax(arr, axis=0),
+        )
