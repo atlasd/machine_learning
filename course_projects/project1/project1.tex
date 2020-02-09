@@ -1,10 +1,12 @@
 \documentclass{amsart}
 \usepackage[ruled,vlined]{algorithm2e}
 \usepackage{amsmath}
-\usepackage{graphicx}
 \usepackage[margin=1in]{geometry}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{ifpdf}
+\usepackage{url}
+\usepackage{graphicx}
 
 \title{Project 1 - Winnow2 and Naive Bayes}
 \author{David Atlas}
@@ -42,7 +44,7 @@
 
     \section{Description of Algorithms}
     \subsection*{Winnow2}
-    The Winnow2 Algorithm is a linear-threshold boolean classifier, in which a set of boolean inputs is mapped
+    The Winnow2 Algorithm\cite{winnow2} is a linear-threshold boolean classifier, in which a set of boolean inputs is mapped
     to a single boolran output. The algorithm works as follows:
 
     Given a boolean input vector, $X = (x_1, \cdots, x_k)$,  create a vector of weights $W = (w_1, \cdots, w_k)$.
@@ -141,7 +143,7 @@
     \section{Experimental Results}
     \subsection{Iris Dataset}
     \subsubsection*{Data Cleaning \& Transformation}
-    The first dataset presented is the Iris dataset. First, the continuous inputs are discretized. Figure~\ref{iris_boxplot}
+    The first dataset presented is the Iris dataset\cite{irisdataset}. First, the continuous inputs are discretized. Figure~\ref{iris_boxplot}
     was used to pick the cutoff points by finding values that best seperate the classes in a univariate sense.
     \begin{figure}
     \centering
@@ -153,7 +155,7 @@
     \begin{table}[]
     \begin{tabular}{llll}
     {} &  Range 1  & Range 2 & Range 3\\
-    Sepal Length &  {[}0, 5.5{]} & (5.5, 10{]} & {} \\
+    Sepal Length &  {[} 0, 5.5{]} & (5.5, 10{]} & {} \\
     Sepal Width &  {[}0, 3{]} & (3, 10{]} & {} \\
     Petal Length &  {[}0, 1{]} & (1, 1.6{]} & (1.6, 10{]} \\
     Petal Width &  {[}0, 2{]} & (2, 5{]} & (5.5, 10{]}
@@ -203,7 +205,7 @@ linearly seperable classes are a good fit with Naive Bayes.
 
 \subsection{Cancer Data}
     \subsubsection*{Data Cleaning \& Transformation}
-    For the cancer dataset, all null values are dropped, as this is only a small proportion of total rows (16/699).
+    For the cancer dataset\cite{cancerdataset}, all null values are dropped, as this is only a small proportion of total rows (16/699).
     The inputs are multivalued discrete, so one-hot encoding representations are made of each column.
     \subsubsection*{Model Fitting Results}
     The model results for Winnow2 with one-hot encoding variables are shown in Table~\ref{cancer_winnow2}.
@@ -241,7 +243,7 @@ of which are likely relevant. The inputs are not continuous, and so Naive Bayes 
 
 \subsection{Glass Data}
 \subsubsection*{Data Cleaning \& Transformation}
-The glass data features are continuous, and so the same procedure as above is followed to discretize them.
+The glass dataset\cite{glassdataset} features are continuous, and so the same procedure as above is followed to discretize them.
 Table~\ref{glassmeans} shows the mean by class for each of the features.
 \begin{table}
 \begin{tabular}{lrrrrrrrrr}
@@ -305,14 +307,14 @@ Naive Bayes was also run with the boolean inputs, and the results are shown in T
 \end{table}
 Naive Bayes was then run with the continuous inputs, and the results are shown in Table~\ref{nb_glass}
 \begin{table}
-\begin{tabular}{lrrrrr}
-{} &  0 &   1 &  2 &  3 & 4&  5 \\
+\begin{tabular}{lrrrrrr}
+{}&  0 &   1 &  2 &  3 & 4 & 5 \\
 0 &  7 &  11 &  1 &  0 &  0 & 0 \\
 1 &  0 &   1 &  0 &  0 &  0 & 0 \\
-2 &  6 &   2 &  4 &  0 &  0 &  0 \\
+2 &  6 &   2 &  4 &  0 &  0 & 0 \\
 3 &  0 &   1 &  0 &  2 &  0 & 1 \\
 4 &  0 &   0 &  0 &  0 &  0 & 0 \\
-5 &  0 &   0 &  0 &  1 &  0 & 5 \\
+5 &  0 &   0 &  0 &  1 &  0 & 5
 \end{tabular}
 \label{nb_glass}
 \caption{Glass dataset Naive Bayes continuous input results.}
@@ -323,7 +325,7 @@ roughly similar with Naive Bayes having an advantage in continuous spaces.
 
 \subsection{Soybean Data}
 \subsubsection*{Data Cleaning \& Transformation}
-The next dataset is the Soybean dataset in which the rot associated with a soybean is predicted
+The next dataset is the Soybean dataset\cite{soybeandataset} in which the rot associated with a soybean is predicted
 based on various attributes of the soybean. The features are all multivalued discrete, but some only have a
 single value. Columns with a single value are dropped, as they cannot help learn classes. The rest of the classes
 are then mapped into one-hot encodings.
@@ -332,12 +334,12 @@ are then mapped into one-hot encodings.
 All of the algorithms perform extremely well on the soybean dataset, with all 3 variants classifying
 all test set examples correctly. The confusion matrix for all three is shown in Figure~\ref{soybean_c}.
 \begin{table}
-\begin{tabular}[lrrrr]
+\begin{tabular}{lrrrr}
 {} &  D1 &  D2 &  D3 & D4  \\
 0 &  2 &  0 &  0 &  0 \\
 1 &  0 &  1 &  0 &  0 \\
 2 &  0 &  0 &  2 &  0 \\
-3 &  0 &  0 &  0 &  4 \\
+3 &  0 &  0 &  0 &  4
 \end{tabular}
 \label{soybean_c}
 \caption{Soybean data models all correctly classify all examples.}
@@ -345,12 +347,57 @@ all test set examples correctly. The confusion matrix for all three is shown in 
 
 \subsection{House Votes}
 \subsubsection*{Data Cleaning \& Transformation}
-For the House Votes dataset, all inputs are boolean. There are missing values scattered throughout the dataset, and
+The House Votes dataset\cite{housedataset} has the boolean values for whether a congressperson voted for or against a measure, and their party
+affiliation. For the House Votes dataset, all inputs are boolean. There are missing values scattered throughout the dataset, and
 so when the data is encoded as a boolean value, null values will be considered their own value, and get their own one-hot
 encoding.
 
 \subsubsection*{Model Fitting Results}
+The Winnow2 results are shown in Table~\ref{winnow_congress}, with 96.5\% accuracy.
+The Naive Bayes results are shown in Table~\ref{nb_congress} with 91.9\% accuracy.
+A second iteration of the Naive Bayes model was not fit, as the dataset was simply a set of booleans, and so fitting another
+Naive Bayes would simply be equivalent.
+\begin{table}
+\begin{tabular}{lrr}
+{} &   Democrats &   Republican \\
+Democrats &  54 &   0 \\
+Republican &   3 &  30 \\
+\end{tabular}
+\label{winnow_congress}
+\caption{House votes Winnow2 results.}
+\end{table}
+
+\begin{table}
+\begin{tabular}{lrr}
+{} &   Democrats &   Republican \\
+Democrats &  50 &   0 \\
+Republican &   7 &  30 \\
+\end{tabular}
+\label{nb_congress}
+\caption{House votes Naive Bayes results.}
+\end{table}
+
+The Winnow2 algorithm outperforms Naive Bayes slightly, which is logical, as this is a set boolean inputs,
+and so Naive Bayes has no advantage here.
+
+\section{Discussion of Algorithm Behavior}
+The results above are intuitive. Winnow2 tends to excel in situations where the inputs are all boolean, whereas
+Naive Bayes has an advantage with discrete multivalued and continuous inputs. This seems like a good rule of thumb in
+deciding between the two algorithms. Otherwise, their behavior is quite similar in terms of accuracy for a given problem,
+as they search similar representation spaces (univariate and linear).
+
+\section{Summary}
+This paper introduced two learning algorithms: Winnow2 and Naive Bayes.
+Winnow2 uses weights and a linear threshold to learn the boundary between two classes. It can only be applied
+to boolean inputs and outputs. Naive Bayes uses a conditional independence assumption to learn the likelihood of an instance
+belonging to a class. It can be used on multivalued discrete and continuous inputs. Its generally applied to classification problems,
+but could likely be adapted to regression problems.
+
+This paper then applied both algorithms to a set of classification problems. It found that the two algorithms perform similarly,
+with Winnow2 excelling with large numbers of boolean inputs, and Naive Bayes exceling with continuous inputs.
 
 
+\bibliographystyle{plainurl}
+\bibliography{biblio.bib}
 
 \end{document}
