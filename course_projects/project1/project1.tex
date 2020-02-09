@@ -103,6 +103,23 @@
     where $\hat{P}$ indicates the estimated distribution from the training process.
 
     \section{Experimental Approach}
-    For the experiments conducted, the following approach was taken.
+    The experiments conducted included 5 datasets:
+    \begin{enumerate}
+        \item The iris dataset classifying plant species from leaf measurements.
+        \item The breast cancer dataset classifying tumors based on breast measurements.
+        \item The glass dataset classifying the origin of broken glass based on measurements of the shards.
+        \item The soybean dataset classifying rot based on crop information.
+        \item The congressional voting dataset classifying party based on legislation votes.
+    \end{enumerate}
+    For each dataset, discrete inputs were one-hot encoded as booleans, and
+    continuous values were discretized based on boxplots of their distributions, segmented by class,
+    to attempt to provide one-hot encodings that best seperated the classes. For multivalued outputs,
+    one vs. rest classifiers were fit. For Winnow2, the same threshold $\theta$ was used for all the classes,
+    and the highest value of $Z$ was selected across each classifier.
+    For Naive Bayes, the highest likelihood class was selected.
+
+    For each dataset, Winnow2 and Naive Bayes algorithms were used on boolean inputs and outputs for
+    comparability. Additionally, Naive Bayes was fit using multivalued discrete and
+    continuous attributes. A 5 fold randomly-shuffled cross-validation approach was used to evaluate the models.
 
 \end{document}

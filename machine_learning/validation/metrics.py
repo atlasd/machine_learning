@@ -3,8 +3,12 @@ import pandas as pd
 
 
 def confusion_matrix(actuals, predictions):
+    """Function to find the confusin matrix for a classifier"""
+
+    # Get all the class values
     actual_values = np.sort(np.unique(actuals))
 
+    # Get the dataframe where columns are y and rows are yhat
     return pd.DataFrame(
         {
             y: [
