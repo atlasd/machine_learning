@@ -9,45 +9,57 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: biblio.bib.bib
 Warning--entry type for "irisdataset" isn't style-file defined
 --line 1 of file biblio.bib.bib
-You've used 1 entry,
+Warning--entry type for "cancerdataset" isn't style-file defined
+--line 8 of file biblio.bib.bib
+Warning--entry type for "glassdataset" isn't style-file defined
+--line 15 of file biblio.bib.bib
+Warning--entry type for "soybeandataset" isn't style-file defined
+--line 22 of file biblio.bib.bib
+Warning--entry type for "housedataset" isn't style-file defined
+--line 28 of file biblio.bib.bib
+I was expecting a `,' or a `}'---line 50 of file biblio.bib.bib
+ :     pages = 385
+ :                -398,
+I'm skipping whatever remains of this entry
+You've used 7 entries,
             2849 wiz_defined-function locations,
-            619 strings with 5095 characters,
-and the built_in function-call counts, 349 in all, are:
-= -- 29
-> -- 8
-< -- 0
-+ -- 3
-- -- 2
-* -- 10
-:= -- 71
-add.period$ -- 3
-call.type$ -- 1
-change.case$ -- 4
+            649 strings with 5919 characters,
+and the built_in function-call counts, 2450 in all, are:
+= -- 241
+> -- 58
+< -- 1
++ -- 21
+- -- 14
+* -- 77
+:= -- 349
+add.period$ -- 22
+call.type$ -- 7
+change.case$ -- 28
 chr.to.int$ -- 0
-cite$ -- 1
-duplicate$ -- 9
-empty$ -- 39
-format.name$ -- 2
-if$ -- 87
+cite$ -- 7
+duplicate$ -- 78
+empty$ -- 278
+format.name$ -- 14
+if$ -- 669
 int.to.chr$ -- 0
-int.to.str$ -- 1
-missing$ -- 0
-newline$ -- 8
-num.names$ -- 2
-pop$ -- 12
+int.to.str$ -- 7
+missing$ -- 2
+newline$ -- 39
+num.names$ -- 14
+pop$ -- 74
 preamble$ -- 1
-purify$ -- 3
+purify$ -- 21
 quote$ -- 0
-skip$ -- 28
+skip$ -- 215
 stack$ -- 0
-substring$ -- 5
-swap$ -- 1
-text.length$ -- 0
+substring$ -- 72
+swap$ -- 16
+text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 4
+type$ -- 28
 warning$ -- 0
-while$ -- 2
-width$ -- 2
-write$ -- 11
-(There was 1 warning)
+while$ -- 17
+width$ -- 8
+write$ -- 71
+(There was 1 error message)
