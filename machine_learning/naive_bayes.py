@@ -76,7 +76,7 @@ class NaiveBayes:
             Vector of target classes
         """
         fitted_distributions = {}
-        all_X_values = list(range(X[:, col_idx].max() + 1))
+        all_X_values = list(range(int(X[:, col_idx].max()) + 1))
         # For each class...
         for val in sorted(set(y)):
             n = np.sum(y == val)  # Number of instances in the class
@@ -158,17 +158,25 @@ class NaiveBayes:
         )
 
     def predict_prob(self, X):
+        """
+        Get the prediction probability for each row in X, for each class in y.
+        """
         if not self.is_fitted:
             raise ValueError("Must fit model before predictions can be made")
 
         return pipe(
             [
-                self._predict_one_class(X=X, class_idx=class_idx)
-                for class_idx in self.fitted_distributions[0].keys()
+                self._predict_one_class(
+                    X=X, class_idx=class_idx
+                )  # Get one class prediction
+                for class_idx in self.fitted_distributions[0].keys()  # For each class
             ],
-            np.vstack,
+            np.vstack,  # Create a matrix where each row is prob of column being class
+            # If self.binomial, return prob of C == 1, else return all rows.
+            # Primarily for the multiclass classifier class.
             lambda arr: arr[1] if self.binomial else arr,
         )
 
     def predict(self, X):
+        # Get the class prediction (argmax across classes)
         return np.argmax(self.predict_prob(X), axis=0)
