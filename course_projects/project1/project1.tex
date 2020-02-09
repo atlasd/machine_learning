@@ -1,6 +1,8 @@
 \documentclass{amsart}
 \usepackage[ruled,vlined]{algorithm2e}
 \usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
 
@@ -17,13 +19,27 @@
     \maketitle
     \section{Problem Statement \& Hypothesis}
     We seek to introduce two basic supervised learning methods, and apply them to classification problems.
+
+
     The first, Winnow2, is a very simplistic learning model for boolean inputs and outputs. The second,
-    Naive Bayes, is a simple graphical model that can handle multivalued discrete and continuous inputs. We will compare
-    both models using Boolean-values inputs and outputs to make the comparison more fair, while also
+    Naive Bayes, is a simple graphical model that can handle multivalued discrete and continuous inputs.
+
+    We will compare both models using Boolean-values inputs and outputs to make the comparison more fair, while also
     applying Naive Bayes in its more flexible context with multivalued discrete and continuous inputs.
-    We expect that Naive Bayes will provide slight performance inprovements over Winnow2, as its representation
-    space is larger, and we expect that the performance gap will grow when Naive Bayes is applied
-    with multivalued discrete and continuous inputs.
+
+    Both algorithms do not explicitly treat interactions between variables (Winnow2 will adjust the weights
+    for all the active weights, and Naive Bayes assumes the feature values are conditionally independent on the class),
+    so large differences in performance between the two are not expected. However, when Naive Bayes is given the
+    capacity to treat continuous inputs via a Gaussian conditional distribution, it might lead to performance inprovements.
+
+    Additionally, given the simplicity of the algorithms, it might be reasonable to expect Winnow2 to perform well on
+    large feature spaces, as it has an implicit regularization mechanism (weights are only updated if boolean
+    features are active). Naive Bayes may struggle in those large spaces with overfitting. This issue might also extend to
+    class imbalances, as there won't be many training instances over which to estimate the conditional distributions.
+
+    In summary, the hypothesis is that of rough performance parity, with Winnow2 having an advantage in large
+    feature spaces, and Naive Bayes having an advantage with continuous features.
+
     \section{Description of Algorithms}
     \subsection*{Winnow2}
     The Winnow2 Algorithm is a linear-threshold boolean classifier, in which a set of boolean inputs is mapped
@@ -121,5 +137,220 @@
     For each dataset, Winnow2 and Naive Bayes algorithms were used on boolean inputs and outputs for
     comparability. Additionally, Naive Bayes was fit using multivalued discrete and
     continuous attributes. A 5 fold randomly-shuffled cross-validation approach was used to evaluate the models.
+
+    \section{Experimental Results}
+    \subsection{Iris Dataset}
+    \subsubsection*{Data Cleaning \& Transformation}
+    The first dataset presented is the Iris dataset. First, the continuous inputs are discretized. Figure~\ref{iris_boxplot}
+    was used to pick the cutoff points by finding values that best seperate the classes in a univariate sense.
+    \begin{figure}
+    \centering
+    \includegraphics{../../notebooks/img_proj1/iris_boxplot.png}
+    \caption{Iris dataset boxplot of feature values by class.}
+    \label{iris_boxplot}
+    \end{figure}
+    The following cutoff points were used:
+    \begin{table}[]
+    \begin{tabular}{llll}
+    {} &  Range 1  & Range 2 & Range 3\\
+    Sepal Length &  {[}0, 5.5{]} & (5.5, 10{]} & {} \\
+    Sepal Width &  {[}0, 3{]} & (3, 10{]} & {} \\
+    Petal Length &  {[}0, 1{]} & (1, 1.6{]} & (1.6, 10{]} \\
+    Petal Width &  {[}0, 2{]} & (2, 5{]} & (5.5, 10{]}
+    \end{tabular}
+    \end{table}
+    One-hot encodings were used on the discretized features.
+
+\subsubsection*{Model Fitting Results}
+    The model results for one of five random folds are shown in Table~\ref{iris_winnow2}. Note that for the confusion matrices
+    here and below, the column headers are the actual labels, while the row headers are the predicted values. Values along
+    the diagonal indicate correct predictions.
+    \begin{table}
+    \begin{tabular}{lrrr}
+{} &  Setosa &  Versicolor &   Virginica \\
+    Setosa &  9 &  0 &   0 \\
+    Versicolor &  0 &  0 &   1 \\
+    Virginica &  0 &  8 &  12
+    \end{tabular}
+    \caption{Iris - Winnow2 Confusion Matrix}
+    \label{iris_winnow2}
+    \end{table}
+    The model results for Naive Bayes with boolean inputs are shown in Table~\ref{iris_nb_bool}
+    \begin{table}
+    \begin{tabular}{lrrr}
+{} &  Setosa &  Versicolor &   Virginica \\
+    Setosa &  9 &  0 &   0 \\
+    Versicolor &  0 &  5 &   6 \\
+    Virginica &  0 &  3 &  7
+    \end{tabular}
+    \caption{Iris - Naive Bayes with Boolean Inputs Confusion Matrix}
+    \label{iris_nb_bool}
+    \end{table}
+    The model results for Naive Bayes with boolean inputs are shown in Table~\ref{iris_nb}
+    \begin{table}
+    \begin{tabular}{lrrr}
+{} &  Setosa &  Versicolor &   Virginica \\
+    Setosa &  9 &  0 &   0 \\
+    Versicolor &  0 &  8 &   1 \\
+    Virginica &  0 &  0 &  12
+    \end{tabular}
+    \caption{Iris - Naive Bayes with Continuous Inputs Confusion Matrix}
+    \label{iris_nb}
+    \end{table}
+These results indicate that the classes are easily seperably in a 4D space of all the features, as the continuous Naive Bayes
+algorithm outperforms the discretized version. This lines up with the hypothesis presented above - continuous inputs with
+linearly seperable classes are a good fit with Naive Bayes.
+
+\subsection{Cancer Data}
+    \subsubsection*{Data Cleaning \& Transformation}
+    For the cancer dataset, all null values are dropped, as this is only a small proportion of total rows (16/699).
+    The inputs are multivalued discrete, so one-hot encoding representations are made of each column.
+    \subsubsection*{Model Fitting Results}
+    The model results for Winnow2 with one-hot encoding variables are shown in Table~\ref{cancer_winnow2}.
+    \begin{table}
+    \begin{tabular}{lrr}
+    {} &  Benign  &   Malignant \\
+    Benign &  86 &   0 \\
+    Malignant &   0 &  50 \\
+    \end{tabular}
+    \caption{Cancer - Winnow2 results.}
+    \label{cancer_winnow2}
+    \end{table}
+    The model results for Naive Bayes with one-hot encoding variables are shown in Table~\ref{cancer_nb_bool}.
+    \begin{table}
+    \begin{tabular}{lrr}
+    {} &  Benign  &   Malignant \\
+    Benign &  84 &   1 \\
+    Malignant &   2 &  49 \\
+    \end{tabular}
+    \caption{Cancer - Naive Bayes with boolean inputs results.}
+    \label{cancer_nb_bool}
+    \end{table}
+    The model results for Naive Bayes with multinomial input variables are shown in Table~\ref{cancer_nb}.
+    \begin{table}
+    \begin{tabular}{lrr}
+    {} &  Benign  &   Malignant \\
+    Benign &  83 &   0 \\
+    Malignant &   3 &  50 \\
+    \end{tabular}
+    \caption{Cancer - Naive Bayes with multivalues discrete inputs results.}
+    \label{cancer_nb}
+    \end{table}
+The results here indicate near performance parity. Winnow2 does quite well, as this problem has many attributes, only some
+of which are likely relevant. The inputs are not continuous, and so Naive Bayes does not have a significant advantage.
+
+\subsection{Glass Data}
+\subsubsection*{Data Cleaning \& Transformation}
+The glass data features are continuous, and so the same procedure as above is followed to discretize them.
+Table~\ref{glassmeans} shows the mean by class for each of the features.
+\begin{table}
+\begin{tabular}{lrrrrrrrrr}
+Class &  refractive index &     sodium &  magnesium &  aluminum &    silicon &  potassium &    calcium &    barium &      iron \\
+0 &          1.518718 &  13.242286 &   3.552429 &  1.163857 &  72.619143 &   0.447429 &   8.797286 &  0.012714 &  0.057000 \\
+1 &          1.518619 &  13.111711 &   3.002105 &  1.408158 &  72.598026 &   0.521053 &   9.073684 &  0.050263 &  0.079737 \\
+2 &          1.517964 &  13.437059 &   3.543529 &  1.201176 &  72.404706 &   0.406471 &   8.782941 &  0.008824 &  0.057059 \\
+3 &          1.518928 &  12.827692 &   0.773846 &  2.033846 &  72.366154 &   1.470000 &  10.123846 &  0.187692 &  0.060769 \\
+4 &          1.517456 &  14.646667 &   1.305556 &  1.366667 &  73.206667 &   0.000000 &   9.356667 &  0.000000 &  0.000000 \\
+5 &          1.517116 &  14.442069 &   0.538276 &  2.122759 &  72.965862 &   0.325172 &   8.491379 &  1.040000 &  0.013448
+\end{tabular}
+\label{glassmeans}
+\end{table}
+The values chosen reflect points that seperate the means of the classes reasonably. The values chosen are shown in Table~\ref{glass_discrete}.
+\begin{table}
+\begin{tabular}{lrrrr}
+{} &       Range 1 &     Range 2 &      Range 3 &     Range 4 \\
+refractive index &   1.518 &   {} &    {} &   {} \\
+sodium           &  12.500 &  14.0 &    {} &   {} \\
+magnesium        &   1.000 &   2.0 &   3.25 &   {} \\
+aluminum         &   1.200 &   1.5 &   2.00 &   {} \\
+silicon          &  72.600 &  72.8 &  73.20 &  73.4 \\
+potassium        &   0.200 &   0.4 &   0.50 &   0.6 \\
+calcium          &   8.600 &   9.0 &  10.00 &   {} \\
+barium           &   0.350 &   {} &    {} &   {} \\
+iron             &   0.200 &   0.6 &    {} &   {} \\
+\end{tabular}
+\label{glass_discrete}
+\end{table}
+One-hot encodings are made for each of the discrete cutoff points.
+
+\subsubsection*{Model Fitting Results}
+The confusion matrix is shown in Table~\ref{glass_winnow2} for the Winnow2 algorithm, using the
+discretization points above.
+\begin{table}
+\begin{tabular}{lrrrrrr}
+{} &   0 &  1 &  2 &  3 & 4 &  5 \\
+0 &  13 &  7 &  4 &  1 & 0& 3 \\
+1 &   0 &  3 &  0 &  2 &  0& 0 \\
+2 &   0 &  5 &  1 &  0 &  0&3 \\
+3 &   0 &  0 &  0 &  0 &  0& 0 \\
+4 &   0 &  0 &  0 & 0 & 0 & 0 \\
+5 &   0 &  0 &  0 &  0 &  0&0 \\
+\end{tabular}
+\label{glass_winnow2}
+\caption{Glass dataset Winnow2 results.}
+\end{table}
+Naive Bayes was also run with the boolean inputs, and the results are shown in Table~\ref{nb_glass_bool}.
+\begin{table}
+\begin{tabular}{lrrrrrr}
+{} &  0 &   1 &  2 &  3 &  4& 5 \\
+0 &  8 &   2 &  4 &  1 &  0&1 \\
+1 &  5 &  10 &  1 &  2 &  0&5 \\
+2 &  0 &   0 &  0 &  0 &  0&0 \\
+3 &  0 &   0 &  0 &  0 &  0&0 \\
+4 &  0 &   0 &  0 &  0 &  0 &0 \\
+5 &  0 &   2 &  0 &  0 &  0&0 \\
+\end{tabular}
+\label{nb_glass_bool}
+\caption{Glass dataset Naive Bayes boolean input results.}
+\end{table}
+Naive Bayes was then run with the continuous inputs, and the results are shown in Table~\ref{nb_glass}
+\begin{table}
+\begin{tabular}{lrrrrr}
+{} &  0 &   1 &  2 &  3 & 4&  5 \\
+0 &  7 &  11 &  1 &  0 &  0 & 0 \\
+1 &  0 &   1 &  0 &  0 &  0 & 0 \\
+2 &  6 &   2 &  4 &  0 &  0 &  0 \\
+3 &  0 &   1 &  0 &  2 &  0 & 1 \\
+4 &  0 &   0 &  0 &  0 &  0 & 0 \\
+5 &  0 &   0 &  0 &  1 &  0 & 5 \\
+\end{tabular}
+\label{nb_glass}
+\caption{Glass dataset Naive Bayes continuous input results.}
+\end{table}
+This experiment results in accuracy of 40\% for Winnow2, 43\% for Naive Bayes with boolean inputs, and
+45\% for Naive Bayes with continuous inputs. This fits with the hypothesis described above - performance is
+roughly similar with Naive Bayes having an advantage in continuous spaces.
+
+\subsection{Soybean Data}
+\subsubsection*{Data Cleaning \& Transformation}
+The next dataset is the Soybean dataset in which the rot associated with a soybean is predicted
+based on various attributes of the soybean. The features are all multivalued discrete, but some only have a
+single value. Columns with a single value are dropped, as they cannot help learn classes. The rest of the classes
+are then mapped into one-hot encodings.
+
+\subsubsection*{Model Fitting Results}
+All of the algorithms perform extremely well on the soybean dataset, with all 3 variants classifying
+all test set examples correctly. The confusion matrix for all three is shown in Figure~\ref{soybean_c}.
+\begin{table}
+\begin{tabular}[lrrrr]
+{} &  D1 &  D2 &  D3 & D4  \\
+0 &  2 &  0 &  0 &  0 \\
+1 &  0 &  1 &  0 &  0 \\
+2 &  0 &  0 &  2 &  0 \\
+3 &  0 &  0 &  0 &  4 \\
+\end{tabular}
+\label{soybean_c}
+\caption{Soybean data models all correctly classify all examples.}
+\end{table}
+
+\subsection{House Votes}
+\subsubsection*{Data Cleaning \& Transformation}
+For the House Votes dataset, all inputs are boolean. There are missing values scattered throughout the dataset, and
+so when the data is encoded as a boolean value, null values will be considered their own value, and get their own one-hot
+encoding.
+
+\subsubsection*{Model Fitting Results}
+
+
 
 \end{document}

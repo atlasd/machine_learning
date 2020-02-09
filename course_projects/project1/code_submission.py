@@ -745,45 +745,202 @@ fit_predict_kfold(
 
 
 # Next, we repeat this process on the Soybean data
-soybean_data = pd.read_csv(
-    "https://archive.ics.uci.edu/ml/machine-learning-databases/soybean/soybean-small.data",
-    header=None,
-    names=[
-        "date",
-        "plant-stand",
-        "precip",
-        "temp",
-        "hail",
-        "crop-hist",
-        "area-damaged",
-        "severity",
-        "seed-tmt",
-        "germination",
-        "plant-growth",
-        "leaves",
-        "leafspots-halo",
-        "leafspots-marg",
-        "leafspot-size",
-        "leaf-shread",
-        "leaf-malf",
-        "leaf-mild",
-        "stem",
-        "lodging",
-        "stem-cankers",
-        "canker-lesion",
-        "fruiting-bodies",
-        "external decay",
-        "mycelium",
-        "int-discolor",
-        "sclerotia",
-        "fruit-pods",
-        "fruit spots",
-        "seed",
-        "mold-growth",
-        "seed-discolor",
-        "seed-size",
-        "shriveling",
-        "roots",
-        "class",
-    ],
+soybean_data = pipe(
+    pd.read_csv(
+        "https://archive.ics.uci.edu/ml/machine-learning-databases/soybean/soybean-small.data",
+        header=None,
+        names=[
+            "date",
+            "plant-stand",
+            "precip",
+            "temp",
+            "hail",
+            "crop-hist",
+            "area-damaged",
+            "severity",
+            "seed-tmt",
+            "germination",
+            "plant-growth",
+            "leaves",
+            "leafspots-halo",
+            "leafspots-marg",
+            "leafspot-size",
+            "leaf-shread",
+            "leaf-malf",
+            "leaf-mild",
+            "stem",
+            "lodging",
+            "stem-cankers",
+            "canker-lesion",
+            "fruiting-bodies",
+            "external decay",
+            "mycelium",
+            "int-discolor",
+            "sclerotia",
+            "fruit-pods",
+            "fruit spots",
+            "seed",
+            "mold-growth",
+            "seed-discolor",
+            "seed-size",
+            "shriveling",
+            "roots",
+            "instance_class",
+        ],
+    )
+    .pipe(lambda df: df.loc(axis=1)[df.nunique() > 1])  # drop columns with no variance
+    .assign(instance_class=lambda df: df["instance_class"].astype("category").cat.codes)
+)
+
+soybean_bool = pd.get_dummies(
+    soybean_data,
+    columns=[col for col in soybean_data.columns if col != "instance_class"],
+    drop_first=True,
+)
+
+soybean_winnow2 = MulticlassClassifier(
+    model_cls=Winnow2,
+    classes=[0, 1, 2, 3],
+    cls_kwargs={
+        cls: {
+            "weight_scaler": 2,
+            "threshold": 1,
+            "num_features": soybean_bool.drop("instance_class", axis=1).shape[1],
+        }
+        for cls in [0, 1, 2, 3]
+    },
+)
+
+logger.info("Fitting Winnow2 on Boolean Soybean")
+
+fit_predict_kfold(
+    model_obj=soybean_winnow2,
+    X=soybean_bool.drop("instance_class", axis=1).values,
+    y=soybean_bool["instance_class"].values,
+    kfold=kfold,
+    randomseed=74,
+)
+
+logger.info("Fitting Naive Bayes on Boolean Soybean")
+
+soybean_naive_bayes_bool = MulticlassClassifier(
+    model_cls=NaiveBayes,
+    classes=[0, 1, 2, 3],
+    cls_kwargs={
+        cls: {
+            "column_distribution_map": {
+                col: "multinomial" for col in range(soybean_bool.shape[1] - 1)
+            },
+            "binomial": True,
+        }
+        for cls in [0, 1, 2, 3]
+    },
+)
+fit_predict_kfold(
+    model_obj=soybean_naive_bayes_bool,
+    X=soybean_bool.drop("instance_class", axis=1).values,
+    y=soybean_bool["instance_class"].values,
+    kfold=kfold,
+    randomseed=74,
+)
+logger.info("Fitting Naive Bayes on Continuous Soybean")
+soybean_naive_bayes_continuous = NaiveBayes(
+    column_distribution_map={
+        col: "multinomial" for col in range(soybean_data.shape[1] - 1)
+    }
+)
+
+fit_predict_kfold(
+    model_obj=soybean_naive_bayes_continuous,
+    X=soybean_data.drop("instance_class", axis=1).values,
+    y=soybean_data["instance_class"].values,
+    kfold=kfold,
+    randomseed=74,
+)
+
+# Next, we fit the congressional voting dataset. See the report for more information
+# on the decisions around the data.
+
+house_votes_data = (
+    pd.read_csv(
+        "https://archive.ics.uci.edu/ml/machine-learning-databases/voting-records/house-votes-84.data",
+        header=None,
+        names=[
+            "instance_class",
+            "handicapped-infants",
+            "water-project-cost-sharing",
+            "adoption-of-the-budget-resolution",
+            "physician-fee-freeze",
+            "el-salvador-aid",
+            "religious-groups-in-schools",
+            "anti-satellite-test-ban",
+            "aid-to-nicaraguan-contras",
+            "mx-missile",
+            "immigration",
+            "synfuels-corporation-cutback",
+            "education-spending",
+            "superfund-right-to-sue",
+            "crime",
+            "duty-free-exports",
+            "export-administration-act-south-africa",
+        ],
+    )
+    .replace("?", np.NaN)
+    .replace("y", 1)
+    .replace("n", 0)
+    .assign(instance_class=lambda df: df["instance_class"].astype("category").cat.codes)
+)
+
+house_votes_bool = pd.get_dummies(
+    house_votes_data,
+    dummy_na=True,
+    drop_first=True,
+    columns=list(filter(lambda c: c != "instance_class", house_votes_data.columns)),
+)
+
+logger.info("Fitting Winnow2 on Boolean Congress")
+
+congress_winnow2 = Winnow2(
+    weight_scaler=2, threshold=1, num_features=house_votes_bool.shape[1] - 1
+)
+
+fit_predict_kfold(
+    model_obj=congress_winnow2,
+    X=house_votes_bool.drop("instance_class", axis=1).values,
+    y=house_votes_bool["instance_class"].values,
+    kfold=kfold,
+    randomseed=73,
+)
+
+logger.info("Fitting Naive Bayes on Boolean Congress")
+congress_naive_bayes_boolean = NaiveBayes(
+    column_distribution_map={
+        col_idx: "multinomial" for col_idx in range(house_votes_bool.shape[1] - 1)
+    }
+)
+
+fit_predict_kfold(
+    model_obj=congress_naive_bayes_boolean,
+    X=house_votes_bool.drop("instance_class", axis=1).values,
+    y=house_votes_bool["instance_class"].values,
+    kfold=kfold,
+    randomseed=73,
+)
+
+logger.info("Fitting Naive Bayes on Multinomial Congress (with NAs)")
+congress_naive_bayes_multinomial = NaiveBayes(
+    column_distribution_map={
+        col_idx: "multinomial" for col_idx in range(house_votes_data.shape[1] - 1)
+    }
+)
+
+fit_predict_kfold(
+    model_obj=congress_naive_bayes_multinomial,
+    X=house_votes_data.drop("instance_class", axis=1)
+    .apply(lambda df: df.astype("category").cat.codes)
+    .add(1)
+    .values,
+    y=house_votes_data["instance_class"].values,
+    kfold=kfold,
+    randomseed=73,
 )
