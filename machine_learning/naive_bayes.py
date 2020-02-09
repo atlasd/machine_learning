@@ -6,24 +6,25 @@ from collections import Counter, OrderedDict
 
 
 class NaiveBayes:
-    def __init__(self, column_distribution_map, multiclass=False, alpha=1):
+    def __init__(self, column_distribution_map, alpha=1, binomial=False):
+        self.binomial = binomial
         self.column_distribution_map = column_distribution_map
         self.fitted_distributions = {}
-        self.multiclass = multiclass
         self.is_fitted = False
         self.alpha = alpha
 
     def _fit_gaussian(self, X, col_idx, y):
         return {
             val: stats.norm(
-                loc=X[y == val, col_idx].mean(), scale=X[y == val, col_idx].std()
+                loc=X[y == val, col_idx].mean(),
+                scale=max(X[y == val, col_idx].std(), 0.00001),
             )
             for val in sorted(set(y))
         }
 
     def _fit_multinomial(self, X, col_idx, y):
         fitted_distributions = {}
-        all_X_values = sorted(np.unique(X[:, col_idx]))
+        all_X_values = list(range(X[:, col_idx].max() + 1))
         for val in sorted(set(y)):
             n = np.sum(y == val)
             relevant_subset = X[y == val, col_idx]
@@ -65,7 +66,7 @@ class NaiveBayes:
     def _predict_one_class(self, X, class_idx):
         return np.array(
             [
-                self.fitted_distributions[col_idx][class_idx].logpdf(X[:, col_idx])
+                self.fitted_distributions[col_idx][class_idx].pdf(X[:, col_idx])
                 if self.column_distribution_map[col_idx] == "gaussian"
                 else self.fitted_distributions[col_idx][class_idx].p[
                     X[:, col_idx].astype("int")
@@ -74,7 +75,7 @@ class NaiveBayes:
             ]
         ).prod(axis=0)
 
-    def predict(self, X):
+    def predict_prob(self, X):
         if not self.is_fitted:
             raise ValueError("Must fit model before predictions can be made")
 
@@ -84,5 +85,8 @@ class NaiveBayes:
                 for class_idx in self.fitted_distributions[0].keys()
             ],
             np.vstack,
-            lambda arr: np.argmax(arr, axis=0),
+            lambda arr: arr[1] if self.binomial else arr,
         )
+
+    def predict(self, X):
+        return np.argmax(self.predict_prob(X), axis=0)

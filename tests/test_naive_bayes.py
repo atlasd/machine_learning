@@ -88,7 +88,10 @@ def test_predict_one_class(fitted_model, X):
     out1 = fitted_model._predict_one_class(X, class_idx=1)
     assert out0.shape[0] == X.shape[0]
     assert out1.shape[0] == X.shape[0]
-    import ipdb
 
-    ipdb.set_trace()
-    out1
+
+def test_predict(fitted_model, X):
+    out = fitted_model.predict(X=X)
+    assert out.shape[0] == X.shape[0]
+    assert out.ndim == 1
+    assert np.allclose(out, [0, 1, 0, 1, 1, 1])
