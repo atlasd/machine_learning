@@ -63,6 +63,10 @@ class KFoldCV:
 
 
 class KFoldStratifiedCV:
+    """
+    Class to conduct Stratified KFold CV
+    """
+
     def __init__(self, num_folds, shuffle=True):
         self.num_folds = num_folds
         self.shuffle = shuffle
@@ -76,8 +80,31 @@ class KFoldStratifiedCV:
         )
 
     def split(self, y):
-        return (
+        """
+        Takes an array of classes, and creates
+        train/test splits with proportional examples for each
+        group.
+
+        Parameters
+        ----------
+        y : np.array
+            The array of class labels.
+        """
+        # Make sure y is an array
+        y = np.array(y) if isinstance(y, list) else y
+
+        # Groupby y and add integer indices.
+        df_with_split = (
             pd.DataFrame({"y": y, "idx": np.arange(len(y))})
             .groupby("y")["idx"]
-            .apply(self.add_split_col)
+            .apply(self.add_split_col)  # Add col for split for instance
         )
+
+        # For each fold, get train and test indices (based on col for split)
+        for cv_split in np.arange(self.num_folds - 1, 0, -1):
+            train_bool = df_with_split["split"] != cv_split
+            test_bool = ~train_bool
+            # Yield index values of not cv_split and cv_split for train, test
+            yield df_with_split["idx"].values[train_bool.values], df_with_split[
+                "idx"
+            ].values[test_bool.values]

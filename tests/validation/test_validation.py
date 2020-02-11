@@ -57,8 +57,31 @@ def test_get_one_split(indices, num_split, expected):
         ([1, 2, 3, 4, 5, 6], [0, 1, 0, 1, 0, 1], 2),
     ],
 )
-def test_add_split_col(arr, split_expected, num_folds):
+def test_add_split_col_strat(arr, split_expected, num_folds):
     kfold_strat = validation.KFoldStratifiedCV(num_folds=num_folds, shuffle=True)
     out = kfold_strat.add_split_col(arr=arr)
     assert out.shape[0] == len(arr)
     assert np.allclose(out["split"], split_expected)
+
+
+@pytest.mark.parametrize(
+    "y, num_folds",
+    [
+        (np.array([1, 1, 1, 2, 2, 3, 3, 3, 2]), 3),
+        (np.array([1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 2, 2]), 3),
+        (np.array([1, 1, 1, 1, 1, 1, 2, 2, 3, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2]), 3),
+    ],
+)
+def test_split_strat(y, num_folds):
+    kfold_strat = validation.KFoldStratifiedCV(num_folds=num_folds, shuffle=True)
+    y_value_counts = list(zip(*np.unique(y, return_counts=True)))
+    for train, test in kfold_strat.split(y=y):
+        for y_elem, count in y_value_counts:
+            n_training_strat = np.sum(y[train] == y_elem)
+            n_testing_strat = np.sum(y[test] == y_elem)
+            assert n_training_strat >= int(
+                count - np.ceil(count / num_folds)
+            ) and n_training_strat <= count - np.floor(count / num_folds)
+            assert n_testing_strat <= np.ceil(
+                count / num_folds
+            ) and n_testing_strat >= np.floor(count / num_folds)
