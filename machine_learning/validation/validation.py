@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 
 class KFoldCV:
@@ -59,3 +60,24 @@ class KFoldCV:
         for num_split in range(self.num_folds):
             # Return all but one split as train, and one split as test
             yield KFoldCV._get_one_split(split_indices, num_split=num_split)
+
+
+class KFoldStratifiedCV:
+    def __init__(self, num_folds, shuffle=True):
+        self.num_folds = num_folds
+        self.shuffle = shuffle
+
+    def add_split_col(self, arr):
+        arr = arr if not self.shuffle else np.random.permutation(arr)
+        n = len(arr)
+        k = int(np.ceil(n / self.num_folds))
+        return pd.DataFrame(
+            {"idx": arr, "split": np.tile(np.arange(self.num_folds), k)[0:n],}
+        )
+
+    def split(self, y):
+        return (
+            pd.DataFrame({"y": y, "idx": np.arange(len(y))})
+            .groupby("y")["idx"]
+            .apply(self.add_split_col)
+        )

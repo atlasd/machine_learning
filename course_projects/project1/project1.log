@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  9 FEB 2020 13:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  9 FEB 2020 19:07
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -229,23 +229,23 @@ Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
 (./project1.aux)
 \openout1 = `project1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Try loading font information for U+msa on input line 13.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Try loading font information for U+msa on input line 14.
  (/usr/local/texlive/2017/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 13.
+LaTeX Font Info:    Try loading font information for U+msb on input line 14.
  (/usr/local/texlive/2017/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
@@ -343,40 +343,40 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<../../notebooks/img_proj1/iris_boxplot.png, id=16, 501.875pt x 501.875pt>
+[2] <../../notebooks/img_proj1/iris_boxplot.png, id=22, 501.875pt x 501.875pt>
 File: ../../notebooks/img_proj1/iris_boxplot.png Graphic file (type png)
 
 <use ../../notebooks/img_proj1/iris_boxplot.png>
 Package pdftex.def Info: ../../notebooks/img_proj1/iris_boxplot.png used on inp
-ut line 150.
+ut line 169.
 (pdftex.def)             Requested size: 501.87376pt x 501.87376pt.
 
-Overfull \hbox (32.11874pt too wide) in paragraph at lines 150--151
+Overfull \hbox (32.11874pt too wide) in paragraph at lines 169--170
  [][] 
  []
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 155.
+               Default added (so using `tbp') on input line 174.
 
-[2] [3 <../../notebooks/img_proj1/iris_boxplot.png>]
-Overfull \hbox (61.69072pt too wide) in paragraph at lines 249--259
+[3] [4 <../../notebooks/img_proj1/iris_boxplot.png>]
+Overfull \hbox (4.27383pt too wide) in paragraph at lines 272--281
  [][] 
  []
 
-[4] [5] [6] (./project1.bbl) [7] (./project1.aux) )
+[5] [6] (./project1.bbl) [7] (./project1.aux) )
 (\end occurred inside a group at level 1)
 
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 4186 strings out of 492995
- 58404 string characters out of 6132704
- 157630 words of memory out of 5000000
- 7520 multiletter control sequences out of 15000+600000
+ 4188 strings out of 492995
+ 58428 string characters out of 6132704
+ 154644 words of memory out of 5000000
+ 7522 multiletter control sequences out of 15000+600000
  10215 words of font info for 40 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 39i,8n,32p,308b,2995s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 39i,9n,32p,308b,2995s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmbx10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmcsc10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/
@@ -393,7 +393,7 @@ pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
 usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></u
 sr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr
 /local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
-Output written on project1.pdf (7 pages, 223214 bytes).
+Output written on project1.pdf (7 pages, 224591 bytes).
 PDF statistics:
  95 PDF objects out of 1000 (max. 8388607)
  67 compressed objects within 1 object stream

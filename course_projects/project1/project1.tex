@@ -6,6 +6,7 @@
 \DeclareMathOperator*{\argmin}{arg\,min}
 \usepackage{ifpdf}
 \usepackage{url}
+
 \usepackage{graphicx}
 
 \title{Project 1 - Winnow2 and Naive Bayes}
@@ -14,25 +15,24 @@
     \begin{abstract}
         This paper will introduce the Winnow2 algorithm and the Naive Bayes algorithm. Both will be treated in
         context of classification problems, with strategies for categorical and continuous valued inputs.
-        We find that in several experiments on real-world datasets,
-        both algorithms perform comparably, especially when Naive Bayes is
-        limited to booelan inputs and outputs.
+        In several experiments on real world datasets, both algorithms perform comparably,
+        with Naive Bayes at a slight advantage on high dimensional continuous feature spaces,
+        and Winnow2 at a slight advantage with on high dimensional boolean feature spaces.
     \end{abstract}
     \maketitle
     \section{Problem Statement \& Hypothesis}
-    We seek to introduce two basic supervised learning methods, and apply them to classification problems.
-
-
-    The first, Winnow2, is a very simplistic learning model for boolean inputs and outputs. The second,
+    Two basic supervised learning methods are introduced, and applied to real world classification problems.
+    The first, Winnow2, is a simple learning model for boolean inputs and outputs. The second,
     Naive Bayes, is a simple graphical model that can handle multivalued discrete and continuous inputs.
 
-    We will compare both models using Boolean-values inputs and outputs to make the comparison more fair, while also
-    applying Naive Bayes in its more flexible context with multivalued discrete and continuous inputs.
+    Both models will be compared using boolean valued inputs for comparability, while Naive Bayes will also be applied
+    to multivalued discrete and continuous inputs, testing for general superiority in those spaces.
 
     Both algorithms do not explicitly treat interactions between variables (Winnow2 will adjust the weights
     for all the active weights, and Naive Bayes assumes the feature values are conditionally independent on the class),
     so large differences in performance between the two are not expected. However, when Naive Bayes is given the
-    capacity to treat continuous inputs via a Gaussian conditional distribution, it might lead to performance inprovements.
+    capacity to treat continuous inputs via a Gaussian conditional distribution, and the inputs do not easily lend to
+    manual segmentation of the classes, it is expected that Naive Bayes may learn a better representation of the function.
 
     Additionally, given the simplicity of the algorithms, it might be reasonable to expect Winnow2 to perform well on
     large feature spaces, as it has an implicit regularization mechanism (weights are only updated if boolean
@@ -40,57 +40,76 @@
     class imbalances, as there won't be many training instances over which to estimate the conditional distributions.
 
     In summary, the hypothesis is that of rough performance parity, with Winnow2 having an advantage in large
-    feature spaces, and Naive Bayes having an advantage with continuous features.
+    feature spaces, and Naive Bayes having an advantage with continuous features. In accordance with the
+    No Free Lunch theorem, it would be unrealisitc to expect one algorithm to perform better on all problems.
 
     \section{Description of Algorithms}
     \subsection*{Winnow2}
     The Winnow2 Algorithm\cite{winnow2} is a linear-threshold boolean classifier, in which a set of boolean inputs is mapped
-    to a single boolran output. The algorithm works as follows:
+    to a single boolian output. The algorithm works as follows:
 
-    Given a boolean input vector, $X = (x_1, \cdots, x_k)$,  create a vector of weights $W = (w_1, \cdots, w_k)$.
-    We also initialize two parameters, $\theta$ and $\alpha > 1$.
-    For each example, we calculate $Z(X, W) = \sum_{i=1}^k x_i w_i$. If $Z \geq \theta$, we
+    Given a boolean input vector, $X = (x_1, \cdots, x_k)$,  initialize a vector of weights $W = (w_1, \cdots, w_k)$.
+    We also initialize two parameters, $\theta > 0$  and $\alpha > 1$.
+    For each training instance, we calculate $Z(X, W) = \sum_{i=1}^k x_i w_i$. If $Z \geq \theta$, we
     predict a 1, and if $Z < \theta$, we predict a 0.
 
-    Our learning mechanism is composed of two operations - promotion and demotion.
-    Under promotion, we update $w_i = \alpha w_i \forall i \mid x_i = 1$. Under demotion,
-    we update $w_i =  \frac{w_i}{\alpha} \forall i \mid x_i = 1$. If our prediction is a 1, while
-    the correct response is a 0, we apply demotion. If our prediction is a 0 while the correct
-    response is a 1, we apply promotion. This has the effect of raising the value of $Z$ when our
-    function predicts a value that is too small, and lowers the value of $Z$ when our
-    function predicts a value that is too large.
+    The learning mechanism is composed of two operations - promotion and demotion.
+    Under promotion, $w_i$ is updated such that $w_i = \alpha w_i ~~\forall i \mid x_i = 1$. Under demotion,
+    $w_i$ is updated such that $w_i =  \frac{w_i}{\alpha} ~~\forall i \mid x_i = 1$. If the prediction is a 1, while
+    the correct response is a 0, demotion is applied. If the prediction is a 0 while the correct
+    response is a 1, promotion is applied. This has the effect of raising the value of $Z$ when the
+    function predicts a value that is too small, and lowers the value of $Z$ when the function predicts a value that is too large.
 
+    If a given training example yields a correct prediction, no updates to the weight vector are made. This is the
+    regularizing effect mentioned above.
+
+    As mentioned in \cite{winnow2}, this algorithm is an online learner, insomuch as given a set of weights, and a training
+    example, the algorithm can make the update without awareness of the other training examples, allowing it to train continuously on new examples coming in without
+    any adjustment.
 
     \subsection*{Naive Bayes}
-    The Naive Bayes algorithm\cite{naivebayes} is a graphical model that leverages Bayes' Rule and some simplifying
+    The Naive Bayes algorithm\cite{naivebayes} is a probablistic graphical model that leverages Bayes' Rule and some simplifying
     assumptions. To recap, under Bayes' Rule:
-    \[
+    \begin{align}
         P(C \mid X) = \frac{P(X \mid C) P(C)}{P(X)}.
-    \]
+    \label{bayes_rule}
+    \end{align}
     Suppose $C $ is the random variable representing the class of an instance, while $X$ is a
     set of random variables representing feature values of a given instance. In creating a classifer,
-    we want to know that likelihood that a given instance belongs to class $C$, given its feature values $X$,
-    and so if we can calculate the right hand side of Bayes' Rule, we have a classifier that reflects our goal.
+    a reasonable goal can be calculating the
+    likelihood that a given instance belongs to class $C$, given its feature values $X$.
+    As such, given the right hand of Equation~\ref{bayes_rule}, the goal would be achieved.
 
-    To make the equation above more managable, a simplifying assumption can be made - suppose all
-    of the features are independent conditional on the class. Then we can say that for a set
-    of $k$ feature values,
+    In the case of a high dimensional feature set $X = (x_1, \cdots, x_k)$, Equation~\ref{bayes_rule}
+    is
     \[
+    P(C \mid X_i, \cdots, X_k ) = \frac{
+                P(X_i, \cdots, X_k\mid C) P(C)
+            }{P(X_i, \cdots, X_k)}
+    \]
+    To make the equation above more managable, a simplifying assumption can be made - suppose all
+    of the features are independent conditional on the class. Then for a set
+    of $k$ feature values,
+    \begin{align}
         P(C \mid X_i, \cdots, X_k ) = \frac{
             P(X_i, \cdots, X_k\mid C) P(C)
         }{P(X_i, \cdots, X_k)}
         = \frac{
             \prod_{i=1}^k P(X_i \mid C) P(C)
         }{P(X_i, \cdots, X_k)}
-    \]
+    \label{nb_pivotal}
+    \end{align}
+    This simplifying assumption is often unrealistic, as feature values are likely not independent conditional on the class.
+    However, in \cite{naivebayes}, empirical evidence is cited that Naive Bayes performs well relative
+    to more complex learning algorithms that account for potential dependence relationships between features, given the class.
 
-    We can define our classification function as choosing the value of $C$ that is most likely, given
+    Returning to the algorithm, the classification function can be defined as choosing the value of $C$ that is most likely, given
     the feature values, and by extension:
     \[
         \argmax_C P(C \mid X_i, \cdots, X_k) = \argmax_C \prod_{i=1}^k P(X_i \mid C) P(C).
     \]
-    Note that the denominator above can be dropped, as its value is not impacted by the class
-    of a given instance, and so it won't affect the $argmax_c$ operator.
+    The denominator in Equation~\ref{nb_pivotal} was dropped, as its value is not impacted by the class
+    of a given instance, and so it won't affect the $\argmax_c$ operator.
 
     With that background, $P(X_i \mid C)$ and $P(C)$ must be estimated.
     If $X_i$ is a discrete random variable, $P(X_i \mid C)$ can be described as multinomial,
@@ -157,38 +176,41 @@
     {} &  Range 1  & Range 2 & Range 3\\
     Sepal Length &  {[} 0, 5.5{]} & (5.5, 10{]} & {} \\
     Sepal Width &  {[}0, 3{]} & (3, 10{]} & {} \\
-    Petal Length &  {[}0, 1{]} & (1, 1.6{]} & (1.6, 10{]} \\
-    Petal Width &  {[}0, 2{]} & (2, 5{]} & (5.5, 10{]}
+    Petal Length &  {[}0, 2{]} & (2, 5{]} & (5.5, 10{]} \\
+    Petal Width &  {[}0, 1{]} & (1, 1.6{]} & (1.6, 10{]} \\
     \end{tabular}
+    \caption{Discretization bins for the Iris Dataset, based on Figure~\ref{iris_boxplot}}
     \end{table}
     One-hot encodings were used on the discretized features.
 
-\subsubsection*{Model Fitting Results}
-    The model results for one of five random folds are shown in Table~\ref{iris_winnow2}. Note that for the confusion matrices
+    \subsubsection*{Model Fitting Results}
+    The model results for one of five random folds are shown in Tables~\ref{iris_winnow2},~\ref{iris_nb_bool} and ~\ref{iris_nb}. Note that for the confusion matrices
     here and below, the column headers are the actual labels, while the row headers are the predicted values. Values along
-    the diagonal indicate correct predictions.
+    the diagonal indicate correct predictions. Winnow2 scores a 100\% accuracy rate, which both forms of Naive Bayes get 96.6\%
+    accuracy.
+
     \begin{table}
     \begin{tabular}{lrrr}
-{} &  Setosa &  Versicolor &   Virginica \\
+    {} &  Setosa &  Versicolor &   Virginica \\
     Setosa &  9 &  0 &   0 \\
-    Versicolor &  0 &  0 &   1 \\
-    Virginica &  0 &  8 &  12
+    Versicolor &  0 &  8 &   0 \\
+    Virginica &  0 &  0 &  13
     \end{tabular}
-    \caption{Iris - Winnow2 Confusion Matrix}
+    \caption{Iris - Winnow2 with boolean inputs confusion matrix}
     \label{iris_winnow2}
     \end{table}
-    The model results for Naive Bayes with boolean inputs are shown in Table~\ref{iris_nb_bool}
     \begin{table}
     \begin{tabular}{lrrr}
-{} &  Setosa &  Versicolor &   Virginica \\
+    {} &  Setosa &  Versicolor &   Virginica \\
     Setosa &  9 &  0 &   0 \\
-    Versicolor &  0 &  5 &   6 \\
-    Virginica &  0 &  3 &  7
+    Versicolor &  0 &  8 &   1 \\
+    Virginica &  0 &  0 &  12
     \end{tabular}
-    \caption{Iris - Naive Bayes with Boolean Inputs Confusion Matrix}
+    \caption{Iris - Naive Bayes with boolean inputs confusion matrix}
     \label{iris_nb_bool}
     \end{table}
-    The model results for Naive Bayes with boolean inputs are shown in Table~\ref{iris_nb}
+
+    The model results for Naive Bayes with boolean inputs are shown in Table~\ref{iris_nb}.
     \begin{table}
     \begin{tabular}{lrrr}
 {} &  Setosa &  Versicolor &   Virginica \\
@@ -199,9 +221,9 @@
     \caption{Iris - Naive Bayes with Continuous Inputs Confusion Matrix}
     \label{iris_nb}
     \end{table}
-These results indicate that the classes are easily seperably in a 4D space of all the features, as the continuous Naive Bayes
-algorithm outperforms the discretized version. This lines up with the hypothesis presented above - continuous inputs with
-linearly seperable classes are a good fit with Naive Bayes.
+These results indicate that the classes are easily seperably in a 4D space of all the features. Both algorithms
+perform quite well, with Winnow2 classifying everything correctly, and Naive Bayes missing just one test example.
+However, note that Winnow2 is aided here by the manual discretization of the boundaries between classes.
 
 \subsection{Cancer Data}
     \subsubsection*{Data Cleaning \& Transformation}
@@ -240,6 +262,7 @@ linearly seperable classes are a good fit with Naive Bayes.
     \end{table}
 The results here indicate near performance parity. Winnow2 does quite well, as this problem has many attributes, only some
 of which are likely relevant. The inputs are not continuous, and so Naive Bayes does not have a significant advantage.
+The exact accuracy numbers are Winnow2: 100\%, Naive Bayes (Boolean Inputs): 97.8\%, Naive Bayes (Multinomial): 97.8\%.
 
 \subsection{Glass Data}
 \subsubsection*{Data Cleaning \& Transformation}
@@ -248,13 +271,14 @@ Table~\ref{glassmeans} shows the mean by class for each of the features.
 \begin{table}
 \begin{tabular}{lrrrrrrrrr}
 Class &  refractive index &     sodium &  magnesium &  aluminum &    silicon &  potassium &    calcium &    barium &      iron \\
-0 &          1.518718 &  13.242286 &   3.552429 &  1.163857 &  72.619143 &   0.447429 &   8.797286 &  0.012714 &  0.057000 \\
-1 &          1.518619 &  13.111711 &   3.002105 &  1.408158 &  72.598026 &   0.521053 &   9.073684 &  0.050263 &  0.079737 \\
-2 &          1.517964 &  13.437059 &   3.543529 &  1.201176 &  72.404706 &   0.406471 &   8.782941 &  0.008824 &  0.057059 \\
-3 &          1.518928 &  12.827692 &   0.773846 &  2.033846 &  72.366154 &   1.470000 &  10.123846 &  0.187692 &  0.060769 \\
-4 &          1.517456 &  14.646667 &   1.305556 &  1.366667 &  73.206667 &   0.000000 &   9.356667 &  0.000000 &  0.000000 \\
-5 &          1.517116 &  14.442069 &   0.538276 &  2.122759 &  72.965862 &   0.325172 &   8.491379 &  1.040000 &  0.013448
+0 &          1.518 &  13.242 &   3.552 &  1.163 &  72.619 &   0.447 &   8.797 &  0.012 &  0.057 \\
+1 &          1.518 &  13.111 &   3.002 &  1.408 &  72.598 &   0.521 &   9.073 &  0.050 &  0.079 \\
+2 &          1.517 &  13.437 &   3.543 &  1.201 &  72.404 &   0.406 &   8.782 &  0.008 &  0.057 \\
+3 &          1.518 &  12.827 &   0.773 &  2.033 &  72.366 &   1.470 &  10.123 &  0.187 &  0.060 \\
+4 &          1.517 &  14.646 &   1.305 &  1.366 &  73.206 &   0.000 &   9.356 &  0.000 &  0.000 \\
+5 &          1.517 &  14.442 &   0.538 &  2.122 &  72.965 &   0.325 &   8.491 &  1.040 &  0.013
 \end{tabular}
+\caption{Glass Data - Feature means by class. This is used to inform the discretization of the features.}
 \label{glassmeans}
 \end{table}
 The values chosen reflect points that seperate the means of the classes reasonably. The values chosen are shown in Table~\ref{glass_discrete}.
@@ -321,7 +345,8 @@ Naive Bayes was then run with the continuous inputs, and the results are shown i
 \end{table}
 This experiment results in accuracy of 40\% for Winnow2, 43\% for Naive Bayes with boolean inputs, and
 45\% for Naive Bayes with continuous inputs. This fits with the hypothesis described above - performance is
-roughly similar with Naive Bayes having an advantage in continuous spaces.
+roughly similar with Naive Bayes having an advantage in continuous spaces. Note that the accuracy numbers here
+are much lower than in the other problems, some of which can potentiall y be attributed to that higher number of classes.
 
 \subsection{Soybean Data}
 \subsubsection*{Data Cleaning \& Transformation}
@@ -385,6 +410,10 @@ The results above are intuitive. Winnow2 tends to excel in situations where the 
 Naive Bayes has an advantage with discrete multivalued and continuous inputs. This seems like a good rule of thumb in
 deciding between the two algorithms. Otherwise, their behavior is quite similar in terms of accuracy for a given problem,
 as they search similar representation spaces (univariate and linear).
+
+One big boost given to the Winnow2 algorithm in this paper is the manual discretization of continuous variables
+along favorable boundaries. One could surmise that given a significanly larger feature space, this would
+become quite cumbersome, and may not be possible.
 
 \section{Summary}
 This paper introduced two learning algorithms: Winnow2 and Naive Bayes.

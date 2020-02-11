@@ -175,7 +175,7 @@ class MulticlassClassifier:
         ]
 
 
-def fit_predict_kfold(model_obj, X, y, kfold, randomseed=None):
+def fit_predict_kfold(model_obj, X, y, kfold, randomseed=None, filename=None):
     # Set seed if not None
     if randomseed:
         np.random.seed(randomseed)
@@ -197,6 +197,19 @@ def fit_predict_kfold(model_obj, X, y, kfold, randomseed=None):
         # Log confusion matrix for last fold
         if iteration == kfold.num_folds:
             logger.info(confusion_matrix(actuals=actuals, predictions=predicted))
+            if filename:
+                # write predictions to file if given filename
+                pd.DataFrame(
+                    np.hstack(
+                        [
+                            X[test],
+                            np.array(model_obj.predict(X[test])).reshape(-1, 1),
+                            np.array(y[test]).reshape(-1, 1),
+                        ]
+                    ),
+                    columns=[f"X_{idx}" for idx in range(X.shape[1])]
+                    + ["Predictions", "Actuals"],
+                ).to_csv(filename, index=False)
 
 
 """
@@ -273,8 +286,7 @@ class Winnow2:
 
         # If prediction is correct, do nothing
         if yhat == y:
-            if self.verbose:
-                logger.info("Correct prediction. No updates.")
+
             return
 
         # If prediction is 0 and y is 1, promote
@@ -511,8 +523,8 @@ X_iris, y_iris = discretize_dataframe(
     discretize_boundries={
         "sepal_length": [0, 5.5, 10],
         "sepal_width": [0, 3, 10],
-        "petal_length": [0, 1, 1.6, 10],
-        "petal_width": [0, 2, 5, 10],
+        "petal_width": [0, 1, 1.6, 10],
+        "petal_length": [0, 2, 5, 10],
     },
 ).pipe(
     lambda df: (
@@ -535,7 +547,12 @@ kfold = KFoldCV(num_folds=5, shuffle=True)
 
 logger.info("Fitting Winnow2 on Boolean Iris Dataset")
 fit_predict_kfold(
-    model_obj=iris_winnow2, X=X_iris, y=y_iris, kfold=kfold, randomseed=73
+    model_obj=iris_winnow2,
+    X=X_iris,
+    y=y_iris,
+    kfold=kfold,
+    randomseed=73,
+    filename="winnow2-iris-test.csv",
 )
 
 logger.info("Fitting Naive Bayes on Boolean Iris Dataset")
@@ -554,7 +571,12 @@ iris_naive_bayes = MulticlassClassifier(
 )
 
 fit_predict_kfold(
-    model_obj=iris_naive_bayes, X=X_iris, y=y_iris, kfold=kfold, randomseed=73
+    model_obj=iris_naive_bayes,
+    X=X_iris,
+    y=y_iris,
+    kfold=kfold,
+    randomseed=73,
+    filename="nb-boolean-iris-test.csv",
 )
 
 logger.info("Fitting Naive Bayes on Continuous Iris Dataset")
@@ -568,6 +590,7 @@ fit_predict_kfold(
     y=iris_data["class"].astype("category").cat.codes.values,
     kfold=kfold,
     randomseed=73,
+    filename="nb-cont-iris-test.csv",
 )
 
 # Next, we fit the models over the cancer dataset. We read in the data.

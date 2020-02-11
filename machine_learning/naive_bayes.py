@@ -1,13 +1,19 @@
 import numpy as np
 from scipy import stats
-import pandas as pd
 from toolz import pipe
 from collections import Counter, OrderedDict
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class NaiveBayes:
     def __init__(
-        self, column_distribution_map: dict, alpha: float = 1, binomial: bool = False
+        self,
+        column_distribution_map: dict,
+        alpha: float = 1,
+        binomial: bool = False,
+        verbose: bool = True,
     ):
         """
         Class to fit Naive Bayes.
@@ -33,6 +39,7 @@ class NaiveBayes:
         self.fitted_distributions = {}
         self.is_fitted = False
         self.alpha = alpha
+        self.verbose = verbose
 
     def _fit_gaussian(self, X, col_idx, y):
         """
@@ -51,13 +58,21 @@ class NaiveBayes:
             Vector of target classes
         """
         # Dictionary to map each value in `y` to a Gaussian.
-        return {
+        gaussian_fits = {
             val: stats.norm(
                 loc=X[y == val, col_idx].mean(),  # Class sample mean
                 scale=max(X[y == val, col_idx].std(), 0.00001),  # Class sample std
             )
             for val in sorted(set(y))
         }
+        if self.verbose:
+            logger.info(f"Fitted Gaussians for column {col_idx}")
+            for k, v in gaussian_fits.items():
+                logger.info(
+                    f"Class: {k} Mean: {np.round(v.mean())} Std: {np.round(v.std())}"
+                )
+
+        return gaussian_fits
 
     def _fit_multinomial(self, X, col_idx, y):
         """
@@ -100,6 +115,11 @@ class NaiveBayes:
             fitted_distributions[val] = stats.multinomial(
                 n=n, p=np.array(list(all_x_value_counts_smoothed.values())) / normalizer
             )
+
+        if self.verbose:
+            logger.info(f"Fitted multinomials for column {col_idx}")
+            for k, v in fitted_distributions.items():
+                logger.info(f"Class: {k} p: {np.round(v.p)}")
         return fitted_distributions
 
     def fit(self, X: np.ndarray, y: np.ndarray):
@@ -146,12 +166,14 @@ class NaiveBayes:
         return (
             np.array(
                 [
-                    self.fitted_distributions[col_idx][class_idx].pdf(X[:, col_idx])
+                    self.fitted_distributions[col_idx][class_idx].pdf(
+                        X[:, col_idx]
+                    )  # get PDF if Gaussian
                     if self.column_distribution_map[col_idx] == "gaussian"
                     else self.fitted_distributions[col_idx][class_idx].p[
-                        X[:, col_idx].astype("int")
+                        X[:, col_idx].astype("int")  # get p if multinomial
                     ]
-                    for col_idx in range(X.shape[1])
+                    for col_idx in range(X.shape[1])  # For each column in X
                 ]
             ).prod(axis=0)
             * self.prior.p[class_idx]
