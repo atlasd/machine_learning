@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from itertools import product
 
 
 class KFoldCV:
@@ -37,10 +38,8 @@ class KFoldCV:
         Given the split indices, get the `num_split` element of the indices.
         """
         return (
-            np.delete(
-                np.concatenate(split_indices), split_indices[num_split]
-            ),  # Drops the test from the train
-            split_indices[num_split],  # Gets the train
+            np.setdiff1d(np.concatenate(split_indices), split_indices[num_split]),
+            split_indices[num_split],
         )
 
     @staticmethod
@@ -48,7 +47,7 @@ class KFoldCV:
         # Split the indicies by the number of folds
         return np.array_split(indices, indices_or_sections=num_folds)
 
-    def split(self, X: np.ndarray):
+    def split(self, X: np.ndarray, y: np.ndarray = None):
         """
         Creates a generator of train test splits from a matrix X
         """
@@ -79,7 +78,7 @@ class KFoldStratifiedCV:
             {"idx": arr, "split": np.tile(np.arange(self.num_folds), k)[0:n],}
         )
 
-    def split(self, y):
+    def split(self, y, X=None):
         """
         Takes an array of classes, and creates
         train/test splits with proportional examples for each
@@ -101,10 +100,46 @@ class KFoldStratifiedCV:
         )
 
         # For each fold, get train and test indices (based on col for split)
-        for cv_split in np.arange(self.num_folds - 1, 0, -1):
+        for cv_split in np.arange(self.num_folds - 1, -1, -1):
             train_bool = df_with_split["split"] != cv_split
             test_bool = ~train_bool
             # Yield index values of not cv_split and cv_split for train, test
             yield df_with_split["idx"].values[train_bool.values], df_with_split[
                 "idx"
             ].values[test_bool.values]
+
+
+class GridSearchCV:
+    def __init__(self, model_callable, param_grid, scoring_func, cv_object):
+        self.model_callable = model_callable
+        self.param_grid = param_grid
+        self.scoring_func = scoring_func
+        self.cv_object = cv_object
+
+    @staticmethod
+    def create_param_grid(param_grid):
+        return (
+            dict(zip(param_grid.keys(), instance))
+            for instance in product(*param_grid.values())
+        )
+
+    def get_single_fitting_iteration(self, X, y, model):
+        scores = []
+        for train, test in self.cv_object.split(X=X, y=y):
+            model.fit(X[train], y[train])
+            yhat = model.predict(X[test])
+            scores.append(self.scoring_func(y[test], yhat))
+        return np.mean(scores)
+
+    def get_cv_scores(self, X, y):
+        param_grid = list(GridSearchCV.create_param_grid(self.param_grid))
+
+        return zip(
+            param_grid,
+            [
+                self.get_single_fitting_iteration(
+                    X, y, model=self.model_callable(**param_set)
+                )
+                for param_set in param_grid
+            ],
+        )

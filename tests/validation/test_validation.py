@@ -85,3 +85,18 @@ def test_split_strat(y, num_folds):
             assert n_testing_strat <= np.ceil(
                 count / num_folds
             ) and n_testing_strat >= np.floor(count / num_folds)
+
+
+def test_create_param_grid():
+    out = list(validation.GridSearchCV.create_param_grid({"a": [1, 2], "b": [3, 4]}))
+    assert out[0]["a"] == 1
+    assert out[0]["b"] == 3
+
+    assert out[1]["a"] == 1
+    assert out[1]["b"] == 4
+
+    assert out[2]["a"] == 2
+    assert out[2]["b"] == 3
+
+    assert out[3]["a"] == 2
+    assert out[3]["b"] == 4

@@ -18,3 +18,11 @@ def confusion_matrix(actuals, predictions):
         },
         index=actual_values,
     )
+
+
+def accuracy(actuals, predictions):
+    return np.mean(actuals == predictions)
+
+
+def mean_squared_error(actuals, predictions):
+    return np.mean((actuals - predictions) ** 2)
