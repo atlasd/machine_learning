@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from itertools import product
+from typing import Callable, Dict, Union
 
 
 class KFoldCV:
@@ -110,7 +111,34 @@ class KFoldStratifiedCV:
 
 
 class GridSearchCV:
-    def __init__(self, model_callable, param_grid, scoring_func, cv_object):
+    """
+    Class to assist with grid searching over potential parameter values.
+    """
+
+    def __init__(
+        self,
+        model_callable: Callable,
+        param_grid: Dict,
+        scoring_func: Callable,
+        cv_object: Union[KFoldCV, KFoldStratifiedCV],
+    ):
+        """
+        Parameters:
+        -----------
+        model_callable : Callable
+            Function that generates a model object. Should
+            take the keys of param_grid as arguments.
+
+        param_grid : dict
+            Mapping of arguments to potential values
+
+        scoring_func : Callable
+            Takes in y and yhat and returns a score to be maximized.
+
+        cv_object
+            A CV object from above that will be used to make validation
+            splits.
+        """
         self.model_callable = model_callable
         self.param_grid = param_grid
         self.scoring_func = scoring_func

@@ -38,7 +38,11 @@
     Out of the algorithms in this paper, the standard KNN should outperform in situations
     where the data is not too noisy, and the classes are reasonably seperated. An Edited KNN
     model might perform better on noisy data, as points that lie in the space of a different
-    class are deleted from the prediction set. A Condensed KNN might perform poorly on noisy
+    class are deleted from the prediction set. Additionally, if there are irrelevant
+    features included in the algorithm, an Edited KNN may perform well, as it may drop points in
+    a space that are far from the true class center only along irrelevant attribute dimensions.
+
+    A Condensed KNN might perform poorly on noisy
     data, as points far from their class center will be added back into the prediction set.
     However, it might do better in a situation where classes occupy multiple spaces.
 
@@ -76,9 +80,57 @@
 
     Edited KNNs\cite{edited_knn} are very similar to the standard KNN. At fitting time, each of the
     training points $x_i$ are iteratively classified using all of the other data points, $X_{-i}$.
-    If the prediction $\hat{y}_i \neq y_i$, then $x_i$ is dropped from the training set. This process
-    is repeated iteratively until
+    If the prediction $\hat{y}_i \neq y_i$, then $x_i$ is dropped from the training set. In \cite{edited_knn},
+    all points are considered for removal once. Alternatively, this process can be
+    repeated until no further changes are made, or until performance on a validation set
+    starts to decrease.
 
+    Alternatively, the editing procedure can remove points that are correctly classified, with the
+    hypothesis that they are likely not needed for correct classification going forward.
+
+    \subsection*{Condensed KNN}
+    The motivation for the Condensed KNN is similar to that of the Edited KNN. It is desirable
+    to have fewer points in the training set, and to retain only those points that are needed
+    to avoid an increase in error.
+
+    The condensing algorithm begins with an empty set $Z = \emptyset$. The first data point
+    considered is added to $Z$. Then, for each of the remaining data points $x_i$,
+    the distances between $x_i$ and all points in $Z$ are calculated, and the nearest data point $z_*$
+    is found. If the class of $x_i$ is not equal to the class of $z_*$,
+    $x_i$ is added to $Z$. This process is repeated until no changes are made.
+
+    Note that at prediction time, the class of the single nearest neighbor is used.
+
+    \section{Description of Experimental Approach}
+    The 3 algorithms were applied to 2 real life classification problems:
+    \begin{enumerate}
+        \item The Ecoli dataset for classifying the localization site of protein.
+        \item The Image Segmentation dataset for classifying the part of the image of a given pixel.
+    \end{enumerate}
+    Standard KNN was applied to 2 additional regression problems.
+    \begin{enumerate}
+        \item The CPU Performance dataset for predicting the performance of a given CPU (regression problem).
+        \item The Forest Fires dataset in which the area burned is predicted (regression problem).
+    \end{enumerate}
+
+    Discrete inputs were one-hot encoded. A 5-Fold cross validation scheme was used to estimate the expected out-of-sample
+    error. For classification problems, a stratefied cross-validation approach was used to accurately
+    represent the various classes. Within the cross-validation scheme, $k$ was tuned by choosing
+    \[
+        \argmax_{1 \leq k \ 5} f(k),
+    \]
+    where $f(k)$ was accuracy for classification problems, and negative MSE for regression problems. $k$ was chosen
+    by running 5-fold CV over the first training set of the overall 5-fold CV, and taking the mean of $f(k)$ across the
+    folds.
+
+    Each dataset was standardized dividing by the column-wise standard deviation. This
+    ensures that the scale of each feature is the same (a distance of 1 indicates a 1
+    standard deviation difference).
+
+    The KNN structure naturally handles multi-class classification problems, and regression
+    problems were solved by taking the mean across the target values of the $k$ neighbors.
+
+    \section{Experimental Results}
 
 \bibliographystyle{plainurl}
 \bibliography{biblio}
