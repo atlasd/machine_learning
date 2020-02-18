@@ -145,23 +145,63 @@ class GridSearchCV:
         self.cv_object = cv_object
 
     @staticmethod
-    def create_param_grid(param_grid):
+    def create_param_grid(param_grid: Dict):
+        """
+        A mapping of arguments to values to grid search over.
+
+        Parameters:
+        -----------
+        param_grid : Dict
+            {kwarg: [values]}
+        """
         return (
             dict(zip(param_grid.keys(), instance))
             for instance in product(*param_grid.values())
         )
 
-    def get_single_fitting_iteration(self, X, y, model):
+    def get_single_fitting_iteration(self, X: np.ndarray, y: np.ndarray, model):
+        """
+        Run a model fit and validate step.
+
+        Parameters:
+        -----------
+        X : np.ndarray
+            Feature matrix for training.
+
+        y : np.ndarray
+            Target vector for training
+
+        model
+            Model object with a fit and predict method.
+        """
         scores = []
+        # Create train/test splits
         for train, test in self.cv_object.split(X=X, y=y):
+            # Fit the model
             model.fit(X[train], y[train])
+            # Get the predictions
             yhat = model.predict(X[test])
+            # Get the scores
             scores.append(self.scoring_func(y[test], yhat))
+        # Get the average score.
         return np.mean(scores)
 
-    def get_cv_scores(self, X, y):
+    def get_cv_scores(self, X: np.ndarray, y: np.ndarray):
+        """
+        Runs the grid search across the parameter grid.
+
+        Parameters:
+        -----------
+        X : np.ndarray
+            Feature matrix
+
+        y : np.ndarray
+            Target vector
+        """
+        # Create the parameter grid
         param_grid = list(GridSearchCV.create_param_grid(self.param_grid))
 
+        # Zip the grid to the results from a single fit
         return zip(
             param_grid,
             [
