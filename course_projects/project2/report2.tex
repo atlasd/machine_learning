@@ -6,8 +6,8 @@
 \DeclareMathOperator*{\argmin}{arg\,min}
 \usepackage{ifpdf}
 \usepackage{url}
-
 \usepackage{graphicx}
+\usepackage{float}
 \title{Project 2 - Nearest Neighbors Classification and Regression}
 \author{David Atlas}
 \begin{document}
@@ -131,6 +131,45 @@
     problems were solved by taking the mean across the target values of the $k$ neighbors.
 
     \section{Experimental Results}
+    \subsection*{Ecoli Data}
+    The first experimental dataset is the Ecoli data, a classification problem. All 3 algorithms above are applied,
+    and the results are shown in Table~\ref{ecoli_results}.
+
+    \begin{table}[H]
+    \begin{tabular}{lcc}
+        Algorithm     & $k$ & Accuracy \\
+        \hline
+        Standard KNN  & 4 & 81.9\% \\
+        Edited KNN    & 2 & 77.3\% \\
+        Condensed KNN & 1 & 78.6\% \\
+    \end{tabular}
+    \label{ecoli_results}
+    \caption{The results of various KNN variants on the Ecoli dataset for classification.}
+    \end{table}
+    As noted above, $k$ was chosen using cross-validation on the training set of the first of the 5-folds. The highest
+    accuracy across the cross-validation folds (within the first fold) was selected. $k$ was set to one for the
+    condensed algorithm.
+
+    \subsection*{Image Segmentation}
+    The second experimental dataset is the Image Segmentation dataset, a classification problem. The goal is to
+    classify pixel to the portion of the image from which they came. All 3 algorithms above are applied,
+    and the results are shown in Table~\ref{image_segmentation_results}. Note that the "REGION-PIXEL-COUNT"
+    class is dropped, as it does not have any variance.
+    \begin{table}[H]
+    \begin{tabular}{lcc}
+        Algorithm     & $k$ & Accuracy \\
+        \hline
+        Standard KNN  & 5 & 85.2\% \\
+        Edited KNN    & 1 & 66.2\% \\
+        Condensed KNN & 1 & 81.42\% \\
+    \end{tabular}
+    \label{image_segmentation_results}
+    \caption{The results of various KNN variants on the Image Segmentation dataset for classification.}
+    \end{table}
+    As noted above, $k$ was chosen using cross-validation on the training set of the first of the 5-folds. The highest
+    accuracy across the cross-validation folds (within the first fold) was selected. $k$ was set to one for the
+    condensed algorithm.
+
 
 \bibliographystyle{plainurl}
 \bibliography{biblio}
