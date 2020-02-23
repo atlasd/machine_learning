@@ -1,5 +1,11 @@
 \begin{thebibliography}{1}
 
+\bibitem{ff_dataset}
+Anibal~Morais Paulo~Corez.
+\newblock Forest fires.
+\newblock URL:
+  \url{https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv}.
+
 \bibitem{edited_knn}
 Dennis~L. Wilson.
 \newblock Asymptotic properties of nearest neighbor rules using edited data.

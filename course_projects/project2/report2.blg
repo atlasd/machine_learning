@@ -7,44 +7,47 @@ Reallocated global_strs (elt_size=20001) to 20 items from 10.
 Reallocated glb_str_end (elt_size=4) to 20 items from 10.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: biblio.bib
-You've used 1 entry,
+Warning--entry type for "ff_dataset" isn't style-file defined
+--line 1 of file biblio.bib
+You've used 2 entries,
             2849 wiz_defined-function locations,
-            621 strings with 5172 characters,
-and the built_in function-call counts, 526 in all, are:
-= -- 53
-> -- 9
+            625 strings with 5306 characters,
+and the built_in function-call counts, 833 in all, are:
+= -- 82
+> -- 17
 < -- 1
-+ -- 3
-- -- 2
-* -- 20
-:= -- 93
-add.period$ -- 3
-call.type$ -- 1
-change.case$ -- 4
++ -- 6
+- -- 4
+* -- 28
+:= -- 133
+add.period$ -- 6
+call.type$ -- 2
+change.case$ -- 8
 chr.to.int$ -- 0
-cite$ -- 1
-duplicate$ -- 20
-empty$ -- 47
-format.name$ -- 2
-if$ -- 134
+cite$ -- 2
+duplicate$ -- 29
+empty$ -- 85
+format.name$ -- 4
+if$ -- 220
 int.to.chr$ -- 0
-int.to.str$ -- 1
+int.to.str$ -- 2
 missing$ -- 1
-newline$ -- 8
-num.names$ -- 2
-pop$ -- 8
+newline$ -- 13
+num.names$ -- 4
+pop$ -- 20
 preamble$ -- 1
-purify$ -- 3
+purify$ -- 6
 quote$ -- 0
-skip$ -- 42
+skip$ -- 70
 stack$ -- 0
-substring$ -- 33
-swap$ -- 10
+substring$ -- 38
+swap$ -- 11
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 4
+type$ -- 8
 warning$ -- 0
-while$ -- 4
-width$ -- 2
-write$ -- 13
+while$ -- 6
+width$ -- 3
+write$ -- 22
+(There was 1 warning)

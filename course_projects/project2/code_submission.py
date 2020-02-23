@@ -796,7 +796,7 @@ In this section, we load and clean the data, and run the experiments
 """
 
 
-if __name__ == "__main__":
+if __name__ != "__main__":
     logger.info("Running Ecoli Experiment")
     np.random.seed(73)
     df = pd.read_csv(
@@ -910,7 +910,33 @@ if __name__ == "__main__":
         X=X,
         y=y_real,
         model_call=lambda k: KNearestNeighborRegression(k=k),
-        param_grid={"k": list(range(1, 10))},
-        scoring_func=lambda *args, **kwargs: -1 * mean_squared_error(*args, **kwargs),
+        param_grid={"k": list(range(1, 5))},
+        scoring_func=lambda *args, **kwargs: -1
+        * np.sqrt(mean_squared_error(*args, **kwargs)),
+        cv=KFoldCV(num_folds=5),
+    )
+
+    logger.info("Running Forest Fires Regression")
+
+if __name__ == "__main__":
+    fires_data = pd.read_csv(
+        "https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv"
+    )
+
+    X = (
+        fires_data.drop("area", axis=1)
+        .pipe(lambda df: pd.get_dummies(df, columns=["month", "day"], drop_first=True))
+        .values
+    )
+    y = fires_data["area"].values
+
+    np.random.seed(73)
+    model = run_experiment(
+        X=X,
+        y=y,
+        model_call=lambda k: KNearestNeighborRegression(k=k),
+        param_grid={"k": list(range(1, 5))},
+        scoring_func=lambda *args, **kwargs: -1
+        * np.sqrt(mean_squared_error(*args, **kwargs)),
         cv=KFoldCV(num_folds=5),
     )

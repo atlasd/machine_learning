@@ -170,6 +170,37 @@
     accuracy across the cross-validation folds (within the first fold) was selected. $k$ was set to one for the
     condensed algorithm.
 
+    \subsection*{CPU Performance}
+    The third experimental dataset is the CPU performance dataset. The goal is to predict the relative performance
+    given a set of characteristics of a CPU. Only the standard KNN is applied to the regression problem, as the edited
+    and condensed algorithms rely on class labels. The results are shown in Table~\ref{cpu_performance_results}.
+    \begin{table}[H]
+    \begin{tabular}{lcc}
+        Algorithm     & $k$ & RMSE \\
+        \hline
+        Standard KNN  & 1 & 63.4
+    \end{tabular}
+    \label{cpu_performance_results}
+    \caption{The results of a KNN on the CPU performance regression problem.}
+    \end{table}
+
+    \subsection*{Forest Fires}
+    The fourth experimental dataset is a regression problem in which the area of a given
+    forest fire is predicted based on features about the time and weather of the fire\cite{ff_dataset}.
+    In preprocessing the data, features describing the month and day are one-hot encoded.
+    The results of the experiments are shown in Table~\ref{fire_forest_area}.
+    As noted in \cite{ff_dataset}, this is a very difficult regression problem, and the performance
+    of the KNN is well below that of the naive mean prediction.
+    \begin{table}[H]
+    \begin{tabular}{lcc}
+        Algorithm     & $k$ & RMSE \\
+        \hline
+        Standard KNN  & 4 & 91.8
+    \end{tabular}
+    \label{fire_forest_area}
+    \caption{The results of a KNN on the Forest Fire Area regression problem.}
+    \end{table}
+
 
 \bibliographystyle{plainurl}
 \bibliography{biblio}
