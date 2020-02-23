@@ -9,45 +9,51 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: biblio.bib
 Warning--entry type for "ff_dataset" isn't style-file defined
 --line 1 of file biblio.bib
-You've used 2 entries,
+Warning--entry type for "cpu_dataset" isn't style-file defined
+--line 8 of file biblio.bib
+Warning--entry type for "image_dataset" isn't style-file defined
+--line 15 of file biblio.bib
+Warning--entry type for "ecoli_dataset" isn't style-file defined
+--line 22 of file biblio.bib
+You've used 5 entries,
             2849 wiz_defined-function locations,
-            625 strings with 5306 characters,
-and the built_in function-call counts, 833 in all, are:
-= -- 82
-> -- 17
+            637 strings with 5718 characters,
+and the built_in function-call counts, 1754 in all, are:
+= -- 169
+> -- 41
 < -- 1
-+ -- 6
-- -- 4
-* -- 28
-:= -- 133
-add.period$ -- 6
-call.type$ -- 2
-change.case$ -- 8
++ -- 15
+- -- 10
+* -- 52
+:= -- 253
+add.period$ -- 15
+call.type$ -- 5
+change.case$ -- 20
 chr.to.int$ -- 0
-cite$ -- 2
-duplicate$ -- 29
-empty$ -- 85
-format.name$ -- 4
-if$ -- 220
+cite$ -- 5
+duplicate$ -- 56
+empty$ -- 199
+format.name$ -- 10
+if$ -- 478
 int.to.chr$ -- 0
-int.to.str$ -- 2
+int.to.str$ -- 5
 missing$ -- 1
-newline$ -- 13
-num.names$ -- 4
-pop$ -- 20
+newline$ -- 28
+num.names$ -- 10
+pop$ -- 56
 preamble$ -- 1
-purify$ -- 6
+purify$ -- 15
 quote$ -- 0
-skip$ -- 70
+skip$ -- 154
 stack$ -- 0
-substring$ -- 38
-swap$ -- 11
+substring$ -- 53
+swap$ -- 14
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 8
+type$ -- 20
 warning$ -- 0
-while$ -- 6
-width$ -- 3
-write$ -- 22
-(There was 1 warning)
+while$ -- 12
+width$ -- 6
+write$ -- 49
+(There were 4 warnings)

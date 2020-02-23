@@ -796,7 +796,7 @@ In this section, we load and clean the data, and run the experiments
 """
 
 
-if __name__ != "__main__":
+if __name__ == "__main__":
     logger.info("Running Ecoli Experiment")
     np.random.seed(73)
     df = pd.read_csv(
@@ -918,7 +918,6 @@ if __name__ != "__main__":
 
     logger.info("Running Forest Fires Regression")
 
-if __name__ == "__main__":
     fires_data = pd.read_csv(
         "https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv"
     )

@@ -8,6 +8,7 @@
 \usepackage{url}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{amsfonts}
 \title{Project 2 - Nearest Neighbors Classification and Regression}
 \author{David Atlas}
 \begin{document}
@@ -117,9 +118,9 @@
     error. For classification problems, a stratefied cross-validation approach was used to accurately
     represent the various classes. Within the cross-validation scheme, $k$ was tuned by choosing
     \[
-        \argmax_{1 \leq k \ 5} f(k),
+        \argmax_{1 \leq k \leq 5} f(k),
     \]
-    where $f(k)$ was accuracy for classification problems, and negative MSE for regression problems. $k$ was chosen
+    where $f(k)$ was accuracy for classification problems, and negative RMSE for regression problems. $k$ was chosen
     by running 5-fold CV over the first training set of the overall 5-fold CV, and taking the mean of $f(k)$ across the
     folds.
 
@@ -132,7 +133,8 @@
 
     \section{Experimental Results}
     \subsection*{Ecoli Data}
-    The first experimental dataset is the Ecoli data, a classification problem. All 3 algorithms above are applied,
+    The first experimental dataset is the Ecoli data\cite{ecoli_dataset},
+    a classification problem. All 3 algorithms above are applied,
     and the results are shown in Table~\ref{ecoli_results}.
 
     \begin{table}[H]
@@ -151,7 +153,7 @@
     condensed algorithm.
 
     \subsection*{Image Segmentation}
-    The second experimental dataset is the Image Segmentation dataset, a classification problem. The goal is to
+    The second experimental dataset is the Image Segmentation dataset\cite{image_dataset}, a classification problem. The goal is to
     classify pixel to the portion of the image from which they came. All 3 algorithms above are applied,
     and the results are shown in Table~\ref{image_segmentation_results}. Note that the "REGION-PIXEL-COUNT"
     class is dropped, as it does not have any variance.
@@ -171,7 +173,7 @@
     condensed algorithm.
 
     \subsection*{CPU Performance}
-    The third experimental dataset is the CPU performance dataset. The goal is to predict the relative performance
+    The third experimental dataset is the CPU performance dataset\cite{cpu_dataset}. The goal is to predict the relative performance
     given a set of characteristics of a CPU. Only the standard KNN is applied to the regression problem, as the edited
     and condensed algorithms rely on class labels. The results are shown in Table~\ref{cpu_performance_results}.
     \begin{table}[H]
@@ -200,6 +202,48 @@
     \label{fire_forest_area}
     \caption{The results of a KNN on the Forest Fire Area regression problem.}
     \end{table}
+
+    \section{Algorithm Behavior and Conclusions}
+    The performance of the algorithms on classification problems was not unexpected,
+    as the standard KNN outperformed the edited and condensed algorithms. The hypothesis
+    was that the edited and condensed versions might outperform if the data were noisy or if
+    irrelevant features were included, but absent that, the larger samples should provide better
+    estimation.
+
+    On the regression problems, the KNN did not perform particularly well. For the
+    CPU performance dataset, the linear regression model cited\cite{cpu_dataset}
+    outperformed the KNN, although the KNN outperformed the naive mean prediction model.
+    On the Forest Fires dataset\cite{ff_dataset}, the KNN did not outperform a linear regression
+    model fit on the same set of features, nor did either of them outperform the
+    naive mean prediction model. This was not unexpected, as the authors referenced the
+    difficulty of the problem, and noted that in terms of RMSE, none of the battery of
+    learning methods applied outperformed the naive mean prediction model.
+
+    It is difficult to draw generalizations about the performance of learning
+    algorithms from only a few datasets, but one structural limitation is worth
+    mentioning. KNNs struggle in high dimensional spaces. This was evidenced by the forest fires
+    data, which has a feature space in $\mathbb{R}^{27}$, once the categorical
+    variables are one-hot encoded. This is exacerbated by the inclusion of features that
+    are irrelevant, as the algorithm has little mechanism for determine
+    what is and what is not important.
+
+    Additionally, if parametric forms are appropriate for a problem, they may outperform
+    KNN - this occurs in the forest fires regression problem, where some transformations
+    and a linear regression model outperform the KNN. This may contain a valuable
+    detail about the KNN - it should be applied in cases where the parametric form is unknown (e.g.
+    not easily linearly seperable), and the flexible Voronoi diagram created by KNN is a desirable quality.
+
+    \section{Summary}
+    This paper introduced the K Nearest-Neighbors algorithm for non-parametric supervised learning,
+    as well as two variants of the classification algorithm designed for efficient inference, and
+    potentially improved performance, called Edited and Condensed KNN. The algorithms select
+    training points that are close in feature space to make predictions about the inference point.
+
+    The KNN was applied to 4 problems, two classification and two regression, while the variants
+    are only applicable to classification, and therefore were only applied to those problems.
+
+    It was found that KNN outperforms its variants on the classification problems, and performs inline
+    with other learning algorithms on the regression problems.
 
 
 \bibliographystyle{plainurl}
