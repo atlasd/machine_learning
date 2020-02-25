@@ -1,10 +1,22 @@
 \begin{thebibliography}{1}
 
+\bibitem{knn}
+Naomi Altman.
+\newblock An introduction to kernel and nearest neighbor nonparametric
+  regression.
+\newblock 1992.
+
 \bibitem{image_dataset}
 Vision Group.
 \newblock Image segmentation data.
 \newblock URL:
   \url{https://archive.ics.uci.edu/ml/machine-learning-databases/image/segmentation.data}.
+
+\bibitem{condensed_knn}
+Baba-Ali Ahmed~Riadh Miloud-Aouidate~Amal.
+\newblock Survey of nearest neighbor condensing techniques.
+\newblock {\em International Journal of Advanced Computer Science and
+  Application}, pages 59--64, 2001.
 
 \bibitem{ecoli_dataset}
 Kenta Nakai.

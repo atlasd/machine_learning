@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  23 FEB 2020 09:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  23 FEB 2020 14:49
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -353,31 +353,31 @@ e
 ))
 [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 [2] [3] (./report2.bbl
-Underfull \hbox (badness 3919) in paragraph at lines 16--20
+Underfull \hbox (badness 3919) in paragraph at lines 28--32
 []\OT1/cmr/m/n/8 Anibal Morais Paulo Corez. For-est fires. URL: $\OT1/cmtt/m/n/
 8 https : / / archive . ics . uci . edu / ml / machine-[]learning-[]databases /
 
  []
 
 
-Underfull \hbox (badness 6859) in paragraph at lines 22--26
+Underfull \hbox (badness 6859) in paragraph at lines 34--38
 []\OT1/cmr/m/n/8 Jacob Feldmesser Phillip Ein-Dor. Rel-a-tive cpu per-for-mance
  data. URL: $\OT1/cmtt/m/n/8 https : / / archive . ics . uci . edu / ml /
  []
 
-) [4] (./report2.aux) )
+[4]) [5] (./report2.aux) )
 (\end occurred inside a group at level 1)
 
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 4222 strings out of 492995
- 58772 string characters out of 6132704
- 143977 words of memory out of 5000000
- 7556 multiletter control sequences out of 15000+600000
+ 4224 strings out of 492995
+ 58792 string characters out of 6132704
+ 143983 words of memory out of 5000000
+ 7558 multiletter control sequences out of 15000+600000
  9869 words of font info for 39 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 39i,9n,32p,307b,3045s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 39i,9n,32p,307b,3078s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmbx10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmcsc10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/
@@ -391,10 +391,10 @@ fb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb
 /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></u
 sr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb
 >
-Output written on report2.pdf (4 pages, 150795 bytes).
+Output written on report2.pdf (5 pages, 155767 bytes).
 PDF statistics:
- 65 PDF objects out of 1000 (max. 8388607)
- 46 compressed objects within 1 object stream
+ 68 PDF objects out of 1000 (max. 8388607)
+ 48 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

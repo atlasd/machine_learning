@@ -15,45 +15,46 @@ Warning--entry type for "image_dataset" isn't style-file defined
 --line 15 of file biblio.bib
 Warning--entry type for "ecoli_dataset" isn't style-file defined
 --line 22 of file biblio.bib
-You've used 5 entries,
+Warning--empty journal in knn
+You've used 7 entries,
             2849 wiz_defined-function locations,
-            637 strings with 5718 characters,
-and the built_in function-call counts, 1754 in all, are:
-= -- 169
-> -- 41
-< -- 1
-+ -- 15
-- -- 10
-* -- 52
-:= -- 253
-add.period$ -- 15
-call.type$ -- 5
-change.case$ -- 20
+            647 strings with 5986 characters,
+and the built_in function-call counts, 2493 in all, are:
+= -- 244
+> -- 59
+< -- 2
++ -- 22
+- -- 14
+* -- 76
+:= -- 356
+add.period$ -- 21
+call.type$ -- 7
+change.case$ -- 28
 chr.to.int$ -- 0
-cite$ -- 5
-duplicate$ -- 56
-empty$ -- 199
-format.name$ -- 10
-if$ -- 478
+cite$ -- 8
+duplicate$ -- 84
+empty$ -- 271
+format.name$ -- 14
+if$ -- 678
 int.to.chr$ -- 0
-int.to.str$ -- 5
-missing$ -- 1
-newline$ -- 28
-num.names$ -- 10
-pop$ -- 56
+int.to.str$ -- 7
+missing$ -- 3
+newline$ -- 38
+num.names$ -- 14
+pop$ -- 74
 preamble$ -- 1
-purify$ -- 15
+purify$ -- 21
 quote$ -- 0
-skip$ -- 154
+skip$ -- 219
 stack$ -- 0
-substring$ -- 53
-swap$ -- 14
-text.length$ -- 1
+substring$ -- 84
+swap$ -- 22
+text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 20
-warning$ -- 0
-while$ -- 12
-width$ -- 6
-write$ -- 49
-(There were 4 warnings)
+type$ -- 28
+warning$ -- 1
+while$ -- 18
+width$ -- 8
+write$ -- 69
+(There were 5 warnings)

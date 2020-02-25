@@ -547,8 +547,9 @@ class EditedKNN:
         Z.remove(idx)
         # Fit the model
         self.knn.fit(X[Z], y[Z])
-        # If classification is incorrect, put idx back in Z
-        if y[idx] != self.knn.predict(X[idx]):
+        # If classification is correct, put idx back in Z
+        # (don't drop it from the training set)
+        if y[idx] == self.knn.predict(X[idx]):
             Z.append(idx)
             return False
         return True
@@ -798,7 +799,6 @@ In this section, we load and clean the data, and run the experiments
 
 if __name__ == "__main__":
     logger.info("Running Ecoli Experiment")
-    np.random.seed(73)
     df = pd.read_csv(
         io.StringIO(
             r.get(
@@ -822,6 +822,7 @@ if __name__ == "__main__":
         ],
     )
 
+    np.random.seed(73)
     data = df.drop("id", axis=1).sample(frac=1)
 
     y = data["instance_class"].astype("category").cat.codes.values
@@ -836,6 +837,7 @@ if __name__ == "__main__":
     )
 
     logger.info("Running Edited KNN")
+    np.random.seed(73)
     run_experiment(
         X,
         y,
@@ -844,6 +846,7 @@ if __name__ == "__main__":
     )
 
     logger.info("Running Condensed KNN")
+    np.random.seed(73)
     model = run_experiment(X, y, model_call=lambda k: CondensedKNN(verbose=True))
 
     logger.info("Running Image Segmentation Experiments")
@@ -872,6 +875,7 @@ if __name__ == "__main__":
     )
 
     logger.info("Running Edited KNN")
+    np.random.seed(73)
     run_experiment(
         X,
         y,
@@ -922,16 +926,27 @@ if __name__ == "__main__":
         "https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv"
     )
 
-    X = (
-        fires_data.drop("area", axis=1)
-        .pipe(lambda df: pd.get_dummies(df, columns=["month", "day"], drop_first=True))
-        .values
+    X = fires_data.drop("area", axis=1).pipe(
+        lambda df: pd.get_dummies(df, columns=["month", "day"], drop_first=True)
     )
     y = fires_data["area"].values
 
+    logger.info("Running full design matrix")
     np.random.seed(73)
     model = run_experiment(
-        X=X,
+        X=X.values,
+        y=y,
+        model_call=lambda k: KNearestNeighborRegression(k=k),
+        param_grid={"k": list(range(1, 5))},
+        scoring_func=lambda *args, **kwargs: -1
+        * np.sqrt(mean_squared_error(*args, **kwargs)),
+        cv=KFoldCV(num_folds=5),
+    )
+
+    np.random.seed(73)
+    logger.info("Running partial design matrix")
+    model = run_experiment(
+        X=X.loc(axis=1)["temp", "RH", "wind", "rain"].values,
         y=y,
         model_call=lambda k: KNearestNeighborRegression(k=k),
         param_grid={"k": list(range(1, 5))},
