@@ -18,7 +18,11 @@ def entropy(y):
 
 
 def negative_mse(y):
-    return -1 * np.mean((y - np.mean(y)) ** 2)
+    return -1 * mse(y)
+
+
+def mse(y):
+    return np.mean((y - np.mean(y)) ** 2)
 
 
 class TreeSplits:
@@ -63,8 +67,16 @@ class BaseTree:
         self.early_stopping_comparison = early_stopping_comparison
 
     @staticmethod
-    def get_unique_sorted(arr):
-        return np.sort(np.unique(arr))
+    def get_valid_midpoints(arr, y):
+        idxs = np.argsort(arr)
+        sorted_arr = arr[idxs]
+        arr_diffs = np.diff(sorted_arr)
+        midpoints = sorted_arr[1:] - arr_diffs / 2
+        valid_midpoints = midpoints[np.bitwise_and(arr_diffs > 0, np.diff(y[idxs]) > 0)]
+
+        return valid_midpoints
+
+        # return np.sort(np.unique(arr))
 
     @staticmethod
     def get_midpoints(arr):
@@ -127,15 +139,16 @@ class BaseTree:
         return (splits[min_eval], *post_split_evals.get(min_eval))
 
     def get_optimal_continuous_feature_split(self, X, y, feature_col):
+        midpoints = BaseTree.get_valid_midpoints(arr=X[:, feature_col], y=y)
+        # midpoints = BaseTree.get_midpoints(sorted_feature)
+        if len(midpoints) > 0:
+            x = BaseTree.get_min_across_splits_continuous(
+                arr=X[:, feature_col], y=y, splits=midpoints, eval_func=self.eval_func
+            )
 
-        sorted_feature = BaseTree.get_unique_sorted(X[:, feature_col])
-        midpoints = BaseTree.get_midpoints(sorted_feature)
-
-        x = BaseTree.get_min_across_splits_continuous(
-            arr=X[:, feature_col], y=y, splits=midpoints, eval_func=self.eval_func
-        )
-
-        return x
+            return x
+        else:
+            return (0, np.inf, 1)
 
     @staticmethod
     def get_discrete_split_value(arr, y, eval_func):
@@ -166,18 +179,21 @@ class BaseTree:
     def get_terminal_node(self, feature_col, node, feature_value, X, y):
         node_type = self.col_type_map[feature_col]
         if node_type == "continuous":
-
-            above = X[:, feature_col] > feature_value
-            node.update(
-                feature_col=feature_col,
-                feature_value=feature_value,
-                node_type=node_type,
-                nodes={
-                    "above": TreeSplits(children=y[above]),
-                    "below": TreeSplits(children=y[np.bitwise_not(above)]),
-                },
-            )
-            self.n_nodes += 2
+            if feature_value is None:
+                node.children = y
+                self.n_nodes += 1
+            else:
+                above = X[:, feature_col] > feature_value
+                node.update(
+                    feature_col=feature_col,
+                    feature_value=feature_value,
+                    node_type=node_type,
+                    nodes={
+                        "above": TreeSplits(children=y[above]),
+                        "below": TreeSplits(children=y[np.bitwise_not(above)]),
+                    },
+                )
+                self.n_nodes += 2
         else:
             unique_x_vals = self.discrete_value_maps[feature_col]
             node.update(
@@ -234,6 +250,7 @@ class BaseTree:
                 split = None
                 class_ratios = 1
             elif v == "continuous":
+
                 split, value, class_ratios = self.get_optimal_continuous_feature_split(
                     X=X, y=y, feature_col=k
                 )
@@ -247,7 +264,8 @@ class BaseTree:
 
         col_idx_with_min_value = max(
             column_values,
-            key=lambda x: (presplit_entropy - column_values.get(x)[1]) / class_ratios,
+            key=lambda x: (presplit_entropy - column_values.get(x)[1])
+            / column_values.get(x)[2],
         )
 
         if (
@@ -367,23 +385,12 @@ class PostPruner:
                 node_idx: self.tree.predict(X, node=node)
                 for node_idx, node in node.nodes.items()
             }
-            #
-            # with multiprocessing.Pool(processes=len(node.nodes)) as p:
-            #     results = dict(
-            #         zip(
-            #             node.nodes.keys(),
-            #             p.map(
-            #                 self.tree.predict,
-            #                 zip([self.X_validation], node.nodes.values())
-            #             )
-            #         )
-            #     )
-            #     p.close()
 
             scores = {
                 subtree_idx: self.eval_func(y, predictions)
                 for subtree_idx, predictions in results.items()
             }
+
             best_score = max(scores, key=scores.get)
 
             if scores.get(best_score) < vertex_score:

@@ -50,3 +50,17 @@ def test_get_midpoints(seed):
 
 def test_split_continuous_feature(X, y, base_tree):
     out = base_tree.get_optimal_continuous_feature_split(X, y, "cont_feature")
+
+
+@pytest.mark.parametrize(
+    "arr, y, expected",
+    [
+        ([1, 2, 3, 4], [1, 2, 3, 4], [1.5, 2.5, 3.5]),
+        ([1, 1, 2, 3], [1, 2, 3, 4], [1.5, 2.5]),
+        ([1, 1, 2, 3], [1, 2, 3, 3], [1.5]),
+    ],
+)
+def test_get_valid_midpoints(arr, y, expected):
+    assert np.allclose(
+        trees.BaseTree.get_valid_midpoints(np.array(arr), np.array(y)), expected
+    )

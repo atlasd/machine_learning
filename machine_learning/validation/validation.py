@@ -120,7 +120,9 @@ class GridSearchCV:
         model_callable: Callable,
         param_grid: Dict,
         scoring_func: Callable,
-        cv_object: Union[KFoldCV, KFoldStratifiedCV],
+        cv_object: Union[KFoldCV, KFoldStratifiedCV] = None,
+        X_validation=None,
+        y_validation=None,
     ):
         """
         Parameters:
@@ -138,11 +140,21 @@ class GridSearchCV:
         cv_object
             A CV object from above that will be used to make validation
             splits.
+
+        X_validation: np.ndarrary
+            X validation set. If not passed, CV is used.
+
+        y_validation: np.ndarrary
+            y validation set. If not passed, CV is used.
+
+
         """
         self.model_callable = model_callable
         self.param_grid = param_grid
         self.scoring_func = scoring_func
         self.cv_object = cv_object
+        self.X_val = X_validation
+        self.y_val = y_validation
 
     @staticmethod
     def create_param_grid(param_grid: Dict):
@@ -159,7 +171,7 @@ class GridSearchCV:
             for instance in product(*param_grid.values())
         )
 
-    def get_single_fitting_iteration(self, X: np.ndarray, y: np.ndarray, model):
+    def get_single_fitting_iteration(self, model, X: np.ndarray, y: np.ndarray):
         """
         Run a model fit and validate step.
 
@@ -175,14 +187,21 @@ class GridSearchCV:
             Model object with a fit and predict method.
         """
         scores = []
-        # Create train/test splits
-        for train, test in self.cv_object.split(X=X, y=y):
-            # Fit the model
-            model.fit(X[train], y[train])
-            # Get the predictions
-            yhat = model.predict(X[test])
-            # Get the scores
-            scores.append(self.scoring_func(y[test], yhat))
+        print("Getting score")
+        if self.cv_object:
+            # Create train/test splits
+            for train, test in self.cv_object.split(X=X, y=y):
+                # Fit the model
+                model.fit(X[train], y[train])
+                # Get the predictions
+                yhat = model.predict(X[test])
+                # Get the scores
+                scores.append(self.scoring_func(y[test], yhat))
+        else:
+            model.fit(X, y)
+            yhat = model.predict(self.X_val)
+            scores.append(self.scoring_func(self.y_val, yhat))
+
         # Get the average score.
         return np.mean(scores)
 
@@ -206,7 +225,7 @@ class GridSearchCV:
             param_grid,
             [
                 self.get_single_fitting_iteration(
-                    X, y, model=self.model_callable(**param_set)
+                    X=X, y=y, model=self.model_callable(**param_set)
                 )
                 for param_set in param_grid
             ],
