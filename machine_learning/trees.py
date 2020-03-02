@@ -7,6 +7,8 @@ import operator
 import sys
 import copy
 
+sys.setrecursionlimit(10000)
+
 
 def entropy(y):
     return -1 * sum(
@@ -229,6 +231,32 @@ class BaseTree:
 
         return node
 
+    def get_discrete_node(self, X, y, feature_col, feature_value, node):
+        unique_x_vals = self.discrete_value_maps[feature_col]
+        node.update(
+            feature_col=feature_col,
+            feature_value=feature_value,
+            nodes={xval: TreeSplits() for xval in unique_x_vals},
+            node_type="discrete",
+        )
+
+        for x_col_value in unique_x_vals:
+            matches = X[:, feature_col] == x_col_value
+            if np.sum(matches) == 0:
+                node.nodes[x_col_value] = TreeSplits(
+                    node_type="discrete",
+                    feature_col=feature_col,
+                    feature_value=x_col_value,
+                    children=y,
+                )
+            else:
+                self.get_next_split(
+                    X=X[matches], y=y[matches], tree_split=node.nodes[x_col_value],
+                )
+                self.n_nodes += 1
+
+        return node
+
     def get_next_split(self, X, y, tree_split):
         column_values = {}
 
@@ -292,32 +320,13 @@ class BaseTree:
             )
 
         else:
-            unique_x_vals = self.discrete_value_maps[col_idx_with_min_value]
-            tree_split.update(
-                feature_col=col_idx_with_min_value,
+            return self.get_discrete_node(
+                X=X,
+                y=y,
                 feature_value=column_values[col_idx_with_min_value][0],
-                nodes={xval: TreeSplits() for xval in unique_x_vals},
-                node_type="discrete",
+                feature_col=col_idx_with_min_value,
+                node=tree_split,
             )
-
-            for x_col_value in unique_x_vals:
-                matches = X[:, col_idx_with_min_value] == x_col_value
-                if np.sum(matches) == 0:
-                    tree_split.nodes[x_col_value] = TreeSplits(
-                        node_type="discrete",
-                        feature_col=col_idx_with_min_value,
-                        feature_value=x_col_value,
-                        children=y,
-                    )
-                else:
-                    self.get_next_split(
-                        X=X[matches],
-                        y=y[matches],
-                        tree_split=tree_split.nodes[x_col_value],
-                    )
-                    self.n_nodes += 1
-
-            return tree_split
 
     def fit(self, X, y):
         self.root = TreeSplits()
@@ -440,7 +449,6 @@ class PostPruner:
         return node
 
     def prune_tree(self):
-        sys.setrecursionlimit(10000)
         tree = copy.deepcopy(self.tree)
         ts = TreeSplits()
         ts.nodes = {"root": tree.root}

@@ -1,0 +1,34 @@
+\documentclass{amsart}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{amsmath}
+\usepackage[margin=1in]{geometry}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{ifpdf}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsfonts}
+\title{Project 3 \\ Classification and Regression Trees}
+\author{David Atlas}
+\begin{document}
+    \begin{abstract}
+    This paper covers decision tree induction, a non-parametric
+    set of models designed to partition a feature space. The Iterative Dichotomiser 3 (ID3)
+    algorithm for classification will be introduced. The more general
+    Classification and Regression Tree (CART) algorithm will be introduced as well.
+    The ID3 algorithm will be applied to 3 classification problems.
+    Post-fit pruning will be used to help prevent overfitting.
+    The CART algorithm will be applied to 3 regression problems.
+    A validation set will be used to tune an early stopping parameter to
+    prevent overfitting. It is found that the tree-based algorithms
+    outperform baseline metrics.
+    \end{abstract}
+
+    \section{Problem Statement \& Hypothesis}
+    Decision trees are a non-parametric supervised learning technique.
+    The general class of models employ greedy searches to best partition
+    the feature space so as to explain the target variable. As such, they would
+    be expected to excel when the relationship
+
+\end{document}

@@ -187,7 +187,7 @@ class GridSearchCV:
             Model object with a fit and predict method.
         """
         scores = []
-        print("Getting score")
+
         if self.cv_object:
             # Create train/test splits
             for train, test in self.cv_object.split(X=X, y=y):
