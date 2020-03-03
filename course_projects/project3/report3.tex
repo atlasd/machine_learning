@@ -106,6 +106,50 @@
     As such, choosing the split that minimizes the entropy will result in choosing the split
     that best seperates the classes in $y$ at each step.
 
+    The expected gain of a split $f_i$ is defined as
+    \begin{align}
+        \textrm{E}(f_i) = \sum_{j=1}^{m_i}
+        \frac{C_{\pi, 1}^j + \cdots + C_{\pi, k}^j}
+        {C_{\pi, i} + \cdots + C_{\pi, k}} I(C_{\pi, 1}^j, \cdot, C_{\pi, k}^j)
+        \label{expected_gain}
+    \end{align}
+    In Equation~\ref{expected_gain}, the sum over the partitions is taken ($m_i$ is
+    the number of partitions created by split $f_i$).
+    For each partition,
+    the ratio of total points that are included in the partition is multiplied by the
+    entropy of the partition. This is a weighted average entropy calculation, where the partitions
+    are weighted by their size.
+
+    The intrinsic value of a feature is defined as
+    \begin{align}
+        \textrm{IV}(f_i) = -\sum_{j=1}^{m_i} \frac{C_{i, 1} + \cdots C_{i, k}}
+        {C_{1} + \cdots C_{k}} \log  \frac{C_{i, 1} + \cdots C_{i, k}}
+        {C_{1} + \cdots C_{k}}
+    \label{iv_feature}
+    \end{align}
+    In Equation~\ref{iv_feature}, $m_i$ is the number of partitions created by splitting
+    on $f_i$, and $C_{i, k}$ is the number of points in class $C_k$ in partition $i$.
+    The intrinsic value calculation penalizes splits with many partitions. The
+    motivation is to discourage multivalued discrete splits that
+    partition the data effectively as a result of creating many partitions. This is
+    likely to result in overfitting, and a model that will not generalize effectively
+    to out-of-sample data. The most extreme example of this phenomenon is an ID number
+    for each of the instances - a single split would perfectly partition all of the
+    datapoints, but would not be very useful going forward.
+
+    Finally, to select the optimal split $f_i^*$, the split with the largest \textbf{gain ratio}
+    is used. This is simply defined as
+    \[
+        f_i^* = \argmax_{f_i} \frac{\textrm{E}(f_i)}{\textrm{IV}(f_i)}.
+    \]
+
+    To summarise the algorithm, the data is recursively partitioned, choosing at each step
+    the partition that maximizes the gain ratio with respect to the target. Note that
+    the algorithm is greedy, in so much that it chooses the best split at each point.
+    There is no guarentee that the tree found is the globally optimal tree.
+
+
+
 
 
 
