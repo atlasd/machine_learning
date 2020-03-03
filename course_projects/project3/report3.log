@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  1 MAR 2020 19:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  2 MAR 2020 19:44
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -351,23 +351,52 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-(./report3.aux) )
+
+Class amsart Warning: Abstract should precede \maketitle in AMS document classe
+s; reported on input line 16.
+
+
+LaTeX Warning: Citation `id3' on page 1 undefined on input line 67.
+
+
+Overfull \hbox (1.09192pt too wide) in paragraph at lines 67--70
+ \OT1/cmr/m/n/10 2.1.\OT1/cmr/bx/n/10 Iterative Di-chotomizer 3 (ID3).[] \OT1/c
+mr/m/n/10 The It-er-a-tive Di-chotomizer 3 (ID3)[[]] al-go-rithm is a non-param
+etric
+ []
+
+[1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+[2] (./report3.aux)
+
+LaTeX Warning: There were undefined references.
+
+ )
 (\end occurred inside a group at level 1)
 
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 4192 strings out of 492995
- 58401 string characters out of 6132704
- 137892 words of memory out of 5000000
- 7534 multiletter control sequences out of 15000+600000
- 7686 words of font info for 30 fonts, out of 8000000 for 9000
+ 4205 strings out of 492995
+ 58538 string characters out of 6132704
+ 142914 words of memory out of 5000000
+ 7544 multiletter control sequences out of 15000+600000
+ 9349 words of font info for 37 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 39i,3n,32p,307b,2821s stack positions out of 5000i,500n,10000p,200000b,80000s
-
-No pages of output.
+ 39i,8n,32p,307b,2931s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmbx10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmcsc10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmex10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmmi10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmi7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mr10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
+7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.p
+fb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pf
+b>
+Output written on report3.pdf (2 pages, 107769 bytes).
 PDF statistics:
- 0 PDF objects out of 1000 (max. 8388607)
+ 47 PDF objects out of 1000 (max. 8388607)
+ 33 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
