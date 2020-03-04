@@ -94,6 +94,8 @@
     to the other partition would make the split more optimal. After all of the midpoints are tested,
     the most optimal one is selected.
 
+    \subsubsection{Entropy, Maximal Gain and Gain Ratio}
+
     To determine the most optimal split point, a metric must be defined. Given a classification
     problem, the entropy (or impurity) of a given set of $y$ values is defined as
     \begin{align}
@@ -147,6 +149,28 @@
     the partition that maximizes the gain ratio with respect to the target. Note that
     the algorithm is greedy, in so much that it chooses the best split at each point.
     There is no guarentee that the tree found is the globally optimal tree.
+
+    \subsubsection{Pruning}
+    After a tree has been grown to completion, one issue remains. It is not unlikely that the tree is overfit,
+    as recursive partitioning (ideally) results in pure nodes, each of which may correspond to a
+    very small partition in the feature space. As a result, it would be desirable to reduce nodes that
+    do not help fit to out-of-sample data.
+
+    This process is called post-pruning. In post-pruning, a validation set (seperate from the train/test sets),
+    is split off from the data. The tree is fit to completion on the training set. Then, beginning with the root node,
+    the validation dataset is applied to the node and all of its children. If any of the children subtrees provide superior
+    performance relative to the parent node, the parent node is swapped for the best performing child, and all the other children
+    are disregarded. If none of the subtrees improve performance, no updates are made.
+    At this point, the process is applied recursively, with each of the children nodes acting as the parent node.
+
+    This creates an effect where splits that do not account for a reduction in entropy in the validation set are
+    recursively removed from the tree. This can also be thought of as a backtracking mechanism, as the greedy nature
+    of the fitting algorithm may miss signal on the forward pass, and the post-pruning allows the tree to
+    move some of its nodes for more optimal performance.
+
+    \subsection{CART}
+    The next algorithm that will be discussed is the Classification and Regression Tree algorithm.
+
 
 
 

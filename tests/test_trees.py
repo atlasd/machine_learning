@@ -64,3 +64,19 @@ def test_get_valid_midpoints(arr, y, expected):
     assert np.allclose(
         trees.BaseTree.get_valid_midpoints(np.array(arr), np.array(y)), expected
     )
+
+
+@pytest.fixture()
+def leaf_node():
+    yield trees.TreeSplits(children=[1, 2, 1, 2])
+
+
+@pytest.fixture()
+def root_node(leaf_node):
+    yield trees.TreeSplits(nodes={"a": leaf_node, "b": leaf_node})
+
+
+def test_collect_children(root_node):
+    out = trees.BaseTree.collect_children(root_node)
+
+    assert out.shape == (8,)

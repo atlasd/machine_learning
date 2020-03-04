@@ -49,6 +49,9 @@ class TreeSplits:
         self.nodes = nodes
         self.children = children
 
+    def is_leaf(self):
+        return self.nodes is None or len(self.nodes) == 0
+
 
 class BaseTree:
     def __init__(
@@ -337,6 +340,22 @@ class BaseTree:
         }
         self.get_next_split(X=X, y=y, tree_split=self.root)
 
+    @staticmethod
+    def collect_children(node):
+        if node.nodes is None or len(node.nodes) == 0:
+            return node.children
+
+        return np.concatenate(
+            [
+                BaseTree.collect_children(child_node)
+                for _, child_node in node.nodes.items()
+            ]
+        ).reshape(-1)
+
+    def predict_from_all_children(self, node):
+        children_values = BaseTree.collect_children(node)
+        return self.agg_func(children_values)
+
     def predict_node(self, X, node):
         if node.children is not None and len(node.children):
             return node.children
@@ -386,84 +405,53 @@ class PostPruner:
         self.X_validation = X_validation
         self.y_validation = y_validation
 
-    def get_best_child_or_node(self, node, X, y):
-        vertex_score = self.eval_func(self.tree.predict(X, node=node), y)
+    def tag_node_from_pruning(self, tree, node, X, y):
+        if node.nodes is None or len(node.nodes) == 0:
+            return False
 
-        if node.nodes is not None and len(node.nodes):
-            results = {
-                node_idx: self.tree.predict(X, node=node)
-                for node_idx, node in node.nodes.items()
-            }
+        predictions = tree.predict(X)
+        whole_tree_score = self.eval_func(y, predictions)
 
-            scores = {
-                subtree_idx: self.eval_func(y, predictions)
-                for subtree_idx, predictions in results.items()
-            }
+        children = BaseTree.collect_children(node)
+        original_nodes = node.nodes
+        node.update(
+            nodes={},
+            children=children,
+            feature_col=node.feature_col,
+            feature_value=node.feature_value,
+            node_type=node.node_type,
+        )
 
-            best_score = max(scores, key=scores.get)
+        predictions = tree.predict(X)
+        pruned_tree_score = self.eval_func(y, predictions)
 
-            if scores.get(best_score) < vertex_score:
-                return node
-            else:
-                return node.nodes[best_score]
+        if whole_tree_score < pruned_tree_score:
+            return True
 
-        return node
+        node.update(
+            children=[],
+            nodes=original_nodes,
+            feature_col=node.feature_col,
+            feature_value=node.feature_value,
+            node_type=node.node_type,
+        )
+        return False
 
-    def prune_node(self, node, parent, node_idx, X, y):
-        best_node = self.get_best_child_or_node(node, X=X, y=y)
+    def prune_node(self, tree, node):
+        change_made = self.tag_node_from_pruning(
+            tree=tree, node=node, X=self.X_validation, y=self.y_validation
+        )
+        if not change_made and not node.is_leaf():
+            for node_idx, node in node.nodes.items():
+                change_made_iter = self.prune_node(tree=tree, node=node)
+                change_made = change_made or change_made_iter
+            return change_made
 
-        if id(best_node) != id(node):
-            parent.nodes[node_idx] = best_node
-            self.prune_node(best_node, parent, node_idx, X=X, y=y)
-
-        else:
-            if node.nodes is None or len(node.nodes) == 0:
-                return node
-
-            if node.node_type == "continuous":
-                self.prune_node(
-                    node.nodes["above"],
-                    node,
-                    "above",
-                    X[X[:, node.feature_col] > node.feature_value],
-                    y[X[:, node.feature_col] > node.feature_value],
-                )
-                self.prune_node(
-                    node.nodes["above"],
-                    node,
-                    "above",
-                    X[X[:, node.feature_col] <= node.feature_value],
-                    y[X[:, node.feature_col] <= node.feature_value],
-                )
-
-            else:
-                for x_val in self.tree.discrete_value_maps[node.feature_col]:
-                    self.prune_node(
-                        node.nodes[x_val],
-                        node,
-                        x_val,
-                        X[X[:, node.feature_col] == x_val],
-                        y[X[:, node.feature_col] == x_val],
-                    )
-
-        return node
+        return change_made
 
     def prune_tree(self):
         tree = copy.deepcopy(self.tree)
-        ts = TreeSplits()
-        ts.nodes = {"root": tree.root}
-
-        self.prune_node(
-            node=tree.root,
-            parent=ts,
-            node_idx="root",
-            X=self.X_validation,
-            y=self.y_validation,
-        )
-        new_tree = DecisionTreeClassifier(
-            col_type_map=tree.col_type_map,
-            eval_func=tree.eval_func,
-            early_stopping_value=None,
-        )
-        new_tree.root = ts.nodes["root"]
-        return new_tree
+        change_made = True
+        while change_made:
+            change_made = self.prune_node(tree, tree.root)
+        return tree
