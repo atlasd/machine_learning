@@ -156,20 +156,55 @@
     very small partition in the feature space. As a result, it would be desirable to reduce nodes that
     do not help fit to out-of-sample data.
 
-    This process is called post-pruning. In post-pruning, a validation set (seperate from the train/test sets),
-    is split off from the data. The tree is fit to completion on the training set. Then, beginning with the root node,
-    the validation dataset is applied to the node and all of its children. If any of the children subtrees provide superior
-    performance relative to the parent node, the parent node is swapped for the best performing child, and all the other children
-    are disregarded. If none of the subtrees improve performance, no updates are made.
-    At this point, the process is applied recursively, with each of the children nodes acting as the parent node.
+    This process is called post-pruning\cite{textbook}.
+    In post-pruning, a validation set (seperate from the train/test sets),
+    is split off from the data. The tree is fit to completion on the training set.
+    The performance on the validation set is calculated over the entire tree.
+    Beginning with the root node,
+    each of the children is (individually) collapsed from a subtree to a leaf node. Prediction
+    is made over the entire tree, with one node truncated into a leaf. If performance
+    on the validation set improves relative to the original tree, the leaf remains. Otherwise,
+    it is swapped back to the original node. This process continues recursively over all the subtrees,
+    and continues iteratively from the root node until no changes are made over the entire tree.
 
-    This creates an effect where splits that do not account for a reduction in entropy in the validation set are
-    recursively removed from the tree. This can also be thought of as a backtracking mechanism, as the greedy nature
-    of the fitting algorithm may miss signal on the forward pass, and the post-pruning allows the tree to
-    move some of its nodes for more optimal performance.
+    This creates an effect where subtrees that do not account for a reduction in entropy in the validation set are
+    removed from the tree. This can also be thought of as a backtracking mechanism, as the greedy nature
+    of the fitting algorithm may a pattern on the forward pass, and the post-pruning allows the tree to
+    re-evaluate the need for nodes on a validation set.
 
     \subsection{CART}
-    The next algorithm that will be discussed is the Classification and Regression Tree algorithm.
+    The next algorithm that will be discussed is the Classification and Regression Tree algorithm\cite{cart}.
+    This is quite similar to the ID3 algorithm discussed above. However, the algorithm
+    can easily be adapted for a regression problem by replacing the entropy expression
+    used above with
+    \[
+        MSE(y) = \frac{1}{n} \sum_{i=1}^n (y - \bar{y})^2,
+    \]
+    where $\bar{y}$ is the mean of $y$. Note that this will lead the formulation above
+    to minimize the variance of target variables in each node, which is analagous
+    to minimizing the entropy within the nodes.
+
+    Commonly, the CART algorithm is implemented with all binary splits. In the implementation
+    provided here, that is not explicitly encoded, but the discrete multi-valued
+    attributes will be encoded as one-hot encodings, and treated as though they
+    were continuous splits (although the only split point to consider will be .5).
+
+    Otherwise, the algorithm is the same as above.
+
+    \subsubsection{Early Stopping}
+    Like the ID3 algorithm above, a CART is prone to overfitting, as the recursive fitting
+    procedure will continue until no more splits will reduce the training set MSE.
+    As above, a mechanism is needed to prevent the overfitting. A post-pruning
+    procedure could be applied to a CART, but in the implementation provided here,
+    an early stopping parameter will prevent the tree from overfitting. This is sometimes
+    known as pre-pruning\cite{textbook}. Given an early-stopping parameter
+    $\theta$, fitting will proceed until either no further splits can be made,
+    or until the gain associated with a split is less than $\theta$. The
+    larger $\theta$ is, the shorter the tree will be before it stops growing.
+
+    In the experiments below, a holdout validation set is used to determine
+    the best value of $\theta$.
+
 
 
 
