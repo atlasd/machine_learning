@@ -6,6 +6,11 @@ import operator
 import sys
 import copy
 from typing import Dict, Callable
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 sys.setrecursionlimit(10000)
 
@@ -568,6 +573,14 @@ class BaseTree:
             / column_values.get(x)[2],
         )
 
+        if self.n_nodes < 5:
+            logger.info("Column split values:")
+            for col, val in column_values.items():
+                logger.info(f"Column Index: {col}")
+                logger.info(f"Gain Ratio: {(presplit_entropy - val[1]) / val[2]}")
+
+            logger.info(f"Choosing column {col_idx_with_min_value}")
+
         # If stopping criteria are met or all splits are infinite, terminate the process
         if (
             self.early_stopping_comparison(
@@ -873,7 +886,7 @@ class PostPruner:
         """
         tree = copy.deepcopy(self.tree)
         change_made = True
-        # As long as changes are made, recursively prune for the root node.
+        # As long as changes are made, recursively prune from the root node.
         while change_made:
             change_made = self.prune_node(tree, tree.root)
         return tree

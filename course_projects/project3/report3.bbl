@@ -1,0 +1,48 @@
+\begin{thebibliography}{1}
+
+\bibitem{textbook}
+Ethem Alpaydin.
+\newblock Introduction to machine learning.
+\newblock pages 222--223, 2014.
+
+\bibitem{wine_quality}
+Paulo Cortex.
+\newblock Wine quality dataset.
+\newblock URL:
+  \url{https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/}.
+
+\bibitem{image_dataset}
+Vision Group.
+\newblock Image segmentation data.
+\newblock URL:
+  \url{https://archive.ics.uci.edu/ml/machine-learning-databases/image/segmentation.data}.
+
+\bibitem{cart}
+R~Olshen CJ~Stone Leo~Breiman, JH~Freidman.
+\newblock Classification and regression trees.
+\newblock 1984.
+
+\bibitem{ff_dataset}
+Anibal~Morais Paulo~Corez.
+\newblock Forest fires.
+\newblock URL:
+  \url{https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv}.
+
+\bibitem{cpu_dataset}
+Jacob~Feldmesser Phillip Ein-Dor.
+\newblock Relative cpu performance data.
+\newblock URL:
+  \url{https://archive.ics.uci.edu/ml/machine-learning-databases/cpu-performance/machine.data}.
+
+\bibitem{id3}
+JR~Quinlan.
+\newblock Induction of decision trees.
+\newblock {\em Machine Learning 1}, pages 81--106, 1986.
+
+\bibitem{abalone_dataset}
+Sam Waugh.
+\newblock Abalone data set.
+\newblock URL:
+  \url{https://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.data}.
+
+\end{thebibliography}
