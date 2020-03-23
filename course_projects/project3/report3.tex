@@ -22,8 +22,7 @@
     Post-fit pruning will be used to help prevent overfitting.
     The CART algorithm will be applied to 3 regression problems.
     A validation set will be used to tune an early stopping parameter to
-    prevent overfitting. It is found that the tree-based algorithms
-    outperform baseline metrics.
+    prevent overfitting.
     \end{abstract}
 
     \section{Problem Statement \& Hypothesis}
@@ -54,9 +53,10 @@
         \item Decision trees are prone to overfitting, as without any explicit treatment for overfitting, each
         datapoint might end up with its own leaf node, partitioning the feature space into very small partitions. As
         a result, a validation set is generally necessary to inform the decision to stop adding nodes (or which nodes to
-        remove in the case of pruning).
+        remove in the case of pruning). This could be problematic with small datasets.
         \item If there are not enough datapoints to fill up relevant parts of the feature space, some of the
-        partitions may have only a few (or even just  1) datapoint. This may lead to poor performance on prediction.
+        partitions may have only a few (or even just  1) datapoint. This may lead to poor performance on prediction
+        if the datapoint is an outlier.
         \item There may be future datapoints that do not follow any path in the decision tree - for example,
         a multivalued discrete feature may have a node where none of the datapoints take on one of the values.
         This presents an estimation problem that must be handled.
@@ -148,7 +148,10 @@
     To summarise the algorithm, the data is recursively partitioned, choosing at each step
     the partition that maximizes the gain ratio with respect to the target. Note that
     the algorithm is greedy, in so much that it chooses the best split at each point.
-    There is no guarentee that the tree found is the globally optimal tree.
+    There is no guarantee that the tree found is the globally optimal tree. This relates
+    to some of the points above; if the individual features have no effect on
+    a target, but their interaction does, it may be difficult for the algorithm to
+    find that pattern.
 
     \subsubsection{Pruning}
     After a tree has been grown to completion, one issue remains. It is not unlikely that the tree is overfit,

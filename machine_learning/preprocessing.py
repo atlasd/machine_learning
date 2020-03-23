@@ -19,10 +19,24 @@ class Standardizer:
             df_xf = X - self.df_means
         if self.std:
             non_zero = np.bitwise_not(np.isclose(self.df_std, 0))
-            df_xf = np.where(non_zero, X / self.df_std, X)
+            df_xf = np.where(non_zero, df_xf / self.df_std, df_xf)
 
         return df_xf
 
     def fit_transform(self, X):
         self.fit(X)
         return self.transform(X)
+
+
+class MaxScaler:
+    """
+    Class that scales everything to [-1, 1] interval.
+    """
+
+    def fit(self, X):
+        # Get the max values
+        self.maxes = np.abs(X).max()
+
+    def transform(self, X):
+        # Scale by said values
+        return X / self.maxes

@@ -1,0 +1,32 @@
+\begin{thebibliography}{1}
+
+\bibitem{irisdataset}
+R.A Fisher.
+\newblock Iris.
+\newblock URL: \url{https://archive.ics.uci.edu/ml/datasets/Iris}.
+
+\bibitem{glassdataset}
+B.~German.
+\newblock Glass identification data set.
+\newblock URL:
+  \url{https://archive.ics.uci.edu/ml/datasets/Glass+Identification}.
+
+\bibitem{soybeandataset}
+R.S.n Michalski.
+\newblock Soybean (small) data set.
+\newblock URL:
+  \url{https://archive.ics.uci.edu/ml/datasets/Soybean+%28Small%29}.
+
+\bibitem{housedataset}
+Jeff Schlimmer.
+\newblock Congressional voting records data set.
+\newblock URL:
+  \url{https://archive.ics.uci.edu/ml/datasets/Congressional+Voting+Records}.
+
+\bibitem{cancerdataset}
+Dr. WIlliam~H. Wolberg.
+\newblock Breast cancer wisconsin (original) data set.
+\newblock URL:
+  \url{https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+%28Original%29}.
+
+\end{thebibliography}

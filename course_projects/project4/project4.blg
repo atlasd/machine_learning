@@ -1,0 +1,61 @@
+This is BibTeX, Version 0.99d (TeX Live 2017)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: project4.aux
+The style file: plainurl.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=20001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: biblio.bib
+Warning--entry type for "irisdataset" isn't style-file defined
+--line 1 of file biblio.bib
+Warning--entry type for "cancerdataset" isn't style-file defined
+--line 8 of file biblio.bib
+Warning--entry type for "glassdataset" isn't style-file defined
+--line 15 of file biblio.bib
+Warning--entry type for "soybeandataset" isn't style-file defined
+--line 22 of file biblio.bib
+Warning--entry type for "housedataset" isn't style-file defined
+--line 28 of file biblio.bib
+You've used 5 entries,
+            2849 wiz_defined-function locations,
+            635 strings with 5600 characters,
+and the built_in function-call counts, 1577 in all, are:
+= -- 145
+> -- 40
+< -- 0
++ -- 15
+- -- 10
+* -- 42
+:= -- 231
+add.period$ -- 15
+call.type$ -- 5
+change.case$ -- 20
+chr.to.int$ -- 0
+cite$ -- 5
+duplicate$ -- 45
+empty$ -- 191
+format.name$ -- 10
+if$ -- 431
+int.to.chr$ -- 0
+int.to.str$ -- 5
+missing$ -- 0
+newline$ -- 28
+num.names$ -- 10
+pop$ -- 60
+preamble$ -- 1
+purify$ -- 15
+quote$ -- 0
+skip$ -- 140
+stack$ -- 0
+substring$ -- 25
+swap$ -- 5
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 20
+warning$ -- 0
+while$ -- 10
+width$ -- 6
+write$ -- 47
+(There were 5 warnings)
