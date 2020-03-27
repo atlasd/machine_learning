@@ -23,9 +23,8 @@
     world datasets. It is expected that the algorithms will perform
     similarly on real world data, as they are both able to find linear
     discriminants, and thus have similar model capacity. Real-world experiments
-        indicate that performance tends to be similar between the two algorithms,
-        and both outperform baselines on the datasets used.
-
+    indicate that performance tends to be similar between the two algorithms,
+    and both outperform baselines on the datasets used.
     \end{abstract}
 
     \maketitle
@@ -183,7 +182,7 @@
     on characteristics of the tumors. This is a simple two-class problem, with continuous valued inputs, and
     so no data transformation is needed. The features are scaled using the max-scaler described above.
     The results of the experiments are shown in Table~\ref{breast_results}.
-    \begin{table}
+    \begin{table}[H]
     \begin{tabular}{lc}
     Algorithm & Average Accuracy \\
     \hline
@@ -202,7 +201,7 @@
     Adaline Network. Logistic regression handles that scenario naturally.
     The features are scaled using the max-scaler approach from above.
     The results can be found in Table~\ref{glass_results}.
-\begin{table}[H]
+    \begin{table}[H]
     \begin{tabular}{lc}
     Algorithm & Average Accuracy \\
     \hline
@@ -270,7 +269,24 @@
     \caption{House Votes dataset experiment results.}
     \end{table}
 
+    \section{Algorithm Behavior}
+    In the experiments run, the algorithms perform comparably. They both
+    outperform the baseline in all the experiments, indicating that the
+    problems present classes that can be linearly seperated to varying degrees,
+    but always exceeding a naive model that chooses the most popular class.
 
+    Training the algorithms was cumbersome, as tuning the learning rate
+    and the number of iterations to run required lots of trial and error.
+    However, it isn't too difficult to detect convergence, and both
+    algorithms get to roughly the same spot.
+
+    \section{Summary}
+    In conclusion, this paper introduced two parametric techniques for
+    learning linear discriminants. The paper introduced the training
+    process via gradient descent. The algorithms were the dispatched
+    on 5 real-world classification problems. Both algorithms outperformed
+    the naive baseline on all problems. Both algorithms performed
+    quite comparably in terms of accuracy on all of the problems.
 
 \bibliographystyle{plainurl}
 \bibliography{biblio}
