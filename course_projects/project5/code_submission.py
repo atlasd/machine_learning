@@ -886,7 +886,7 @@ if __name__ != "__main__":
         f"Glass Results: {dicttoolz.valmap(np.mean, glass_results['accuracy'])}"
     )
 
-if __name__ == "__main__":
+    np.random.seed(73)
     logger.info("Iris Experiment")
     iris_data = pd.read_csv(
         "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data",
@@ -908,3 +908,56 @@ if __name__ == "__main__":
     )
 
     logger.info(f"Iris Results: {dicttoolz.valmap(np.mean, iris_results['accuracy'])}")
+
+    np.random.seed(73)
+    house_votes_data = pipe(
+        pd.read_csv(
+            "https://archive.ics.uci.edu/ml/machine-learning-databases/voting-records/house-votes-84.data",
+            header=None,
+            names=[
+                "instance_class",
+                "handicapped-infants",
+                "water-project-cost-sharing",
+                "adoption-of-the-budget-resolution",
+                "physician-fee-freeze",
+                "el-salvador-aid",
+                "religious-groups-in-schools",
+                "anti-satellite-test-ban",
+                "aid-to-nicaraguan-contras",
+                "mx-missile",
+                "immigration",
+                "synfuels-corporation-cutback",
+                "education-spending",
+                "superfund-right-to-sue",
+                "crime",
+                "duty-free-exports",
+                "export-administration-act-south-africa",
+            ],
+        )
+        .replace("?", np.NaN)
+        .replace("y", 1)
+        .replace("n", 0),
+        lambda df: pd.get_dummies(
+            df, columns=df.columns, drop_first=True, dummy_na=True
+        ),
+    )
+
+    X, y = (
+        house_votes_data.drop(
+            ["instance_class_republican", "instance_class_nan"], axis=1
+        ).values,
+        house_votes_data["instance_class_republican"].values,
+    )
+
+    house_votes_results = run_classification_experiment(
+        X=X,
+        y=y,
+        learning_rate_choices=list(np.linspace(0.001, 0.01, 10)),
+        hidden_layer_choices=[4, 7, 9],
+        n_iter=1500,
+        conv_tol=0.01,
+    )
+
+    logger.info(
+        f"House Results: {dicttoolz.valmap(np.mean, house_votes_results['accuracy'])}"
+    )

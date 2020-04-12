@@ -259,6 +259,28 @@
     \label{iris_results}
     \end{table}
 
+    \subsection*{House Votes Experiment}
+    The House Votes dataset\cite{housedataset}
+    involves predicting the party
+    affiliation of congress-people based on their votes on several key
+    issues. As above, cross-validation was used to tune the size of the
+    hidden layer and the learning rate. The votes were
+    one-hot encoded, with null values being encoded as a boolean
+    value indicator.
+    The experiment results can be found in Table~\ref{house_results}.
+    \begin{table}[H]
+    \begin{tabular}{lccc}
+    Model & Size of H1 & Size of H2 & Mean Accuracy \\
+    \hline
+    No Hidden Layer & NA & NA & 90\% \\
+    One Hidden Layer & 4 & NA & 94\% \\
+    Two Hidden Layers & 3 & 4 & 96\% \\
+    Naive Baseline & NA & NA & 61\%
+    \end{tabular}
+    \label{house_results}
+    \end{table}
+
+
 \bibliographystyle{plainurl}
 \bibliography{biblio}
 \end{document}
