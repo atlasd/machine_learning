@@ -40,3 +40,7 @@ class MaxScaler:
     def transform(self, X):
         # Scale by said values
         return X / self.maxes
+
+    def fit_transform(self, X):
+        self.fit(X)
+        return self.transform(X)

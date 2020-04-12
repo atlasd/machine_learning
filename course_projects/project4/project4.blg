@@ -17,45 +17,46 @@ Warning--entry type for "soybeandataset" isn't style-file defined
 --line 22 of file biblio.bib
 Warning--entry type for "housedataset" isn't style-file defined
 --line 28 of file biblio.bib
-You've used 5 entries,
+Warning--empty journal in adaline
+You've used 7 entries,
             2849 wiz_defined-function locations,
-            635 strings with 5600 characters,
-and the built_in function-call counts, 1577 in all, are:
-= -- 145
-> -- 40
-< -- 0
-+ -- 15
-- -- 10
-* -- 42
-:= -- 231
-add.period$ -- 15
-call.type$ -- 5
-change.case$ -- 20
+            645 strings with 5860 characters,
+and the built_in function-call counts, 2430 in all, are:
+= -- 235
+> -- 58
+< -- 1
++ -- 22
+- -- 14
+* -- 72
+:= -- 343
+add.period$ -- 21
+call.type$ -- 7
+change.case$ -- 28
 chr.to.int$ -- 0
-cite$ -- 5
-duplicate$ -- 45
-empty$ -- 191
-format.name$ -- 10
-if$ -- 431
+cite$ -- 8
+duplicate$ -- 79
+empty$ -- 272
+format.name$ -- 14
+if$ -- 661
 int.to.chr$ -- 0
-int.to.str$ -- 5
-missing$ -- 0
-newline$ -- 28
-num.names$ -- 10
-pop$ -- 60
+int.to.str$ -- 7
+missing$ -- 2
+newline$ -- 38
+num.names$ -- 14
+pop$ -- 78
 preamble$ -- 1
-purify$ -- 15
+purify$ -- 21
 quote$ -- 0
-skip$ -- 140
+skip$ -- 214
 stack$ -- 0
-substring$ -- 25
-swap$ -- 5
-text.length$ -- 0
+substring$ -- 80
+swap$ -- 19
+text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 20
-warning$ -- 0
-while$ -- 10
-width$ -- 6
-write$ -- 47
-(There were 5 warnings)
+type$ -- 28
+warning$ -- 1
+while$ -- 16
+width$ -- 8
+write$ -- 67
+(There were 6 warnings)

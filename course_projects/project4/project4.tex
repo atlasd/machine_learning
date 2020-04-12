@@ -24,7 +24,8 @@
     similarly on real world data, as they are both able to find linear
     discriminants, and thus have similar model capacity. Real-world experiments
     indicate that performance tends to be similar between the two algorithms,
-    and both outperform baselines on the datasets used.
+    and both outperform baselines on the datasets used, indicating
+    classes that are at least partially linearly seperable.
     \end{abstract}
 
     \maketitle
@@ -51,14 +52,16 @@
         poorly on a classification task.
         }
     \end{figure}
-    As such the classification accuracy of the algorithms will be inline with
+    As such, the classification accuracy of the algorithms will be inline with
     the proportion of instances that are linearly seperable. Problems that are
     mostly linearly seperable, but where labels are noisy, will have accuracy proportional
     to the degree of noise.
 
     Because the algorithms both involve linear transformations of the
     features, they do not natively handle any discrete-multivalued attributes.
-    Such inputs must be transformed to one-hot encodings.
+    Such inputs must be transformed to one-hot encodings. To assist with the
+    convergence of the training algorithm, all inputs are rescaled such
+    that all values are between 0 and 1.
 
     The algorithms do not have capacity to identify interactions between
     input features. All such interactions must be identified manually and encoded
@@ -73,7 +76,8 @@
     \section{Description of Algorithm}
     \subsection{Logistic Regression}
     \subsubsection*{Discriminant Development}
-    The logistic regression algorithm creates a linear discriminant between two classes. Suppose
+    The logistic regression algorithm\cite{logistic_regression}
+    creates a linear discriminant between two classes. Suppose
     $k$ classes $(C_1, \cdots, C_k)$ exist.
     The logistic regression classifier seeks to calculate
     \begin{align}
@@ -134,10 +138,12 @@
 
     \subsection{Adaline Network}
     \subsubsection*{Training}
-    The Adaline Network unit is quite similar to the logistic regression model. A linear
-    discriminant is estimated via gradient descent. The primary difference is that rather than
+    The Adaline Network\cite{adaline} unit is quite similar to the logistic regression model. A linear
+    discriminant is estimated via gradient descent. The difference is that rather than
     applying the logistic function to the output of the linear transformation, the Adaline Network
-    tries to minimize the squared distance between its network outputs and the correct value.
+    tries to minimize the squared distance between its network outputs and the correct value. In other
+    words, if the class instance is 0, the output of the linear transformation should be close to 0,
+    and if the class instance is 1, the output of the linear transformation should be close to 1.
 
     To train the network, the squared error loss function is used:
     \[
@@ -153,7 +159,7 @@
 
     \begin{align*}
         \Delta W &= \eta (r^t - w^T x^t) x^t \\
-        W^{n+1} = W^n + \Delta W^{n}
+        W^{n+1} &= W^n + \Delta W^{n}
     \end{align*}
 
     \subsubsection*{Prediction}
@@ -171,7 +177,7 @@
     all values are divided by the maximum absolute value in the column.
 
     For each dataset, the algorithms are measured by their accuracy on the classification problem. They are also compared
-    to a naive baseline model that predicts the mode over the training data.
+    to a naive baseline model that predicts the class label mode over the training data.
 
     Stratefied 5-Fold cross-validation is used to get a better estimate of the performance of each classifier on
     various out-of sample portions of the data.
@@ -275,10 +281,11 @@
     problems present classes that can be linearly seperated to varying degrees,
     but always exceeding a naive model that chooses the most popular class.
 
-    Training the algorithms was cumbersome, as tuning the learning rate
-    and the number of iterations to run required lots of trial and error.
+    Training the algorithms was more cumbersome than expected,
+    as tuning the learning rate
+    and the number of iterations to run required some trial and error.
     However, it isn't too difficult to detect convergence, and both
-    algorithms get to roughly the same spot.
+    algorithms converge to similar performance levels.
 
     \section{Summary}
     In conclusion, this paper introduced two parametric techniques for

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  22 MAR 2020 14:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  29 MAR 2020 10:34
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -357,17 +357,17 @@ Package pdftex.def Info: non-seperable.png used on input line 47.
 (pdftex.def)             Requested size: 422.77664pt x 220.89659pt.
 
 [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./non
--seperable.png>] [2] [3] (./project4.bbl) [4] (./project4.aux) )
+-seperable.png>] [2] [3] (./project4.bbl [4]) [5] (./project4.aux) )
 (\end occurred inside a group at level 1)
 
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 4235 strings out of 492995
- 58976 string characters out of 6132704
- 145009 words of memory out of 5000000
- 7567 multiletter control sequences out of 15000+600000
- 9863 words of font info for 39 fonts, out of 8000000 for 9000
+ 4239 strings out of 492995
+ 59025 string characters out of 6132704
+ 145015 words of memory out of 5000000
+ 7570 multiletter control sequences out of 15000+600000
+ 10215 words of font info for 40 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
  39i,10n,32p,340b,3046s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts
@@ -383,11 +383,12 @@ pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb
 usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></u
 sr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr
 /local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/
-local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
-Output written on project4.pdf (4 pages, 211689 bytes).
+local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/lo
+cal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
+Output written on project4.pdf (5 pages, 226001 bytes).
 PDF statistics:
- 76 PDF objects out of 1000 (max. 8388607)
- 53 compressed objects within 1 object stream
+ 83 PDF objects out of 1000 (max. 8388607)
+ 58 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

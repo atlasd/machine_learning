@@ -11,6 +11,12 @@ B.~German.
 \newblock URL:
   \url{https://archive.ics.uci.edu/ml/datasets/Glass+Identification}.
 
+\bibitem{logistic_regression}
+N.M.~Laird G.M.~Fitzmaurice.
+\newblock Multivariate analysis: Discrete variables (logistic regression).
+\newblock {\em International Encyclopedia of the Social and Behavioral
+  Sciences}, pages 10221--10228, 2001.
+
 \bibitem{soybeandataset}
 R.S.n Michalski.
 \newblock Soybean (small) data set.
@@ -22,6 +28,11 @@ Jeff Schlimmer.
 \newblock Congressional voting records data set.
 \newblock URL:
   \url{https://archive.ics.uci.edu/ml/datasets/Congressional+Voting+Records}.
+
+\bibitem{adaline}
+B.~Widrow.
+\newblock An adaptive adaline neuron using chemical memistors.
+\newblock 1960.
 
 \bibitem{cancerdataset}
 Dr. WIlliam~H. Wolberg.
