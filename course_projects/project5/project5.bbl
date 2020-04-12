@@ -1,0 +1,31 @@
+\begin{thebibliography}{1}
+
+\bibitem{irisdataset}
+R.A Fisher.
+\newblock Iris.
+\newblock URL: \url{https://archive.ics.uci.edu/ml/datasets/Iris}.
+
+\bibitem{deeplearning}
+Ian Goodfellow, Yoshua Bengio, and Aaron Courville.
+\newblock {\em Deep Learning}.
+\newblock MIT Press, 2016.
+\newblock \url{http://www.deeplearningbook.org}.
+
+\bibitem{soybeandataset}
+R.S.n Michalski.
+\newblock Soybean (small) data set.
+\newblock URL:
+  \url{https://archive.ics.uci.edu/ml/datasets/Soybean+%28Small%29}.
+
+\bibitem{backprop}
+Hinton~G.E. Rumelhart, D.E and R.J. Williams.
+\newblock Learning representations by back-propogating errors.
+\newblock {\em Nature}, pages 533--536, 1986.
+
+\bibitem{cancerdataset}
+Dr. WIlliam~H. Wolberg.
+\newblock Breast cancer wisconsin (original) data set.
+\newblock URL:
+  \url{https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+%28Original%29}.
+
+\end{thebibliography}

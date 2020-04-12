@@ -94,7 +94,7 @@
 
     \subsection*{Network Topology}
     Now that the basic unit of the network has been established, there
-    are two parameters that must be chosen within the network.
+    are two parameters that must be chosen within the network\cite{deeplearning}.
 
     The number of additional units to include in the network (which will be
     called the hidden layers) is crucial in defining the capacity of the
@@ -122,7 +122,7 @@
     Given the network defined above, the challenge is in tuning
     the weight matrices $W_h$ for each of the $h$ units in
     the network. As in past papers, gradient descent will be
-    used, but the challenge remains in calculating the gradient.
+    used, but the challenge remains in calculating the gradient\cite{backprop}.
     Given the loss function
     \[
         E(W, X) = (O - Y)^T (O - y)
@@ -197,17 +197,68 @@
     learning rate were both tuned using a validation set, and chosen based on which
     set minimized the out-of-sample classification error.
     A stratified 5-fold cross-validation scheme was used to estimate
-    the out-of-sample error. ALl problems were trained using a multi-net approach, where each
+    the out-of-sample error. All problems were trained using a multi-net approach, where each
     class label has a corresponding output, and a softmax function was used to calculate
     the error relative to a one-hot encoding of the class labels.
 
+    \section{Experimental Results}
+    \subsection*{Breast Cancer Data}
+    The first experiment conducted involved the classification of a breast tumor
+    as malignant or benign\cite{cancerdataset}. Rows containing null values were dropped, as they're a small portion of the
+    data. The features were also mean-centered at zero and scaled by the standard deviation.
+    As mentioned above, a cross-validation approach was used to pick the size of the hidden layers and
+    the learning rate. Batches of size 48 were, providing some stability in the learning process.
+    The results of the experiments can be found in Table~\ref{breast_results}.
+    \begin{table}[H]
+    \begin{tabular}{lccc}
+    Model & Size of H1 & Size of H2 & Mean Accuracy \\
+    \hline
+    No Hidden Layer & NA & NA & 97\%\\
+    One Hidden Layer & 4 & NA & 97\% \\
+    Two Hidden Layers & 4 & 8 & 97\% \\
+    Naive Baseline & NA & NA & 65\%
+    \end{tabular}
+    \label{breast_results}
+    \caption{Breast Cancer Classification Results}
+    \end{table}
 
 
+    \subsection*{Soybean Experiment}
+    The next experiment run was to classify the type of rot exhibited by a soybean given
+    characteristics about the bean\cite{soybeandataset}. As above, cross-validation was used to determine the best
+    size of both of the hidden layers and the learning rate. A batch size of 48 was used again.
+    The network with no hidden layer performed quite well, while the networks with hidden layers
+    perform in line with a naive baseline. The results can be found in Table~\ref{soybean_results}.
+    \begin{table}[H]
+    \begin{tabular}{lccc}
+    Model & Size of H1 & Size of H2 & Mean Accuracy \\
+    \hline
+    No Hidden Layer & NA & NA & 98\%  \\
+    One Hidden Layer & 5 & NA & 36\% \\
+    Two Hidden Layers & 7 & 9 & 36\% \\
+    Naive Baseline & NA & NA & 36\%
+    \end{tabular}
+    \label{soybean_results}
+    \end{table}
 
+    \subsection*{Iris Experiment}
+    The Iris dataset\cite{irisdataset} involves classifying the type of flower based on measurements
+    of the flower. As above, cross-validation was used to find the size of the hidden layers and the learning
+    rate. A batch size of 48 was used. The networks had some trouble converging to extremely
+    performant results, but all were able to outperform the baseline naive model on average.
+    The experiment results can be found in Table~\ref{iris_results}.
+    \begin{table}[H]
+    \begin{tabular}{lccc}
+    Model & Size of H1 & Size of H2 & Mean Accuracy \\
+    \hline
+    No Hidden Layer & NA & NA & 74\% \\
+    One Hidden Layer & 4 & NA & 66\% \\
+    Two Hidden Layers & 3 & 4 & 66\% \\
+    Naive Baseline & NA & NA & 33\%
+    \end{tabular}
+    \label{iris_results}
+    \end{table}
 
-
-
-
-
-
+\bibliographystyle{plainurl}
+\bibliography{biblio}
 \end{document}
