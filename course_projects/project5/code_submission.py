@@ -595,6 +595,7 @@ def run_classification_experiment(
     hidden_layer_choices=list(range(3, 16, 3)),
     n_iter=10000,
     conv_tol=0.001,
+    filename=None,
 ):
     kfold = KFoldStratifiedCV(num_folds=5)
     accuracy_0h = []
@@ -703,6 +704,29 @@ def run_classification_experiment(
         best_model_h1.fit(X_train, y_train)
         best_model_h2.fit(X_train, y_train)
 
+        if split == 1 and filename:
+            logger.info(f"Creating prediction output files: {filename}")
+            preds = pd.DataFrame(
+                np.hstack(
+                    [
+                        X_test,
+                        y[test].reshape(-1, 1),
+                        np.array(best_model_h0.predict(X_test)).reshape(-1, 1),
+                        np.array(best_model_h1.predict(X_test)).reshape(-1, 1),
+                        np.array(best_model_h2.predict(X_test)).reshape(-1, 1),
+                    ]
+                )
+            )
+            orig_cols = list(preds.columns)
+            orig_cols[-4:] = [
+                "actuals",
+                "h0_prediction",
+                "h1_predictions",
+                "h2_predictions",
+            ]
+            preds.columns = orig_cols
+            preds.to_csv(filename, index=False)
+
         baseline.append(np.mean(mode(y[train]).mode[0] == y[test]))
         accuracy_0h.append(np.mean(best_model_h0.predict(X_test) == y[test]))
         accuracy_1h.append(np.mean(best_model_h1.predict(X_test) == y[test]))
@@ -721,49 +745,74 @@ def run_classification_experiment(
 """
 Load the data and run the experiments
 """
-if __name__ != "__main__":
-    logger.info("Running breast cancer classification experiment")
-
-    # Load and clean the data
-    breast_cancer = (
-        pd.read_csv(
-            io.BytesIO(
-                requests.get(
-                    "https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/breast-cancer-wisconsin.data",
-                    verify=False,
-                ).content
-            ),
-            header=None,
-            names=[
-                "id_number",
-                "clump_thickness",
-                "uniformity_cell_size",
-                "uniformity_cell_shape",
-                "marginal_adhesion",
-                "single_epithelial_cell_size",
-                "bare_nuclei",
-                "bland_chromatin",
-                "normal_nucleoli",
-                "mitosis",
-                "class",
-            ],
-        )
-        .replace("?", np.NaN)
-        .astype("float", errors="ignore")
-        .dropna()
-    )
-
-    # Run the experiment
-    X, y = (
-        breast_cancer.drop(["id_number", "class"], axis=1).values,
-        breast_cancer["class"].astype("category").cat.codes.values.reshape(-1,),
-    )
+if __name__ == "__main__":
     np.random.seed(73)
-    breast_cancer_results = run_classification_experiment(X=X, y=y)
-
-    logger.info(
-        f"Breast Cancer Results: {dicttoolz.valmap(np.mean, breast_cancer_results['accuracy'])}"
+    logger.info("Iris Experiment")
+    iris_data = pd.read_csv(
+        "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data",
+        header=None,
+        names=["sepal_length", "sepal_width", "petal_length", "petal_width", "class"],
     )
+
+    X, y = (
+        iris_data.drop(["class"], axis=1).values,
+        iris_data["class"].astype("category").cat.codes.values,
+    )
+    iris_results = run_classification_experiment(
+        X=X,
+        y=y,
+        learning_rate_choices=list(np.linspace(0.01, 0.8, 5)),
+        hidden_layer_choices=[3, 4],
+        n_iter=500,
+        conv_tol=0.001,
+        filename="iris_prediction_results.csv",
+    )
+
+    logger.info(f"Iris Results: {dicttoolz.valmap(np.mean, iris_results['accuracy'])}")
+
+    logger.info("Running glass experiment")
+
+    glass_data = pd.read_csv(
+        io.BytesIO(
+            requests.get(
+                "https://archive.ics.uci.edu/ml/machine-learning-databases/glass/glass.data",
+                verify=False,
+            ).content
+        ),
+        header=None,
+        names=[
+            "id_number",
+            "refractive_index",
+            "sodium",
+            "magnesium",
+            "aluminum",
+            "silicon",
+            "potassium",
+            "calcium",
+            "barium",
+            "iron",
+            "class",
+        ],
+    )
+
+    X, y = (
+        glass_data.drop(["id_number", "class"], axis=1).values,
+        glass_data["class"].astype("category").cat.codes.values,
+    )
+
+    glass_results = run_classification_experiment(
+        X,
+        y=y,
+        learning_rate_choices=np.linspace(0.025, 0.1, 5),
+        hidden_layer_choices=[3, 5, 7, 8],
+        n_iter=1000,
+        conv_tol=0.0001,
+        filename="glass_prediction_results.csv",
+    )
+    logger.info(
+        f"Glass Results: {dicttoolz.valmap(np.mean, glass_results['accuracy'])}"
+    )
+
     logger.info("Running soybean experiment")
 
     # Next, we repeat this process on the Soybean data
@@ -837,77 +886,13 @@ if __name__ != "__main__":
     soybean_results = run_classification_experiment(
         X,
         y=y,
-        learning_rate_choices=np.linspace(0.002, 0.007, 5),
+        learning_rate_choices=np.linspace(0.003, 0.005, 3),
         hidden_layer_choices=list(range(5, 11, 2)),
+        filename="soybean_prediction_results.csv",
     )
     logger.info(
         f"Soybean Results: {dicttoolz.valmap(np.mean, soybean_results['accuracy'])}"
     )
-
-    logger.info("Running glass experiment")
-
-    glass_data = pd.read_csv(
-        io.BytesIO(
-            requests.get(
-                "https://archive.ics.uci.edu/ml/machine-learning-databases/glass/glass.data",
-                verify=False,
-            ).content
-        ),
-        header=None,
-        names=[
-            "id_number",
-            "refractive_index",
-            "sodium",
-            "magnesium",
-            "aluminum",
-            "silicon",
-            "potassium",
-            "calcium",
-            "barium",
-            "iron",
-            "class",
-        ],
-    )
-
-    X, y = (
-        glass_data.drop(["id_number", "class"], axis=1).values,
-        glass_data["class"].astype("category").cat.codes.values,
-    )
-
-    glass_results = run_classification_experiment(
-        X,
-        y=y,
-        learning_rate_choices=[0.05] + list(np.linspace(0.3, 1, 9)),
-        hidden_layer_choices=[3],
-        n_iter=1000,
-        conv_tol=0.0001,
-    )
-    logger.info(
-        f"Glass Results: {dicttoolz.valmap(np.mean, glass_results['accuracy'])}"
-    )
-
-    np.random.seed(73)
-    logger.info("Iris Experiment")
-    iris_data = pd.read_csv(
-        "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data",
-        header=None,
-        names=["sepal_length", "sepal_width", "petal_length", "petal_width", "class"],
-    )
-
-    X, y = (
-        iris_data.drop(["class"], axis=1).values,
-        iris_data["class"].astype("category").cat.codes.values,
-    )
-    iris_results = run_classification_experiment(
-        X=X,
-        y=y,
-        learning_rate_choices=list(np.linspace(0.01, 0.8, 5)),
-        hidden_layer_choices=[3, 4],
-        n_iter=500,
-        conv_tol=0.001,
-    )
-
-    logger.info(f"Iris Results: {dicttoolz.valmap(np.mean, iris_results['accuracy'])}")
 
     np.random.seed(73)
     house_votes_data = pipe(
@@ -956,8 +941,54 @@ if __name__ != "__main__":
         hidden_layer_choices=[4, 7, 9],
         n_iter=1500,
         conv_tol=0.01,
+        filename="house_votes_results.csv",
     )
 
     logger.info(
         f"House Results: {dicttoolz.valmap(np.mean, house_votes_results['accuracy'])}"
+    )
+
+    logger.info("Running breast cancer classification experiment")
+
+    # Load and clean the data
+    breast_cancer = (
+        pd.read_csv(
+            io.BytesIO(
+                requests.get(
+                    "https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/breast-cancer-wisconsin.data",
+                    verify=False,
+                ).content
+            ),
+            header=None,
+            names=[
+                "id_number",
+                "clump_thickness",
+                "uniformity_cell_size",
+                "uniformity_cell_shape",
+                "marginal_adhesion",
+                "single_epithelial_cell_size",
+                "bare_nuclei",
+                "bland_chromatin",
+                "normal_nucleoli",
+                "mitosis",
+                "class",
+            ],
+        )
+        .replace("?", np.NaN)
+        .astype("float", errors="ignore")
+        .dropna()
+    )
+
+    # Run the experiment
+    X, y = (
+        breast_cancer.drop(["id_number", "class"], axis=1).values,
+        breast_cancer["class"].astype("category").cat.codes.values.reshape(-1,),
+    )
+    np.random.seed(73)
+    breast_cancer_results = run_classification_experiment(
+        X=X, y=y, filename="breast_cancer_predictions.csv"
+    )
+
+    logger.info(
+        f"Breast Cancer Results: {dicttoolz.valmap(np.mean, breast_cancer_results['accuracy'])}"
     )

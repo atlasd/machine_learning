@@ -5,6 +5,12 @@ R.A Fisher.
 \newblock Iris.
 \newblock URL: \url{https://archive.ics.uci.edu/ml/datasets/Iris}.
 
+\bibitem{glassdataset}
+B.~German.
+\newblock Glass identification data set.
+\newblock URL:
+  \url{https://archive.ics.uci.edu/ml/datasets/Glass+Identification}.
+
 \bibitem{deeplearning}
 Ian Goodfellow, Yoshua Bengio, and Aaron Courville.
 \newblock {\em Deep Learning}.
@@ -21,6 +27,12 @@ R.S.n Michalski.
 Hinton~G.E. Rumelhart, D.E and R.J. Williams.
 \newblock Learning representations by back-propogating errors.
 \newblock {\em Nature}, pages 533--536, 1986.
+
+\bibitem{housedataset}
+Jeff Schlimmer.
+\newblock Congressional voting records data set.
+\newblock URL:
+  \url{https://archive.ics.uci.edu/ml/datasets/Congressional+Voting+Records}.
 
 \bibitem{cancerdataset}
 Dr. WIlliam~H. Wolberg.

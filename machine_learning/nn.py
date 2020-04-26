@@ -4,7 +4,7 @@ import numpy as np
 
 def softmax(y):
     """Numerically stable softmax function"""
-    y = y - np.max(y, axis=1)
+    y = y - np.max(y, axis=1).reshape(-1, 1)
     return np.exp(y) / np.sum(np.exp(y), axis=1).reshape(-1, 1)
 
 
@@ -88,7 +88,9 @@ class SequentialNetwork:
             delta_list = self.get_delta_list(target=y[batch_mask])
 
             # Make the gradient updates
-            gradient_list = self.get_gradient_updates(delta_list=delta_list)
+            gradient_list = self.get_gradient_updates(
+                delta_list=delta_list, verbose=True if n_iter < 4 else False
+            )
 
             # Calculate and track the loss
             loss = np.mean((y[batch_mask] - preds) ** 2)
@@ -143,7 +145,7 @@ class SequentialNetwork:
                 )
         return delta_list
 
-    def get_gradient_updates(self, delta_list):
+    def get_gradient_updates(self, delta_list, verbose=False):
         """
         Function to make the gradient updates. Happens in place.
 
@@ -165,7 +167,9 @@ class SequentialNetwork:
 
             # Calculate the gradient from delta and the previous input
             gradient = prev_input.T @ delta_list[module_num]
-
+            if verbose:
+                print("Gradient update: ")
+                print(gradient)
             # Make the update to the weights
             self.modules[module_num].weight += self.lr * gradient
 

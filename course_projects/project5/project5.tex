@@ -23,9 +23,10 @@
         A sigmoid activation function will
         be used to introduce non-linearities into the network.
         A softmax classifier will be used to train a multi-net
-        classifier. The networks mostly outperform
-        a naive baseline, although require
-        substantial tuning effort to converge to a good solution.
+        classifier. It is found that the networks outperform
+        a naive baseline in most problems, although require
+        substantial tuning effort to converge to a good solution (and in some cases do not
+    converge as desired).
     \end{abstract}
     \maketitle
 
@@ -45,7 +46,8 @@
     this paper, as it is known from previous experiments that
     a simple linear classifier can outperform baseline on these
     problems. As such, the feed-forward network has \textit{at least}
-    as much capacity as those models, and should outperform.
+    as much capacity as those models, and should therefore perform
+    equally or better (as measured by classification accuracy).
 
     However, the additional cost of the expanded model
     capacity is that the networks can be difficult to train.
@@ -53,7 +55,8 @@
     and size of each of the units. Therefore, it would not be
     wholly unexpected if it were to be too difficult to find
     a network that outperforms a simpler linear model
-    on problems with classes that are largely linearly seperable.
+    on problems with classes that are largely linearly seperable,
+    especially where there is not a lot of data.
 
     In the experiments below, 3 network configurations are used.
     A network with 0, 1 and 2 hidden layers will be applied to
@@ -62,18 +65,21 @@
     hidden layers on problems with linear seperability. If an
     experiment presents a non-linear boundary between classes,
     it is expected that the hidden layer networks will outperform.
+    It is also expected that the network with no hidden layer will be
+    easier to tune, and therefore will have fewer instances of non-convergence
+    in real-world experiments.
 
     \section{Description of Algorithms}
-    \subsection*{Single Unit}
+    \subsection*{Single Perceptron Unit}
     The networks discussed in this paper are all composed of
     simple, small units. Each unit takes an input $X$ and
     generates an output $z$ via the following function:
     \begin{align*}
-        \sigma(x) = \frac{1}{1 + \exp{-x}}
-        z &= \sigma(XW) \\
+        \sigma(x) &= \frac{1}{1 + \exp^{-x}} \\
+        z &= \sigma(XW)
     \end{align*}
     where $W$ is a matrix with the same number of rows as $X$
-    has columns. $sigma(x)$ is the sigmoid activation function, shown
+    has columns. $\sigma(x)$ is the sigmoid activation function, shown
     below in Figure~\ref{sigmoid}.
     \begin{figure}
         \centering
@@ -89,8 +95,13 @@
     the $[0, 1]$ interval. When training a classifier, the output
     must be interpreted as binary. The output of the sigmoid
     function can be interpreted as the probability of a positive
-    predictions. This is also advantageos relative to a binary label
-    because the interpretation is naturally probablistic.
+    prediction. This is better than a strictly binary label
+    because the interpretation is naturally probablistic. It is
+    also easier to train relative to a binary step function because
+    the gradient is continuous and differentiable across the real
+    number line. It is steepest around the decision boundary (where $x = 0$).
+    If $x > 0$, then $\sigma(x)$ can be interpretted as indicating a positive class
+    label.
 
     \subsection*{Network Topology}
     Now that the basic unit of the network has been established, there
@@ -100,7 +111,7 @@
     called the hidden layers) is crucial in defining the capacity of the
     network. As the number of units grows, the capacity of the
     network increases, all else equal, which reflects a change in the
-    representation bias. However, the search space becomes bigger,
+    representation bias. However, the corresponding search space becomes bigger,
     and the selection bias plays a large role in whether the network
     converges to a performant solution.
 
@@ -112,6 +123,15 @@
     Note that the effect of a larger value of $k$ is similar to adding more
     units in the network - larger values will increase the representation
     capacity, but will create more parameters (and thus a larger search space).
+    It is sensible for the applications here to restrict $k$ to be between
+    the number of input features and the number of output features,
+    although not unreasonable to move beyond that range. Choosing $k > m$
+    allows for a higher dimensional representation (similar to the representation
+    used in SVMs to achieve non-linear decision boundaries), but it not strictly
+    necessary as the decision boundary here is non-linear. Choosing $k$ less than the
+    number of output classes creates a pinching effect (similar to that of an
+    autoencoder), but for this problem space, indicates an unnecessary reduction
+    of the representation space that is not desirable.
 
     There is also a relationship between the two parameters. A network
     might have fewer large hidden layers, or many small hidden layers.
@@ -122,18 +142,19 @@
     Given the network defined above, the challenge is in tuning
     the weight matrices $W_h$ for each of the $h$ units in
     the network. As in past papers, gradient descent will be
-    used, but the challenge remains in calculating the gradient\cite{backprop}.
+    used, but the challenge remains in calculating the gradient\cite{backprop} across
+    all the layers.
     Given the loss function
     \[
-        E(W, X) = (O - Y)^T (O - y)
-    \],
+        E(W, X) = (O - Y)^T (O - Y),
+    \]
     where $o_i \in O$
-    is the output of the network given input $X_i$, and $Y$
+    is the output of the network given input row $X_i$, and $y_i \in Y$
     is a vector of targets corresponding rowwise to $X$,
     the derivative of the loss relative to the output of the
     network is
     \[
-        \frac{dE}{dO} = (O - y).
+        \frac{dE}{dO} = 2(O - Y).
     \]
     At this point, the chain rule must be
     applied to find the derivative of the loss relative
@@ -204,7 +225,8 @@
     \section{Experimental Results}
     \subsection*{Breast Cancer Data}
     The first experiment conducted involved the classification of a breast tumor
-    as malignant or benign\cite{cancerdataset}. Rows containing null values were dropped, as they're a small portion of the
+    as malignant or benign\cite{cancerdataset}. Rows containing null values were dropped,
+    as they are a small portion of the
     data. The features were also mean-centered at zero and scaled by the standard deviation.
     As mentioned above, a cross-validation approach was used to pick the size of the hidden layers and
     the learning rate. Batches of size 48 were, providing some stability in the learning process.
@@ -221,6 +243,32 @@
     \label{breast_results}
     \caption{Breast Cancer Classification Results}
     \end{table}
+    The model converges to a solution in line with previous linear
+    classifiers. This solution vastly outperforms the baseline model.
+
+    \subsection*{Glass Data}
+    The Glass data\cite{glassdataset} experiment involved classifying the source of
+    broken glass based on characteristics of the broken glass.
+    The features were also mean-centered at zero and scaled by the standard deviation.
+    As mentioned above, a cross-validation approach was used to pick the size of the hidden layers and
+    the learning rate. Batches of size 48 were, providing some stability in the learning process.
+    The results of the experiments can be found in Table~\ref{glass_results}.
+    \begin{table}[H]
+    \begin{tabular}{lccc}
+    Model & Size of H1 & Size of H2 & Mean Accuracy \\
+    \hline
+    No Hidden Layer & NA & NA & 46\%\\
+    One Hidden Layer & 7 & NA & 34\% \\
+    Two Hidden Layers & 3 & 5 & 35\% \\
+    Naive Baseline & NA & NA & 36\%
+    \end{tabular}
+    \label{glass_results}
+    \caption{Glass Classification Results}
+    \end{table}
+    The network did not converge to a performant solution with hidden layers added.
+    There is not a lot of data for each class, which may prevent convergence. The
+    model with no hidden layers does converge to a solution in line with
+    previous work.
 
 
     \subsection*{Soybean Experiment}
@@ -252,8 +300,8 @@
     Model & Size of H1 & Size of H2 & Mean Accuracy \\
     \hline
     No Hidden Layer & NA & NA & 74\% \\
-    One Hidden Layer & 4 & NA & 66\% \\
-    Two Hidden Layers & 3 & 4 & 66\% \\
+    One Hidden Layer & 3 & NA & 67\% \\
+    Two Hidden Layers & 3 & 3 & 66\% \\
     Naive Baseline & NA & NA & 33\%
     \end{tabular}
     \label{iris_results}
@@ -279,6 +327,47 @@
     \end{tabular}
     \label{house_results}
     \end{table}
+
+    \section{Algorithm Behavior}
+    The performance of the neural networks are largely
+    in line with the enumerated hypotheses above. The networks are able to outperform
+    baseline in 3 of the 5 real-world problems viewed. As the class discriminants
+    are mostly linear, this is as expected. The network did not materially
+    outperform the logistic regression classifier of previous work,
+    which is likely more a statement about the form of the
+    class discriminants for these datasets
+    than of the effectiveness of the network.
+
+    The biggest difficulty in all this is finding a performant solution within
+    the hypothesis space of the network. Initially, the networks were tuned by hand,
+    manually finding learning rates, layer sizes,
+    and number of training iterations to use. This was untenable, as it
+    took too long, and wasn't stable. This spurred a move to an automated
+    grid search approach, which succeeded in finding performant
+    networks for most of the problems. However, it is quite time
+    consuming to run, as each proposed network configuration takes
+    1-3 minutes to train.
+
+    One behavior that stands out as useful in training the networks is the
+    relationship between loss and number of gradient updates applied. This
+    can give insight into the appropriate number of iterations, as well
+    as the learning rate. If the loss bounces around without showing
+    improvement, the learning rate is too large. If it shows little
+    movement, the learning rate is too small. Training can be stopped
+    when the loss stops materially decreasing.
+
+    \section{Summary}
+    This paper introduced feed-forward neural networks, as well as the
+    backpropogation algorithm that helps train them.
+    The networks outperform naive baseline
+    models in situations where they are able to converge to a good solution.
+    It is difficult and time consuming to tune the networks to such a good solution.
+    They would be easier to train and more outperformant relative to linear
+    methods if the boundary between classes was more non-linear than
+    in these problems. However, given the largely linear boundaries in the
+    problems examined, the performance is not beyond that of a simplier
+    logistic regression.
+
 
 
 \bibliographystyle{plainurl}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  12 APR 2020 17:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  19 APR 2020 13:14
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -353,23 +353,23 @@ e
 <sigmoid.png, id=1, 702.625pt x 451.6875pt>
 File: sigmoid.png Graphic file (type png)
  <use sigmoid.png>
-Package pdftex.def Info: sigmoid.png used on input line 80.
+Package pdftex.def Info: sigmoid.png used on input line 86.
 (pdftex.def)             Requested size: 281.85587pt x 181.1956pt.
  [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2 <
 ./sigmoid.png>]
-[3] (./project5.bbl) [4] (./project5.aux) )
+[3] [4] (./project5.bbl) [5] (./project5.aux) )
 (\end occurred inside a group at level 1)
 
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 4230 strings out of 492995
- 58853 string characters out of 6132704
- 144944 words of memory out of 5000000
- 7561 multiletter control sequences out of 15000+600000
+ 4234 strings out of 492995
+ 58911 string characters out of 6132704
+ 145966 words of memory out of 5000000
+ 7565 multiletter control sequences out of 15000+600000
  10215 words of font info for 40 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 39i,9n,32p,308b,3044s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 39i,9n,32p,308b,3048s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmbx10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmcsc10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/
@@ -382,10 +382,10 @@ fb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb
 ></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></
 usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
-Output written on project5.pdf (4 pages, 174188 bytes).
+Output written on project5.pdf (5 pages, 180988 bytes).
 PDF statistics:
- 68 PDF objects out of 1000 (max. 8388607)
- 47 compressed objects within 1 object stream
+ 71 PDF objects out of 1000 (max. 8388607)
+ 49 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
