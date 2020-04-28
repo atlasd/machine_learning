@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  26 APR 2020 18:16
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  26 APR 2020 18:24
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -351,11 +351,10 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (228.97264pt too wide) in paragraph at lines 132--144
-[]\OT1/cmr/m/n/10 With that, the Q-Learning al-go-rithm is as fol-lows: $[]$ 
- []
+Underfull \vbox (badness 6708) has occurred while \output is active []
 
-(./project6.bbl [2]) [3] (./project6.aux) )
+ [2]
+(./project6.bbl) [3] (./project6.aux) )
 (\end occurred inside a group at level 1)
 
 ### simple group (level 1) entered at line 1061 ({)
@@ -383,7 +382,7 @@ sr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr
 /local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/l
 ocal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/lo
 cal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb>
-Output written on project6.pdf (3 pages, 172973 bytes).
+Output written on project6.pdf (3 pages, 174971 bytes).
 PDF statistics:
  74 PDF objects out of 1000 (max. 8388607)
  53 compressed objects within 1 object stream

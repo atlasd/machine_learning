@@ -8,29 +8,8 @@ import logging
 from toolz import dicttoolz
 
 
-def run_experiment(track_file, harsh_crash_variant):
-    results = {}
-    np.random.seed(73)
-    track = actors.Track(track_file, harsh_crash_variant=harsh_crash_variant)
-
-    track.start_track()
-    logger.info("Initializing track...")
-
-    pi = policy.Policy(states=track.get_states(), actions=track.get_actions())
-
-    vi = ValueIteration(policy=pi, actor=track, discount_factor=0.9, max_iter=30)
-
-    vi.explore()
-    vi.policy.set_exploit_mode()
-    results["value_iteration"] = []
-    for _ in range(20):
-        path, steps = vi.exploit()
-        results["value_iteration"].append(steps)
-    return results
-
-
 if __name__ != "__main__":
-    logging.info(
+    logger.info(
         "Running Value Iteration on L-Track Experiment with restart after crash..."
     )
     np.random.seed(73)
@@ -42,7 +21,7 @@ if __name__ != "__main__":
 
     pi = policy.Policy(states=track.get_states(), actions=track.get_actions())
 
-    vi = ValueIteration(policy=pi, actor=track, discount_factor=0.8, max_iter=100)
+    vi = ValueIteration(policy=pi, actor=track, discount_factor=0.7, max_iter=200)
 
     logger.info("Updating policy via Value Iteration...")
     vi.explore()
@@ -55,7 +34,7 @@ if __name__ != "__main__":
 
     logger.info(f"Avg Steps to Solve: {np.mean(value_iteration_results)}")
 
-    logging.info(
+    logger.info(
         "Running Value Iteration on L-Track Experiment with no restart after crash..."
     )
     np.random.seed(73)
@@ -81,8 +60,8 @@ if __name__ != "__main__":
     logger.info(f"Avg Steps to Solve: {np.mean(value_iteration_results)}")
 
 
-if __name__ == "__main__":
-    logging.info(
+if __name__ != "__main__":
+    logger.info(
         "Running Q-Learning on L-Track Experiment with no restart after crash..."
     )
     np.random.seed(73)
@@ -95,7 +74,7 @@ if __name__ == "__main__":
     pi = policy.Policy(states=track.get_states(), actions=track.get_actions())
 
     q_learner = QLearning(
-        policy=pi, actor=track, discount_factor=0.5, learning_rate=0.2, max_iter=30000
+        policy=pi, actor=track, discount_factor=0.5, learning_rate=0.2, max_iter=100000
     )
 
     logger.info("Updating policy via Q-Learning...")
@@ -108,7 +87,7 @@ if __name__ == "__main__":
 
     logger.info(f"Avg Steps to Solve: {np.mean(q_learning_results)}")
 
-    logging.info("Running SARSA on L-Track Experiment with no restart after crash...")
+    logger.info("Running SARSA on L-Track Experiment with no restart after crash...")
     np.random.seed(73)
     track = actors.Track(
         "course_projects/project6/L-track.txt", harsh_crash_variant=False
@@ -119,7 +98,156 @@ if __name__ == "__main__":
     pi = policy.Policy(states=track.get_states(), actions=track.get_actions())
 
     sarsa = SARSA(
-        policy=pi, actor=track, discount_factor=0.5, learning_rate=0.2, max_iter=75000
+        policy=pi, actor=track, discount_factor=0.5, learning_rate=0.2, max_iter=100000
+    )
+
+    logger.info("Updating policy via SARSA...")
+    sarsa.explore()
+
+    sarsa_results = []
+    for _ in range(20):
+        path, steps = sarsa.exploit()
+        sarsa_results.append(steps)
+
+    logger.info(f"Avg Steps to Solve: {np.mean(sarsa_results)}")
+
+    logger.info("Running Q-Learning on L-Track Experiment with restart after crash...")
+    np.random.seed(73)
+    track = actors.Track(
+        "course_projects/project6/L-track.txt", harsh_crash_variant=True
+    )
+    track.start_track()
+    logger.info("Initializing track...")
+
+    pi = policy.Policy(states=track.get_states(), actions=track.get_actions())
+
+    q_learner = QLearning(
+        policy=pi, actor=track, discount_factor=0.5, learning_rate=0.2, max_iter=200000
+    )
+
+    logger.info("Updating policy via Q-Learning...")
+    q_learner.explore()
+
+    q_learning_results = []
+    for _ in range(20):
+        path, steps = q_learner.exploit()
+        q_learning_results.append(steps)
+
+    logger.info(f"Avg Steps to Solve: {np.mean(q_learning_results)}")
+
+    logger.info("Running SARSA on L-Track Experiment with restart after crash...")
+    np.random.seed(73)
+    track = actors.Track(
+        "course_projects/project6/L-track.txt", harsh_crash_variant=True
+    )
+    track.start_track()
+    logger.info("Initializing track...")
+
+    pi = policy.Policy(states=track.get_states(), actions=track.get_actions())
+
+    sarsa = SARSA(
+        policy=pi, actor=track, discount_factor=0.5, learning_rate=0.2, max_iter=200000
+    )
+
+    logger.info("Updating policy via SARSA...")
+    sarsa.explore()
+
+    sarsa_results = []
+    for _ in range(20):
+        path, steps = sarsa.exploit()
+        sarsa_results.append(steps)
+
+    logger.info(f"Avg Steps to Solve: {np.mean(sarsa_results)}")
+
+
+if __name__ == "__main__":
+
+    logger.info(
+        "Running Q-Learning on O-Track Experiment with no restart after crash..."
+    )
+    np.random.seed(73)
+    track = actors.Track(
+        "course_projects/project6/O-track.txt", harsh_crash_variant=False
+    )
+    track.start_track()
+    logger.info("Initializing track...")
+
+    pi = policy.Policy(states=track.get_states(), actions=track.get_actions())
+
+    q_learner = QLearning(
+        policy=pi, actor=track, discount_factor=0.5, learning_rate=0.2, max_iter=150000
+    )
+
+    logger.info("Updating policy via Q-Learning...")
+    q_learner.explore()
+
+    q_learning_results = []
+    for _ in range(20):
+        path, steps = q_learner.exploit()
+        q_learning_results.append(steps)
+
+    logger.info(f"Avg Steps to Solve: {np.mean(q_learning_results)}")
+
+    logger.info("Running SARSA on O-Track Experiment with no restart after crash...")
+    np.random.seed(73)
+    track = actors.Track(
+        "course_projects/project6/O-track.txt", harsh_crash_variant=False
+    )
+    track.start_track()
+    logger.info("Initializing track...")
+
+    pi = policy.Policy(states=track.get_states(), actions=track.get_actions())
+
+    sarsa = SARSA(
+        policy=pi, actor=track, discount_factor=0.5, learning_rate=0.2, max_iter=150000
+    )
+
+    logger.info("Updating policy via SARSA...")
+    sarsa.explore()
+
+    sarsa_results = []
+    for _ in range(20):
+        path, steps = sarsa.exploit()
+        sarsa_results.append(steps)
+
+    logger.info(f"Avg Steps to Solve: {np.mean(sarsa_results)}")
+
+    logger.info("Running Q-Learning on O-Track Experiment with restart after crash...")
+    np.random.seed(73)
+    track = actors.Track(
+        "course_projects/project6/O-track.txt", harsh_crash_variant=True
+    )
+    track.start_track()
+    logger.info("Initializing track...")
+
+    pi = policy.Policy(states=track.get_states(), actions=track.get_actions())
+
+    q_learner = QLearning(
+        policy=pi, actor=track, discount_factor=0.5, learning_rate=0.2, max_iter=300000
+    )
+
+    logger.info("Updating policy via Q-Learning...")
+    q_learner.explore()
+
+    q_learning_results = []
+    for _ in range(20):
+        path, steps = q_learner.exploit()
+        q_learning_results.append(steps)
+
+    logger.info(f"Avg Steps to Solve: {np.mean(q_learning_results)}")
+
+    logger.info("Running SARSA on O-Track Experiment with restart after crash...")
+    np.random.seed(73)
+    track = actors.Track(
+        "course_projects/project6/O-track.txt", harsh_crash_variant=True
+    )
+    track.start_track()
+    logger.info("Initializing track...")
+
+    pi = policy.Policy(states=track.get_states(), actions=track.get_actions())
+
+    sarsa = SARSA(
+        policy=pi, actor=track, discount_factor=0.5, learning_rate=0.2, max_iter=300000
     )
 
     logger.info("Updating policy via SARSA...")

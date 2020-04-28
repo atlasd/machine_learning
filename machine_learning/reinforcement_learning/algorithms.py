@@ -5,8 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import logging
 
-logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 FINISH_TOKEN = "FINISHED"
@@ -30,17 +30,19 @@ class BasePolicy:
 
     def explore(self):
         for iter_num in tqdm.tqdm(range(self.max_iter)):
-            if iter_num + 1 % self.stat_collection_freq == 0:
-                print("Collecting stats...")
+            if (iter_num + 1) % self.stat_collection_freq == 0:
+                logger.infp("Collecting stats...")
                 self.collect_stats(iter_num)
             self.single_iteration()
+        self.collect_stats(iter_num)
+        logger.info(msg=self.stats)
 
     def exploit(self):
         self.actor.start_track()
         is_finished = "MOVED"
         n_steps = 0
         path = []
-        while is_finished != FINISH_TOKEN and n_steps < 100:
+        while is_finished != FINISH_TOKEN and n_steps < 1000:
             current_state = self.actor.get_current_state()
             path.append(current_state)
             action = self.policy.get_optimal_action(current_state)
@@ -106,7 +108,7 @@ class QLearning(BasePolicy):
 
         while status != FINISH_TOKEN:
             n_iter += 1
-            eps = 1 / n_iter
+            eps = max(1 / n_iter, 0.2)
             state = self.actor.get_current_state()
 
             action = self.policy.get_optimal_action_eps_greedy(state=state, eps=eps)
@@ -143,7 +145,7 @@ class SARSA(BasePolicy):
 
         while status != FINISH_TOKEN:
             n_iter += 1
-            eps = 1 / n_iter
+            eps = max(1 / n_iter, 0.2)
             state = self.actor.get_current_state()
             action = self.policy.get_optimal_action_eps_greedy(state=state, eps=eps)
             status, state_prime = self.actor.get_next_state(state=state, action=action)
@@ -161,89 +163,3 @@ class SARSA(BasePolicy):
                 new_term=self.learning_rate
                 * (1 + self.discount_factor * sprime_aprime_q - s_qstar),
             )
-
-
-def run_experiment(track_file, harsh_crash_variant):
-    results = {}
-    np.random.seed(73)
-
-    track = actors.Track(track_file, harsh_crash_variant=harsh_crash_variant)
-
-    track.start_track()
-    logger.info("Initializing track...")
-
-    pi = policy.Policy(states=track.get_states(), actions=track.get_actions())
-
-    sarsa = SARSA(
-        policy=pi, actor=track, discount_factor=0.5, learning_rate=0.2, max_iter=30000
-    )
-    sarsa.explore()
-
-    results["sarsa"] = []
-    for _ in range(20):
-        path, steps = sarsa.exploit()
-        results["sarsa"].append(steps)
-
-    import ipdb
-
-    ipdb.set_trace()
-
-    track = actors.Track(track_file, harsh_crash_variant=harsh_crash_variant)
-
-    track.start_track()
-    logger.info("Initializing track...")
-
-    pi = policy.Policy(states=track.get_states(), actions=track.get_actions())
-
-    q_learner = QLearning(
-        policy=pi, actor=track, discount_factor=0.5, learning_rate=0.2, max_iter=30000
-    )
-    q_learner.explore()
-
-    results["q_learning"] = []
-    for _ in range(20):
-        path, steps = q_learner.exploit()
-        results["q_learning"].append(steps)
-
-    track = actors.Track(track_file, harsh_crash_variant=harsh_crash_variant)
-
-    track.start_track()
-    logger.info("Initializing track...")
-
-    pi = policy.Policy(states=track.get_states(), actions=track.get_actions())
-
-    vi = ValueIteration(policy=pi, actor=track, discount_factor=0.9, max_iter=30)
-
-    vi.explore()
-    vi.policy.set_exploit_mode()
-    results["value_iteration"] = []
-    for _ in range(20):
-        path, steps = vi.exploit()
-        results["value_iteration"].append(steps)
-
-    track = actors.Track(track, harsh_crash_variant=harsh_crash_variant)
-
-    return results
-
-
-if __name__ == "__main__":
-    logging.info("Running L-Track Experiment with restart after crash...")
-    l_track_results = run_experiment(
-        track_file="course_projects/project6/L-track.txt", harsh_crash_variant=False
-    )
-    from toolz import dicttoolz
-
-    logger.info(
-        f"Avg Steps to Solve: {dicttoolz.valmap(lambda x: np.mean(x), l_track_results)}"
-    )
-    import ipdb
-
-    ipdb.set_trace()
-
-    logging.info("Running L-Track Experiment with no restart after crash...")
-    l_track_results = run_experiment(
-        track_file="course_projects/project6/L-track.txt", harsh_crash_variant=False
-    )
-    logger.info(
-        f"Avg Steps to Solve: {dicttoolz.valmap(lambda x: np.mean(x), l_track_results)}"
-    )

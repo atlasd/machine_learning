@@ -129,25 +129,63 @@
     useful in iterative training because it would be undesirable for the agent to choose the optimal policy
     at the outset, as it will be randomly initialized.
 
-    With that, the Q-Learning algorithm is as follows:
+    With that, the Q-Learning algorithm is shown in Algorithm~\ref{q_learning_algo_block}.
 
 
     \begin{algorithm}[H]
     \SetAlgoLined
         \KwResult{$Q^*(s, a)$}
-         Initialize $Q(s, a)$ to arbitrary values\;
-        $s \gets s_0$ (a starting state)\;
+        Initialize $Q(s, a)$ to arbitrary values\;
         \For{$i\gets0$ \KwTo Number of Episodes}{
+            $s \gets s_0$ (a starting state)\;
             \While{$s$ is not a terminal state}{
                 Choose $a$ via $\epsilon$-greedy selection\;
                 Get $r$ and $s^\prime$ from applying $a$ in $s$\;
                 $Q(s, a) \gets Q(s, a) + \eta (r + \gamma \argmax_{a^\prime} Q(s^\prime, a^\prime) - Q(s, a))$\;
+                $s \gets s^\prime$
             }
         }
      \caption{Q-Learning}
-    \label{q_learning_algo}
+    \label{q_learning_algo_block}
     \end{algorithm}
 
+    The intuition behind algorithm \ref{q_learning_algo} is to use the $\epsilon$-greedy action selection to explore the space, while
+    estimating $Q(s, a)$ as a mix between its current value and the approximate additional reward that would be come
+    from taking action $a$, and the proceeding in accordance with the policy at the new state, $s^\prime$.
+    The big difference between Q-Learning and Value Iteration is that Q-Learning uses episodes, in which the agent
+    makes a sequence of decisions from the beginning to the end, updating the policy along the way, whereas Value Iteration
+    updates each state-action pair on each iteration. This means that for very large state spaces, Q-Learning may have
+    an easier time learning a good policy, while Value Iteration would require alot of computational resources to
+    update each state at each iteration.
+
+    \subsection{SARSA}
+    The last algorithm presented here is SARSA (State-Action-Reward-State-Action)\cite{sarsa}. This is known as an
+    on-policy learning algorithm, as the policy is used to determine not only the immediate action $a$, but also
+    the succeeding one, $a^\prime$. This is in contrast to Q-Learning, in which the policy only determines $a$,
+    and the ensuing reward is estimated by the approximation of the optimal choice at state $Q(s^\prime, a)$.
+    However, the agent does not necessarily make that optimal choice. Beyond this difference, the
+    algorithms are quite similar. SARSA is shown in Algorithm~\ref{sarsa_algo_block}.
+
+    \begin{algorithm}[H]
+    \SetAlgoLined
+        \KwResult{$Q^*(s, a)$}
+         Initialize $Q(s, a)$ to arbitrary values\;
+        \For{$i\gets0$ \KwTo Number of Episodes}{
+            $s \gets s_0$ (a starting state)\;
+            Choose $a$ via $\epsilon$-greedy selection\;
+            \While{$s$ is not a terminal state}{
+                Get $r$ and $s^\prime$ from applying $a$ in $s$\;
+                Choose $a^\prime$ from $\epsilo$-greedy selection in $s^\prime$\;
+                $Q(s, a) \gets Q(s, a) + \eta (r + \gamma \argmax_{a^\prime} Q(s^\prime, a^\prime) - Q(s, a))$\;
+                $s \gets s^\prime$\;
+                $a \gets a^\prime$\;
+            }
+        }
+     \caption{Q-Learning}
+    \label{sarsa_algo_block}
+    \end{algorithm}
+
+    \subsection{Experimental Approach}
 
 
 
