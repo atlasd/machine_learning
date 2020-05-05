@@ -13,7 +13,6 @@ class Policy:
         self.exploit_mode = True
 
     def get_optimal_action(self, state):
-
         actions = sorted(
             self.policy.get(state), key=self.policy.get(state).get, reverse=False
         )

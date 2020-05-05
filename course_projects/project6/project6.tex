@@ -4,22 +4,31 @@
 \usepackage[margin=1in]{geometry}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{adjustbox}
 \usepackage{ifpdf}
 \usepackage{url}
-\usepackage[ruled,vlined]{algorithm2e}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
 \usepackage{amsfonts}
 \title{Project 6 \\ Reinforcement Learning}
 \author{David Atlas}
+
 
 \begin{document}
     \begin{abstract}
     This paper will introduce basic concepts in reinforcement
     learning, including three algorithms for finding policies: Value Iteration, Q-Learning and SARSA.
         The paper will introduce a simulated race-track environment, and present results on
-        learning a policy in the environment. It is found that the agent is able
-        to learn a policy <fill in here>
+        learning a policy in the environment. It would be expected that the algorithms will
+        have an easier time learning smaller environments and simpler crash outcome
+        variants, and that the Q-Learning/SARSA
+        approach will have more success in the larger environments, as they do not
+        require exhaustive updates to the space, and are more easily able to hone a good policy
+        without visiting every space on the track.
+    The experiments validate this hypothesis, as the algorithms are able to find good policies
+        on the smaller tracks, and are more successful with the simpler crash variant.
     \end{abstract}
     \maketitle
 
@@ -175,19 +184,109 @@
             Choose $a$ via $\epsilon$-greedy selection\;
             \While{$s$ is not a terminal state}{
                 Get $r$ and $s^\prime$ from applying $a$ in $s$\;
-                Choose $a^\prime$ from $\epsilo$-greedy selection in $s^\prime$\;
+                Choose $a^\prime$ from $\epsilon$-greedy selection in $s^\prime$\;
                 $Q(s, a) \gets Q(s, a) + \eta (r + \gamma \argmax_{a^\prime} Q(s^\prime, a^\prime) - Q(s, a))$\;
                 $s \gets s^\prime$\;
                 $a \gets a^\prime$\;
             }
         }
-     \caption{Q-Learning}
+    \caption{Q-Learning}
     \label{sarsa_algo_block}
     \end{algorithm}
 
     \subsection{Experimental Approach}
+    There were 3 environments used in each experiment:
+    \begin{enumerate}
+    \item L-Shaped Track
+    \item O-Shaped Track
+    \item R-Shaped Track
+    \end{enumerate}
+
+    For each environment, Value Iteration, Q-Learning and SARSA were all applied to the environment. Each algorithm
+    was allowed to train for a variable number of iterations, until performance converged to good solution. To be
+    clear, a good solution here implies going from start to finish in a number of steps proportional to the difficulty
+    of tracing such a path.
+
+    The algorithms have hyperparameters - all of the algorithms include a discount factor, which is the amount by which
+    a future reward is discounted back to the present time step. Both Q-Learning and SARSA include a
+    learning rate, which is the proportion of the temporal difference that is added back to the current tally of the
+    expected reward in a given state. Additionally, Q-Learning and SARSA have an $\epsilon$ parameter that dictates
+    the likelihood of choosing a random action in each state.
+
+    Due to the time-consuming nature of training the algorithms, it would be preferable to avoid exhaustive
+    experimentation with respect to the hyperparameters. Therefore, for track-algorithm pairs that
+    did not require any tuning to converge to a good solution, values were chosen based on some intuition about the
+    relationships between the hyperparameters and the training process. This included all variants of all algorithms
+    for the L-track and the O-track, and SARSA and Q-Learning for the R-track under the non-harsh
+    crash variant. For the $\epsilon$-greedy policy, the larger of $\frac{1}{T}$ and $.25$ was used to ensure
+    sufficient exploration of the space.
+
+    For the remaining combinations, some light experimental tuning was used to find more preferable values. However,
+    this approach was not useful, and the algorithms were not converging in a reasonable time. Therefore, a
+    "pre-training" approach was used, in which the starting policy was the policy found by SARSA
+    under the non-harsh variant.
 
 
+    \subsection{Algorithm Results}
+    The results of the algorithms can be found below in Table~\ref{results_tab}
+    \begin{table}
+    \begin{adjustbox}{width=1\textwidth}
+        \small
+    \begin{tabular}{lllcccc}
+        Track & Algorithm & Crash Variant & Discount Factor & Learning Rate & Number of Training Iterations & Average Steps to Solve \\
+        \hline
+        L & Value Iteration & Harsh       & .7              & N/A           & 250 & NA \\
+        L & Value Iteration & Non-Harsh   & .8              & N/A           & 100 & NA \\
+        L & Q-Learning      & Harsh       & .5              & .2           & 100000 & NA \\
+        L & Q-Learning      & Non-Harsh   & .5              & .2           & 40000 & NA \\
+        L & SARSA           & Harsh       & .5              & .2           & 125000 & NA \\
+        L & SARSA           & Non-Harsh   & .5              & .2           & 4000 & NA \\
+        O & Value Iteration & Harsh       & .7              & N/A           & 1000 & NA \\
+        O & Value Iteration & Non-Harsh   & .8              & N/A           & 500 & NA \\
+        O & Q-Learning      & Harsh       & .5              & .2           & 175000 & NA \\
+        O & Q-Learning      & Non-Harsh   & .5              & .2           & 75000 & NA \\
+        O & SARSA           & Harsh       & .5              & .2           & 200000 & NA \\
+        O & SARSA           & Non-Harsh   & .5              & .2           & 4000 & NA \\
+
+
+    \end{tabular}
+    \end{adjustbox}
+    \label{results_tab}
+    \end{table}
+
+
+    \begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Ltrack_2_learning_rate.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Ltrack_3_learning_rate.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Ltrack_6_learning_rate.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Ltrack_5_learning_rate.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Ltrack_1_learning_rate.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Ltrack_4_learning_rate.pdf}
+    \end{subfigure}
+    \caption{This figure shows the average number of steps needed to solve the track after a given number of
+    training iterations for each of the 6 L-track algorithm and crash variant combinations. Note that the exploitation
+    step is limited to 1000 steps at maximum. 10 exploitations were run for each starting point on the track.}
+    \end{figure}
+
+    \section{Algorithm Behavior}
 
 \bibliographystyle{plainurl}
 \bibliography{biblio}

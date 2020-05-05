@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  26 APR 2020 18:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  3 MAY 2020 17:27
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -194,10 +194,27 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 \Gm@layoutvoffset=\dimen127
 \Gm@dimlist=\toks26
 )
-(/usr/local/texlive/2017/texmf-dist/tex/latex/url/url.sty
-\Urlmuskip=\muskip11
-Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+(/usr/local/texlive/2017/texmf-dist/tex/latex/adjustbox/adjustbox.sty
+Package: adjustbox 2012/05/21 v1.0 Adjusting TeX boxes (trim, clip, ...)
+
+(/usr/local/texlive/2017/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
+
+(/usr/local/texlive/2017/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/usr/local/texlive/2017/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+\XKV@toks=\toks27
+\XKV@tempa@toks=\toks28
 )
+\XKV@depth=\count106
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/adjustbox/adjcalc.sty
+Package: adjcalc 2012/05/16 v1.1 Provides advanced setlength with multiple back
+-ends (calc, etex, pgfmath)
+)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/adjustbox/trimclip.sty
+Package: trimclip 2012/05/16 v1.0 Trim and clip general TeX material
+
 (/usr/local/texlive/2017/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
 
@@ -221,40 +238,96 @@ Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
 (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
 Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
 )
-\Gread@gobject=\count106
+\Gread@gobject=\count107
 ))
 \Gin@req@height=\dimen128
 \Gin@req@width=\dimen129
 )
+(/usr/local/texlive/2017/texmf-dist/tex/latex/collectbox/collectbox.sty
+Package: collectbox 2012/05/17 v0.4b Collect macro arguments as boxes
+\collectedbox=\box37
+)
+\tc@llx=\dimen130
+\tc@lly=\dimen131
+\tc@urx=\dimen132
+\tc@ury=\dimen133
+Package trimclip Info: Using driver 'tc-pdftex.def'.
+
+(/usr/local/texlive/2017/texmf-dist/tex/latex/adjustbox/tc-pdftex.def
+File: tc-pdftex.def 2012/05/13 v1.0 Clipping driver for pdftex
+))
+\adjbox@Width=\dimen134
+\adjbox@Height=\dimen135
+\adjbox@Depth=\dimen136
+\adjbox@Totalheight=\dimen137
+
+(/usr/local/texlive/2017/texmf-dist/tex/latex/ifoddpage/ifoddpage.sty
+Package: ifoddpage 2016/04/23 v1.1 Conditionals for odd/even page detection
+\c@checkoddpage=\count108
+)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/varwidth/varwidth.sty
+Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
+\@vwid@box=\box38
+\sift@deathcycles=\count109
+\@vwid@loff=\dimen138
+\@vwid@roff=\dimen139
+))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip11
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count107
-\float@exts=\toks27
-\float@box=\box37
-\@float@everytoks=\toks28
-\@floatcapt=\box38
-) (./project6.aux)
+\c@float@type=\count110
+\float@exts=\toks29
+\float@box=\box39
+\@float@everytoks=\toks30
+\@floatcapt=\box40
+)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2016/02/21 v3.3-144 Customizing captions (AR)
+
+(/usr/local/texlive/2017/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2016/05/22 v1.7-166 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 67.
+\captionmargin=\dimen140
+\captionmargin@=\dimen141
+\captionwidth=\dimen142
+\caption@tempdima=\dimen143
+\caption@indent=\dimen144
+\caption@parindent=\dimen145
+\caption@hangindent=\dimen146
+)
+Package caption Info: AMS or SMF document class.
+\c@ContinuedFloat=\count111
+Package caption Info: float package is loaded.
+)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2016/05/22 v1.1-161 Sub-captions (AR)
+\c@subfigure=\count112
+\c@subtable=\count113
+)
+(./project6.aux)
 \openout1 = `project6.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Try loading font information for U+msa on input line 16.
-(/usr/local/texlive/2017/texmf-dist/tex/latex/amsfonts/umsa.fd
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Try loading font information for U+msa on input line 19.
+ (/usr/local/texlive/2017/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 16.
-
-(/usr/local/texlive/2017/texmf-dist/tex/latex/amsfonts/umsb.fd
+LaTeX Font Info:    Try loading font information for U+msb on input line 19.
+ (/usr/local/texlive/2017/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 *geometry* driver: auto-detecting
@@ -293,17 +366,17 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 (/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count108
-\scratchdimen=\dimen130
-\scratchbox=\box39
-\nofMPsegments=\count109
-\nofMParguments=\count110
-\everyMPshowfont=\toks29
-\MPscratchCnt=\count111
-\MPscratchDim=\dimen131
-\MPnumerator=\count112
-\makeMPintoPDFobject=\count113
-\everyMPtoPDFconversion=\toks30
+\scratchcounter=\count114
+\scratchdimen=\dimen147
+\scratchbox=\box41
+\nofMPsegments=\count115
+\nofMParguments=\count116
+\everyMPshowfont=\toks31
+\MPscratchCnt=\count117
+\MPscratchDim=\dimen148
+\MPnumerator=\count118
+\makeMPintoPDFobject=\count119
+\everyMPtoPDFconversion=\toks32
 ) (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2017/03/19 v0.25 Utility functions of pdfTeX for LuaTeX (HO
 )
@@ -350,23 +423,104 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+
 [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 Underfull \vbox (badness 6708) has occurred while \output is active []
 
  [2]
-(./project6.bbl) [3] (./project6.aux) )
+
+LaTeX Warning: Reference `q_learning_algo' on page 3 undefined on input line 15
+5.
+
+[3]
+
+Package caption Warning: \label without proper reference on input line 241.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `results_tab' on page 4 undefined on input line 225.
+
+<Ltrack_2_learning_rate.pdf, id=26, 1300.86pt x 505.89pt>
+File: Ltrack_2_learning_rate.pdf Graphic file (type pdf)
+
+<use Ltrack_2_learning_rate.pdf>
+Package pdftex.def Info: Ltrack_2_learning_rate.pdf used on input line 249.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+
+<Ltrack_3_learning_rate.pdf, id=27, 1300.86pt x 505.89pt>
+File: Ltrack_3_learning_rate.pdf Graphic file (type pdf)
+
+<use Ltrack_3_learning_rate.pdf>
+Package pdftex.def Info: Ltrack_3_learning_rate.pdf used on input line 253.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+
+<Ltrack_6_learning_rate.pdf, id=28, 1300.86pt x 505.89pt>
+File: Ltrack_6_learning_rate.pdf Graphic file (type pdf)
+
+<use Ltrack_6_learning_rate.pdf>
+Package pdftex.def Info: Ltrack_6_learning_rate.pdf used on input line 257.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+
+<Ltrack_5_learning_rate.pdf, id=29, 1300.86pt x 505.89pt>
+File: Ltrack_5_learning_rate.pdf Graphic file (type pdf)
+
+<use Ltrack_5_learning_rate.pdf>
+Package pdftex.def Info: Ltrack_5_learning_rate.pdf used on input line 261.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+
+<Ltrack_1_learning_rate.pdf, id=30, 1300.86pt x 505.89pt>
+File: Ltrack_1_learning_rate.pdf Graphic file (type pdf)
+
+<use Ltrack_1_learning_rate.pdf>
+Package pdftex.def Info: Ltrack_1_learning_rate.pdf used on input line 265.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+
+<Ltrack_4_learning_rate.pdf, id=31, 1300.86pt x 505.89pt>
+File: Ltrack_4_learning_rate.pdf Graphic file (type pdf)
+
+<use Ltrack_4_learning_rate.pdf>
+Package pdftex.def Info: Ltrack_4_learning_rate.pdf used on input line 269.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+ (./project6.bbl) [4 <./Ltrack_2_learning_rate.pdf> <./Ltrack_3_learning_rate.p
+df
+
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Ltrack_3_learning_rate.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+> <./Ltrack_6_learning_rate.pdf
+
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Ltrack_6_learning_rate.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+> <./Ltrack_5_learning_rate.pdf
+
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Ltrack_5_learning_rate.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+> <./Ltrack_1_learning_rate.pdf
+
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Ltrack_1_learning_rate.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+> <./Ltrack_4_learning_rate.pdf
+
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Ltrack_4_learning_rate.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+>] (./project6.aux)
+
+LaTeX Warning: There were undefined references.
+
+ )
 (\end occurred inside a group at level 1)
 
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 4217 strings out of 492995
- 58706 string characters out of 6132704
- 144916 words of memory out of 5000000
- 7551 multiletter control sequences out of 15000+600000
- 10047 words of font info for 39 fonts, out of 8000000 for 9000
+ 6113 strings out of 492995
+ 92056 string characters out of 6132704
+ 180848 words of memory out of 5000000
+ 9394 multiletter control sequences out of 15000+600000
+ 11592 words of font info for 45 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 39i,17n,32p,308b,3139s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 53i,17n,92p,436b,4737s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmbx10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmcsc10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/
@@ -377,15 +531,16 @@ mmi7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
 10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.
 pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb
 ></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></
-usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></u
-sr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr
-/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/l
-ocal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/lo
-cal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb>
-Output written on project6.pdf (3 pages, 174971 bytes).
+usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr
+/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/
+local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/lo
+cal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/loca
+l/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local
+/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb>
+Output written on project6.pdf (4 pages, 238818 bytes).
 PDF statistics:
- 74 PDF objects out of 1000 (max. 8388607)
- 53 compressed objects within 1 object stream
+ 240 PDF objects out of 1000 (max. 8388607)
+ 89 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 

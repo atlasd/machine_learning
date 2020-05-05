@@ -123,12 +123,11 @@ class Track:
     def get_current_state(self):
         return self.agent.get_state()
 
-    def start_track(self):
-        logger.info("Initializing track...")
-        starting_point = np.random.choice(np.arange(len(self.starting_points)), size=1)[
-            0
-        ]
-        logger.info(f"Car at: {self.starting_points[starting_point]}")
+    def start_track(self, starting_point=None):
+        if not starting_point:
+            starting_point = np.random.choice(
+                np.arange(len(self.starting_points)), size=1
+            )[0]
         self.agent = Car(*self.starting_points[starting_point])
 
     def get_actions(self):

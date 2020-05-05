@@ -5,6 +5,10 @@ Richard Bellman.
 \newblock A markovian decision process.
 \newblock {\em Indiana University Math Journal}, pages 679--684, 1957.
 
+\bibitem{sarsa}
+M.~Niranjan G.A.~Rummery.
+\newblock On-line q-learning using connectionist systems.
+
 \bibitem{q_learning}
 Francisco~S. Melo.
 \newblock Convergence of q-learning: A simple proof.
