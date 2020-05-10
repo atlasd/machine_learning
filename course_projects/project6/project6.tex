@@ -27,7 +27,7 @@
         approach will have more success in the larger environments, as they do not
         require exhaustive updates to the space, and are more easily able to hone a good policy
         without visiting every space on the track.
-    The experiments validate this hypothesis, as the algorithms are able to find good policies
+        The experiments validate this hypothesis, as the algorithms are able to find good policies
         on the smaller tracks, and are more successful with the simpler crash variant.
     \end{abstract}
     \maketitle
@@ -213,40 +213,50 @@
     expected reward in a given state. Additionally, Q-Learning and SARSA have an $\epsilon$ parameter that dictates
     the likelihood of choosing a random action in each state.
 
-    Due to the time-consuming nature of training the algorithms, it would be preferable to avoid exhaustive
-    experimentation with respect to the hyperparameters. Therefore, for track-algorithm pairs that
-    did not require any tuning to converge to a good solution, values were chosen based on some intuition about the
-    relationships between the hyperparameters and the training process. This included all variants of all algorithms
-    for the L-track and the O-track, and SARSA and Q-Learning for the R-track under the non-harsh
-    crash variant. For the $\epsilon$-greedy policy, the larger of $\frac{1}{T}$ and $.25$ was used to ensure
-    sufficient exploration of the space.
+    Due to the time-consuming nature of training the algorithms, it was not feasible to avoid exhaustive
+    experimentation with respect to the hyperparameters. However, there were a couple of things
+    that stand out. First, the discount rate has no effect on Value Iteration in this context. Second,
+    varying the learning rate and the discount rate had no noticable impact on Q-Learning and SARSA
+    in the experiments run. It seems as though the algorithms either converge to good policies after
+    running for a couple hours, or they do not converge after running for many days.
 
-    For the remaining combinations, some light experimental tuning was used to find more preferable values. However,
-    this approach was not useful, and the algorithms were not converging in a reasonable time. Therefore, a
-    "pre-training" approach was used, in which the starting policy was the policy found by SARSA
-    under the non-harsh variant.
+    The $\epsilon$ value did seem to have a large impact. After some experimentation, it seems as though
+    setting it to the larger of $\frac{1}{T}$ or .05 had the best effect on the algorithm not ignoring
+    areas of the state space, while also pursuing poor policies that had not had values updated sufficiently often.
 
 
     \subsection{Algorithm Results}
-    The results of the algorithms can be found below in Table~\ref{results_tab}
+    The results of the algorithms can be found below in Table~\ref{results_tab}. For each
+    algorithm-track-crash variant combination, 10 exploit phases were run for each
+    starting point on the track. The number reported below is the average
+    number of steps needed to complete the track across all these runs. For the
+    variants that did not converge, many parameter combinations were tried, along
+    with extremely long training times (several days, and hundreds of thousands of training episodes), to no avail.
     \begin{table}
     \begin{adjustbox}{width=1\textwidth}
         \small
     \begin{tabular}{lllcccc}
         Track & Algorithm & Crash Variant & Discount Factor & Learning Rate & Number of Training Iterations & Average Steps to Solve \\
         \hline
-        L & Value Iteration & Harsh       & .7              & N/A           & 250 & NA \\
-        L & Value Iteration & Non-Harsh   & .8              & N/A           & 100 & NA \\
-        L & Q-Learning      & Harsh       & .5              & .2           & 100000 & NA \\
-        L & Q-Learning      & Non-Harsh   & .5              & .2           & 40000 & NA \\
-        L & SARSA           & Harsh       & .5              & .2           & 125000 & NA \\
-        L & SARSA           & Non-Harsh   & .5              & .2           & 4000 & NA \\
-        O & Value Iteration & Harsh       & .7              & N/A           & 1000 & NA \\
-        O & Value Iteration & Non-Harsh   & .8              & N/A           & 500 & NA \\
-        O & Q-Learning      & Harsh       & .5              & .2           & 175000 & NA \\
-        O & Q-Learning      & Non-Harsh   & .5              & .2           & 75000 & NA \\
-        O & SARSA           & Harsh       & .5              & .2           & 200000 & NA \\
-        O & SARSA           & Non-Harsh   & .5              & .2           & 4000 & NA \\
+        L & Value Iteration & Harsh       & .7              & N/A           & 250 & Did not converge \\
+        L & Value Iteration & Non-Harsh   & .8              & N/A           & 100 &  61.7 \\
+        L & Q-Learning      & Harsh       & .5              & .2           & 100000 & 175.375 \\
+        L & Q-Learning      & Non-Harsh   & .5              & .2           & 40000 & 80.25 \\
+        L & SARSA           & Harsh       & .5              & .2           & 125000 & 152.75 \\
+        L & SARSA           & Non-Harsh   & .5              & .2           & 4000 & 133.225 \\
+        O & Value Iteration & Harsh       & .7              & N/A           & 1000 & 544.925 \\
+        O & Value Iteration & Non-Harsh   & .8              & N/A           & 500 & 33.5 \\
+        O & Q-Learning      & Harsh       & .5              & .2           & 175000 & 915 \\
+        O & Q-Learning      & Non-Harsh   & .5              & .2           & 75000 & 75.22 \\
+        O & SARSA           & Harsh       & .5              & .2           & 200000 & 978 \\
+        O & SARSA           & Non-Harsh   & .5              & .2           & 4000 & 58.32 \\
+        R & Value Iteration & Harsh       & .001            & N/A           & 1000 & Did not converge \\
+        R & Value Iteration & Non-Harsh   & .001              & N/A           & 500 & Did not converge \\
+        R & Q-Learning      & Harsh       & .3              & .1           & 175000 & Did not converge \\
+        R & Q-Learning      & Non-Harsh   & .3              & .1          & 75000 &  861 \\
+        R & SARSA           & Harsh       & .3              & .2           & 200000 & Did not converge \\
+        R & SARSA           & Non-Harsh   & .3              & .1           & 75000 & 980 \\
+
 
 
     \end{tabular}
@@ -286,7 +296,108 @@
     step is limited to 1000 steps at maximum. 10 exploitations were run for each starting point on the track.}
     \end{figure}
 
+        \begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Otrack_2_learning_rate.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Otrack_3_learning_rate.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Otrack_6_learning_rate.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Otrack_5_learning_rate.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Otrack_1_learning_rate.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Otrack_4_learning_rate.pdf}
+    \end{subfigure}
+    \caption{This figure shows the average number of steps needed to solve the track after a given number of
+    training iterations for each of the 6 O-track algorithm and crash variant combinations. Note that the exploitation
+    step is limited to 1000 steps at maximum. 10 exploitations were run for each starting point on the track.}
+    \end{figure}
+
+            \begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Rtrack_2_learning_rate.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Rtrack_3_learning_rate.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Rtrack_6_learning_rate.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Rtrack_5_learning_rate.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Rtrack_1_learning_rate.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Rtrack_4_learning_rate.pdf}
+    \end{subfigure}
+    \caption{This figure shows the average number of steps needed to solve the track after a given number of
+    training iterations for each of the 6 O-track algorithm and crash variant combinations. Note that the exploitation
+    step is limited to 1000 steps at maximum. 10 exploitations were run for each starting point on the track.}
+    \end{figure}
+
+
     \section{Algorithm Behavior}
+    The algorithms behave largely as expected - they are all easily able to solve
+    small tracks without the harsh crash variant. However, as the track
+    size grows, and the state space with it, Value Iteration struggles
+    to converge to a good solution in a reasonable amount of time.
+    This is not unexpected - because Value Iteration must visit
+    every state-action pair on each update, it ends up visiting many
+    states that are largely irrelevant and will not be visited in practice.
+    Value Iteration also struggles in this specific context because the reward of finishing
+    must propogate all the way from the finish line to the starting line, making it
+    take longer for that to happen, especially when the randomness of the
+    environment may add in penalties despite reasonably good decision making.
+
+    In that vein, the harsh crash variant is quite tough on the learning processes,
+    especially on the R-track, where the agent needs to avoid boundaries that
+    do not give any space for a misstep. For Q-Learning and SARSA, this could result in
+    learning to avoid an otherwise good policy if the randomness sends the agent
+    back to the start. This could proceed as a "blocker" to the training process
+    that might persist for quite a while.
+
+    As a whole, the training time is quite long, and makes experimentation difficult,
+    so it is not feasible to try training 10 runs for each configuration.
+
+    In a direct comparison between track variants, for the L-track, the non-harsh variants converged
+    quickly and to good solutions. The harsh variants converged for Q-Learning and SARSA, but take quite a bit longer to solve the track.
+    The Value Iteration version did not converge.
+    The story is identical for the O-track. For the R-track, none of the algorithms converged for the
+    harsh variant (after running for several weeks with different parameters), but Q-Learning and SARSA
+    converged on the non-harsh variant.
+
+
+    \section{Summary}
+    In conclusion, the reinforcement learning algorithms presented here can solve temporal learning problems.
+    Value Iteration is the basic dynamic programming approach, but struggled with difficult problems
+    and larger state spaces. Q-Learning and SARSA seem to perform inline with each other, which is intuitive because
+    the differences between the two algorithms should not make a big difference in this context.
+    Additionally, the randomness of the track and the harsh crash variant seem to provide significant
+    challenges in learning the tracks, and the extremely long training times make it difficult to
+    tune the learning algorithms.
 
 \bibliographystyle{plainurl}
 \bibliography{biblio}

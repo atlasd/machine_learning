@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  3 MAY 2020 17:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  9 MAY 2020 22:25
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -427,64 +427,147 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 
 [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \vbox (badness 6708) has occurred while \output is active []
+Underfull \vbox (badness 2680) has occurred while \output is active []
 
  [2]
 
-LaTeX Warning: Reference `q_learning_algo' on page 3 undefined on input line 15
-5.
+LaTeX Warning: Reference `q_learning_algo' on page 3 undefined on input line 16
+1.
 
 [3]
 
-Package caption Warning: \label without proper reference on input line 241.
+Package caption Warning: \label without proper reference on input line 264.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `results_tab' on page 4 undefined on input line 225.
+LaTeX Warning: Reference `results_tab' on page 4 undefined on input line 229.
 
 <Ltrack_2_learning_rate.pdf, id=26, 1300.86pt x 505.89pt>
 File: Ltrack_2_learning_rate.pdf Graphic file (type pdf)
 
 <use Ltrack_2_learning_rate.pdf>
-Package pdftex.def Info: Ltrack_2_learning_rate.pdf used on input line 249.
+Package pdftex.def Info: Ltrack_2_learning_rate.pdf used on input line 272.
 (pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
 
 <Ltrack_3_learning_rate.pdf, id=27, 1300.86pt x 505.89pt>
 File: Ltrack_3_learning_rate.pdf Graphic file (type pdf)
 
 <use Ltrack_3_learning_rate.pdf>
-Package pdftex.def Info: Ltrack_3_learning_rate.pdf used on input line 253.
+Package pdftex.def Info: Ltrack_3_learning_rate.pdf used on input line 276.
 (pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
 
 <Ltrack_6_learning_rate.pdf, id=28, 1300.86pt x 505.89pt>
 File: Ltrack_6_learning_rate.pdf Graphic file (type pdf)
 
 <use Ltrack_6_learning_rate.pdf>
-Package pdftex.def Info: Ltrack_6_learning_rate.pdf used on input line 257.
+Package pdftex.def Info: Ltrack_6_learning_rate.pdf used on input line 280.
 (pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
 
 <Ltrack_5_learning_rate.pdf, id=29, 1300.86pt x 505.89pt>
 File: Ltrack_5_learning_rate.pdf Graphic file (type pdf)
 
 <use Ltrack_5_learning_rate.pdf>
-Package pdftex.def Info: Ltrack_5_learning_rate.pdf used on input line 261.
+Package pdftex.def Info: Ltrack_5_learning_rate.pdf used on input line 284.
 (pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
 
 <Ltrack_1_learning_rate.pdf, id=30, 1300.86pt x 505.89pt>
 File: Ltrack_1_learning_rate.pdf Graphic file (type pdf)
 
 <use Ltrack_1_learning_rate.pdf>
-Package pdftex.def Info: Ltrack_1_learning_rate.pdf used on input line 265.
+Package pdftex.def Info: Ltrack_1_learning_rate.pdf used on input line 288.
 (pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
 
 <Ltrack_4_learning_rate.pdf, id=31, 1300.86pt x 505.89pt>
 File: Ltrack_4_learning_rate.pdf Graphic file (type pdf)
 
 <use Ltrack_4_learning_rate.pdf>
-Package pdftex.def Info: Ltrack_4_learning_rate.pdf used on input line 269.
+Package pdftex.def Info: Ltrack_4_learning_rate.pdf used on input line 292.
 (pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
- (./project6.bbl) [4 <./Ltrack_2_learning_rate.pdf> <./Ltrack_3_learning_rate.p
-df
+
+<Otrack_2_learning_rate.pdf, id=32, 1300.86pt x 505.89pt>
+File: Otrack_2_learning_rate.pdf Graphic file (type pdf)
+
+<use Otrack_2_learning_rate.pdf>
+Package pdftex.def Info: Otrack_2_learning_rate.pdf used on input line 303.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+
+<Otrack_3_learning_rate.pdf, id=33, 1300.86pt x 505.89pt>
+File: Otrack_3_learning_rate.pdf Graphic file (type pdf)
+
+<use Otrack_3_learning_rate.pdf>
+Package pdftex.def Info: Otrack_3_learning_rate.pdf used on input line 307.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+
+<Otrack_6_learning_rate.pdf, id=34, 1300.86pt x 505.89pt>
+File: Otrack_6_learning_rate.pdf Graphic file (type pdf)
+
+<use Otrack_6_learning_rate.pdf>
+Package pdftex.def Info: Otrack_6_learning_rate.pdf used on input line 311.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+
+<Otrack_5_learning_rate.pdf, id=35, 1300.86pt x 505.89pt>
+File: Otrack_5_learning_rate.pdf Graphic file (type pdf)
+
+<use Otrack_5_learning_rate.pdf>
+Package pdftex.def Info: Otrack_5_learning_rate.pdf used on input line 315.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+
+<Otrack_1_learning_rate.pdf, id=36, 1300.86pt x 505.89pt>
+File: Otrack_1_learning_rate.pdf Graphic file (type pdf)
+
+<use Otrack_1_learning_rate.pdf>
+Package pdftex.def Info: Otrack_1_learning_rate.pdf used on input line 319.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+
+<Otrack_4_learning_rate.pdf, id=37, 1300.86pt x 505.89pt>
+File: Otrack_4_learning_rate.pdf Graphic file (type pdf)
+
+<use Otrack_4_learning_rate.pdf>
+Package pdftex.def Info: Otrack_4_learning_rate.pdf used on input line 323.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+
+<Rtrack_2_learning_rate.pdf, id=38, 1300.86pt x 505.89pt>
+File: Rtrack_2_learning_rate.pdf Graphic file (type pdf)
+
+<use Rtrack_2_learning_rate.pdf>
+Package pdftex.def Info: Rtrack_2_learning_rate.pdf used on input line 334.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+
+<Rtrack_3_learning_rate.pdf, id=39, 1300.86pt x 505.89pt>
+File: Rtrack_3_learning_rate.pdf Graphic file (type pdf)
+
+<use Rtrack_3_learning_rate.pdf>
+Package pdftex.def Info: Rtrack_3_learning_rate.pdf used on input line 338.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+
+<Rtrack_6_learning_rate.pdf, id=40, 1300.86pt x 505.89pt>
+File: Rtrack_6_learning_rate.pdf Graphic file (type pdf)
+
+<use Rtrack_6_learning_rate.pdf>
+Package pdftex.def Info: Rtrack_6_learning_rate.pdf used on input line 342.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+
+<Rtrack_5_learning_rate.pdf, id=41, 1300.86pt x 505.89pt>
+File: Rtrack_5_learning_rate.pdf Graphic file (type pdf)
+
+<use Rtrack_5_learning_rate.pdf>
+Package pdftex.def Info: Rtrack_5_learning_rate.pdf used on input line 346.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+
+<Rtrack_1_learning_rate.pdf, id=42, 1300.86pt x 505.89pt>
+File: Rtrack_1_learning_rate.pdf Graphic file (type pdf)
+
+<use Rtrack_1_learning_rate.pdf>
+Package pdftex.def Info: Rtrack_1_learning_rate.pdf used on input line 350.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+
+<Rtrack_4_learning_rate.pdf, id=43, 1300.86pt x 505.89pt>
+File: Rtrack_4_learning_rate.pdf Graphic file (type pdf)
+
+<use Rtrack_4_learning_rate.pdf>
+Package pdftex.def Info: Rtrack_4_learning_rate.pdf used on input line 354.
+(pdftex.def)             Requested size: 140.92793pt x 54.79895pt.
+ [4 <./Ltrack_2_learning_rate.pdf> <./Ltrack_3_learning_rate.pdf
 
 pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Ltrack_3_learning_rate.pdf
 ): PDF inclusion: multiple pdfs with page group included in a single page
@@ -504,7 +587,52 @@ pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Ltrack_1_learning_rate.pdf
 
 pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Ltrack_4_learning_rate.pdf
 ): PDF inclusion: multiple pdfs with page group included in a single page
->] (./project6.aux)
+>] (./project6.bbl [5 <./Otrack_2_learning_rate.pdf> <./Otrack_3_learning_rate.
+pdf
+
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Otrack_3_learning_rate.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+> <./Otrack_6_learning_rate.pdf
+
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Otrack_6_learning_rate.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+> <./Otrack_5_learning_rate.pdf
+
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Otrack_5_learning_rate.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+> <./Otrack_1_learning_rate.pdf
+
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Otrack_1_learning_rate.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+> <./Otrack_4_learning_rate.pdf
+
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Otrack_4_learning_rate.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+> <./Rtrack_2_learning_rate.pdf
+
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Rtrack_2_learning_rate.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+> <./Rtrack_3_learning_rate.pdf
+
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Rtrack_3_learning_rate.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+> <./Rtrack_6_learning_rate.pdf
+
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Rtrack_6_learning_rate.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+> <./Rtrack_5_learning_rate.pdf
+
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Rtrack_5_learning_rate.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+> <./Rtrack_1_learning_rate.pdf
+
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Rtrack_1_learning_rate.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+> <./Rtrack_4_learning_rate.pdf
+
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./Rtrack_4_learning_rate.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+>]) [6] (./project6.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -514,13 +642,13 @@ LaTeX Warning: There were undefined references.
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 6113 strings out of 492995
- 92056 string characters out of 6132704
- 180848 words of memory out of 5000000
- 9394 multiletter control sequences out of 15000+600000
+ 6173 strings out of 492995
+ 93844 string characters out of 6132704
+ 189848 words of memory out of 5000000
+ 9442 multiletter control sequences out of 15000+600000
  11592 words of font info for 45 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 53i,17n,92p,436b,4737s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 53i,17n,92p,436b,4738s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmbx10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmcsc10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/
@@ -537,10 +665,10 @@ local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/lo
 cal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/loca
 l/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local
 /texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb>
-Output written on project6.pdf (4 pages, 238818 bytes).
+Output written on project6.pdf (6 pages, 334283 bytes).
 PDF statistics:
- 240 PDF objects out of 1000 (max. 8388607)
- 89 compressed objects within 1 object stream
+ 645 PDF objects out of 1000 (max. 8388607)
+ 226 compressed objects within 3 object streams
  0 named destinations out of 1000 (max. 500000)
- 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 91 words of extra memory for PDF output out of 10000 (max. 10000000)
 
