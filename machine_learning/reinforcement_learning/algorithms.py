@@ -3,6 +3,7 @@ import logging
 import json
 from toolz import dicttoolz
 import numpy as np
+import pandas as pd
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -13,6 +14,11 @@ MOVING_TOKEN = "MOVING"
 
 
 class BasePolicy:
+    """
+    Class of shared functionality for
+    all the RL algorithms
+    """
+
     def __init__(
         self,
         policy,
@@ -21,25 +27,59 @@ class BasePolicy:
         discount_factor,
         stat_collection_freq=100,
         fname=None,
-        satisfactory_performance=None,
         max_exploit=1000,
     ):
+        """
+        Parameters:
+        -----------
+        policy : Policy
+            A policy object
+
+        max_iter : int
+            The maximum number of training iterations
+            to run.
+
+        actor : Track
+            A track class to solve
+
+        discount_factor : float
+            Discount factor for the learning process
+
+        stat_collection_freq : int
+            The number of iterations to collect
+            performance over
+
+        fname : str
+            The filename to dump the results to.
+
+        max_exploit : int
+            The maximum number of iterations to solve the track
+        """
         self.policy = policy
         self.actor = actor
         self.max_iter = max_iter
         self.discount_factor = discount_factor
-        self.actor.start_track()
         self.stats = {}
         self.stat_collection_freq = stat_collection_freq
         self.fname = fname
-        self.satisfactory_performance = satisfactory_performance
         self.max_exploit = max_exploit
 
+        # Initialize the track
+        self.actor.start_track()
+
     def single_iteration(self):
+        """
+        Placeholder for a single learning iteration
+        """
         raise NotImplementedError
 
     def explore(self):
+        """
+        Function to conduct the exploration process
+        """
+        # Conduct max_iter iterations
         for iter_num in tqdm.tqdm(range(self.max_iter)):
+            # If stat_collection_freq, run an exploit
             if (iter_num + 1) % self.stat_collection_freq == 0:
                 logger.info("Collecting stats...")
                 self.collect_stats(iter_num)
@@ -47,22 +87,27 @@ class BasePolicy:
             self.single_iteration()
 
         self.collect_stats(iter_num)
-        logger.info(msg=self.stats)
+
+        # Dump the results to file
         if self.fname:
             json.dump(
                 {
                     "policy": dicttoolz.keymap(
                         str,
                         dicttoolz.valmap(
-                            lambda d: dicttoolz.keymap(str, d), self.policy.policy
+                            lambda d: dicttoolz.keymap(str, d), self.policy.policy,
                         ),
                     ),
                     "stats": self.stats,
                 },
                 open(self.fname, "w"),
             )
+        logger.info(msg=self.stats)
 
     def load_from_file(self, filename):
+        """
+        Function to load policy from file
+        """
         from_file = json.load(open(filename))
         self.policy.policy = dicttoolz.valmap(
             lambda d: dicttoolz.keymap(eval, d),
@@ -71,21 +116,57 @@ class BasePolicy:
         self.stats = from_file.get("stats")
 
     def exploit(self, starting_point=None):
+        """
+        Run an exploitation iteration.
+
+
+        Parameters:
+        -----------
+        starting_point : int
+            Index of starting point to use.
+        """
+        # Initialize track
         self.actor.start_track(starting_point=starting_point)
+
+        # Initialize trackers
         is_finished = "MOVED"
         n_steps = 0
         path = []
+
+        # While not finished
         while is_finished != FINISH_TOKEN and n_steps < self.max_exploit:
+            # Get the current state
             current_state = self.actor.get_current_state()
+
+            # Add to path
             path.append(current_state)
+
+            # Get the next action
             action = self.policy.get_optimal_action(current_state)
+
+            # Do action and take step
             self.actor.agent.set_acceleration(*action)
             self.actor.agent.take_step()
+
+            # Check the location to see if finished
             is_finished = self.actor.check_agent_location()
             n_steps += 1
+
+        # Return the number of steps and the path taken
         return (path, n_steps)
 
     def collect_stats(self, iter_number):
+        """
+        Function to collect the number of
+        steps until completion to see the
+        learning trace.
+
+        Parameters:
+        -----------
+        iter_number : int
+            Iteration of colleciton
+        """
+        # Exploit from each starting point ten time
         self.stats[iter_number] = [
             self.exploit(start)[1]
             for _ in range(10)
@@ -94,15 +175,45 @@ class BasePolicy:
 
 
 class ValueIteration(BasePolicy):
+    """
+    Implementation of ValueIteration policy
+    """
+
     def __init__(
         self,
         policy,
         max_iter,
         actor,
         discount_factor=0.1,
-        stat_collection_freq=20,
+        stat_collection_freq=10,
         **kwargs,
     ):
+        """
+        Parameters:
+        -----------
+        policy : Policy
+            A policy object
+
+        max_iter : int
+            The maximum number of training iterations
+            to run.
+
+        actor : Track
+            A track class to solve
+
+        discount_factor : float
+            Discount factor for the learning process
+
+        stat_collection_freq : int
+            The number of iterations to collect
+            performance over
+
+        fname : str
+            The filename to dump the results to.
+
+        **kwargs
+            To pass to parent class
+        """
         super().__init__(
             policy=policy,
             max_iter=max_iter,
@@ -116,28 +227,64 @@ class ValueIteration(BasePolicy):
         return "ValueIteration"
 
     def single_iteration(self):
-        for state in tqdm.tqdm(self.policy.states[::-1]):
+        """
+        Update the whole policy using dynamic programming.
+        Function conducts a single update
+        """
+        # Iterate through states
+        for state in self.policy.states:
             status = None
+            # Iterate through actions in each state
             for action, value in self.policy.policy[state].items():
+                # Record the next state
                 status, state_prime = self.actor.get_next_state(
                     state=state, action=action
                 )
+
+                # If finished, add zero to the policy
                 if status == FINISH_TOKEN:
                     self.policy.update_policy(state=state, action=action, new_term=0)
 
+                # Otherwise, update with approx value of next state
                 else:
                     next_val = self.policy.get_optimal_action_value(state_prime)
                     self.policy.update_policy(
                         state=state,
                         action=action,
-                        new_term=1 + self.discount_factor * next_val,
+                        new_term=self.discount_factor * next_val,
                     )
 
 
 class QLearning(BasePolicy):
+    """
+    Class to conduct QLearning
+    """
+
     def __init__(
         self, policy, max_iter, actor, discount_factor, learning_rate=0.1, **kwargs
     ):
+        """
+        Parameters:
+        -----------
+        policy : Policy
+            A policy object
+
+        max_iter : int
+            The maximum number of training iterations
+            to run.
+
+        actor : Track
+            A track class to solve
+
+        discount_factor : float
+            Discount factor for the learning process
+
+        learning_rate : float
+            Learning rate for updates
+
+        **kwargs
+            To pass to parent class
+        """
         super().__init__(
             policy=policy,
             max_iter=max_iter,
@@ -152,23 +299,34 @@ class QLearning(BasePolicy):
         return "QLearning"
 
     def single_iteration(self):
+        # Initialize track
         status = MOVING_TOKEN
         n_iter = 0
         self.actor.start_track()
 
+        # While not finished, explore
         while status != FINISH_TOKEN:
             n_iter += 1
+
+            # Make epsilon greedy update
             eps = max(1 / n_iter, 0.05)
+
+            # Get the current state
             state = self.actor.get_current_state()
 
+            # Get the eps greedy action choice
             action = self.policy.get_optimal_action_eps_greedy(state=state, eps=eps)
 
+            # Get sprime (and go to that state)
             status, state_prime = self.actor.get_next_state(state=state, action=action)
 
+            # Get the approx value of that state
             sprime_qstar = self.policy.get_optimal_action_value(state=state_prime)
 
+            # Get current state estimate
             s_qstar = self.policy.policy[state][action]
 
+            # Update policy by temporal difference
             self.policy.update_policy(
                 state=state,
                 action=action,
@@ -177,18 +335,45 @@ class QLearning(BasePolicy):
                     * (1 + self.discount_factor * sprime_qstar - s_qstar)
                 ),
             )
+        logger.info(f"Number of Steps to Complete: {n_iter}")
 
 
 class SARSA(BasePolicy):
+    """
+    Class to conduct SARSA exploration
+    """
+
     def __init__(
         self, policy, max_iter, actor, discount_factor, learning_rate=0.1, **kwargs
     ):
+        """
+        Parameters:
+        -----------
+        policy : Policy
+            A policy object
+
+        max_iter : int
+            The maximum number of training iterations
+            to run.
+
+        actor : Track
+            A track class to solve
+
+        discount_factor : float
+            Discount factor for the learning process
+
+        learning_rate : float
+            Learning rate for updates
+
+        **kwargs
+            To pass to parent class
+        """
         super().__init__(
             policy=policy,
             max_iter=max_iter,
             actor=actor,
             discount_factor=discount_factor,
-            stat_collection_freq=10000,
+            stat_collection_freq=1000,
             **kwargs,
         )
         self.learning_rate = learning_rate
@@ -197,71 +382,43 @@ class SARSA(BasePolicy):
         return "SARSA"
 
     def single_iteration(self):
+        """
+        Conduct single exploration experiment
+        """
         status = MOVING_TOKEN
         n_iter = 0
         self.actor.start_track()
 
         while status != FINISH_TOKEN:
             n_iter += 1
+            # Get eps greedy propbability
             eps = max(1 / n_iter, 0.05)
+
+            # Get current state
             state = self.actor.get_current_state()
+
+            # Get the action via eps-greedy selection
             action = self.policy.get_optimal_action_eps_greedy(state=state, eps=eps)
+
+            # Get the next state (and move agent there)
             status, state_prime = self.actor.get_next_state(state=state, action=action)
 
+            # Get the eps-greedy best action for that state
             action_prime = self.policy.get_optimal_action_eps_greedy(
                 state=state_prime, eps=eps
             )
+
+            # Get the state that results from that action
             sprime_aprime_q = self.policy.policy[state_prime][action_prime]
 
+            # Get the current Q-value
             s_qstar = self.policy.policy[state][action]
 
+            # Update the policy via the difference
             self.policy.update_policy(
                 state=state,
                 action=action,
                 new_term=self.learning_rate
                 * (1 + self.discount_factor * sprime_aprime_q - s_qstar),
             )
-
-
-class Tuner:
-    def __init__(self, algo, param_grid):
-        self.param_grid = param_grid
-        self.algo = algo
-
-    def fit(self):
-        self.mean_steps = {}
-        for param_set in self.param_grid:
-            algo_obj = self.algo(**param_set)
-            algo_obj.explore()
-            self.mean_steps[param_set] = np.mean(
-                [algo_obj.exploit() for _ in range(10)]
-            )
-        return self.mean_steps
-
-
-if __name__ == "__main__":
-    DIR = "/Users/home/Documents/JHU/machine_learning/course_projects/project6"
-    from machine_learning.reinforcement_learning import actors
-    from machine_learning.reinforcement_learning import policy
-
-    track = actors.Track(f"{DIR}/R-track.txt", harsh_crash_variant=True)
-    track.start_track()
-    pi = policy.Policy(states=track.get_states(), actions=track.get_actions())
-
-    tn = Tuner(
-        algo=lambda **kwargs: ValueIteration(policy=pi, actor=track, **kwargs),
-        param_grid=[
-            {
-                "discount_factor": dr,
-                "max_exploit": 10000,
-                "max_iter": 15,
-                "stat_collection_freq": 100000,
-            }
-            for dr in np.arange(0.4, 1, 0.2)
-        ],
-    )
-    res = tn.fit()
-    import ipdb
-
-    ipdb.set_trace()
-    res
+        logger.info(f"Number of steps: {n_iter}")
